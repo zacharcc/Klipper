@@ -1,34 +1,35 @@
-## Description: Manual RGB Chamber Lights control - via LCD Display menu:
+## - Description: Manual RGB Chamber Lights control - via LCD Display menu:
 
-###/// Start Notes:
+## - /// Start Notes:
 
-##################################################################################
-##   LCD Menu control tree look like this:
+#######################################################################################
+##  LCD Menu control tree look like this:
 ##
-##  + Main:
-##   + Lights:
-##       + Lights: ON/OF         # Toogle: On or Off (ON to default 30% Bright)
-##       + Bright: 30%           # Toogle: 0-100% (in 10% steps, only white)
-##       + Lights on Max         # Command
-##       + Red: 0.30             # Toogle: 0.00 - 1.00 (in 0.01 steps)
-##       + Green: 0.30           # Toogle: 0.00 - 1.00 (in 0.01 steps)
-##       + Blue: 0.30            # Toogle: 0.00 - 1.00 (in 0.01 steps)
+##  Main:
+##    + Control
+##    + Temperature
+##    + ...
+##    + Lights:
+##        + Lights: ON/OF         # Toogle: On or Off (ON defaults to 30% brightnesst)
+##        + Bright: 30%           # Toogle: 0-100% (in 10% steps, only white)
+##        + Lights on Max         # Command
+##        + Red: 0.30             # Toogle: 0.00 - 1.00 (in 0.01 steps)
+##        + Green: 0.30           # Toogle: 0.00 - 1.00 (in 0.01 steps)
+##        + Blue: 0.30            # Toogle: 0.00 - 1.00 (in 0.01 steps)
 ##
-##################################################################################
+#######################################################################################
 
-## (Default ON 30% Brightness can be renamed in <gcode_macro ligths_on> (when is renamed: must both lines, set and save))
+## - (Default ON 30% Brightness can be renamed in <gcode_macro ligths_on> (when is renamed: must both lines, set and save))
 
-## Setup for HARDWARE:
-## LCD Display: BIGTREETECH MINI 12864 V2.0 LCD Display Screen.
-## 2x Neopixel Led Lights: Voron 2.4 V2.4 3D, Printer Daylight Disco On a Stick PCB Kits, 5V Lamp Bar, Lenth 270mm.
-## Neo LEDs Connected to Octopus RGB output (Octopus 1.1 STM32F407 pin:PB0).
+## - Setup for HARDWARE:
+##   LCD Display: BIGTREETECH MINI 12864 V2.0 LCD Display Screen.
+##   2x Neopixel Led Lights: Voron 2.4 V2.4 3D, Printer Daylight Disco On a Stick PCB Kits, 5V Lamp Bar, Lenth 270mm.
+##   Neo LEDs Connected to Octopus RGB output (Octopus 1.1 STM32F407 pin:PB0).
 
+## - PREPARE:
+##   Need to creat emtpy <variables.cfg> file in the path:  ~/printer_data/config/variables.cfg
 
-## PREPARE:
-## Need to creat emtpy <variables.cfg> file in the path:  ~/printer_data/config/variables.cfg
-
-
-###/// End of Notes, add all codes below to printer.cfg >>>
+## - /// End of Notes, add all codes below to printer.cfg >>>
 
 
 #####################################################################
@@ -42,6 +43,7 @@ filename: ~/printer_data/config/variables.cfg
 #####################################################################
 #   Display SETUP:
 #####################################################################
+## For Octopus 1.1 STM32F407 board, can be different.
 
 [display]
 lcd_type: uc1701
@@ -99,6 +101,7 @@ aliases:
 #################################################################
 #   Neopixel RGB - Chamber Light - Config SETUP:
 #################################################################
+## For Octopus 1.1 STM32F407 board, can be different.
 ## Gcode usage: SET_LED LED=<config_name> RED=<value> GREEN=<value> BLUE=<value> [INDEX=<index>] [TRANSMIT=0] [SYNC=1]
 
 [neopixel lights]

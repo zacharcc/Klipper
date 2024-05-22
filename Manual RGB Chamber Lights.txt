@@ -2,6 +2,7 @@
 
 ###/// Start Notes:
 
+##################################################################################
 ##   LCD Menu control tree look like this:
 ##
 ##  + Main:
@@ -12,6 +13,8 @@
 ##       + Red: 0.30             # Toogle: 0.00 - 1.00 (in 0.01 steps)
 ##       + Green: 0.30           # Toogle: 0.00 - 1.00 (in 0.01 steps)
 ##       + Blue: 0.30            # Toogle: 0.00 - 1.00 (in 0.01 steps)
+##
+##################################################################################
 
 ## (Default ON 30% Brightness can be renamed in <gcode_macro ligths_on> (when is renamed: must both lines, set and save))
 

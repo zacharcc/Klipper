@@ -262,59 +262,59 @@ gcode:
     {% else %}
         {% set VALUE_ONOFF = 0 | int %}
     {% endif %} 
-	SET_LED LED=lights RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} TRANSMIT=1                          # Set Lights to <bright> value
-	lights_var RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} ONOFF={VALUE_ONOFF} BRIGHT={VALUE_BRIGHT}   # Save change to variables
+    SET_LED LED=lights RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} TRANSMIT=1                          # Set Lights to <bright> value
+    lights_var RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} ONOFF={VALUE_ONOFF} BRIGHT={VALUE_BRIGHT}   # Save change to variables
 
 ## Setings For LCD Menu RGB control:
 [gcode_macro set_rgb_lights]
 description: Set Lights on <lights_var> variables
 gcode:
     {% set R = printer["gcode_macro lights_var"].red | float | round(2) %}
-	{% set G = printer["gcode_macro lights_var"].green | float | round(2) %}
-	{% set B = printer["gcode_macro lights_var"].blue | float | round(2) %}           
-	{% set VALUE_ONOFF = printer["gcode_macro lights_var"].onoff %}         
-	{% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
-	## Save change <ONOFF> Variable value (1 or 0) on RGB:
-        {% if R > 0.00 | float | round(2) %}         
+    {% set G = printer["gcode_macro lights_var"].green | float | round(2) %}
+    {% set B = printer["gcode_macro lights_var"].blue | float | round(2) %}           
+    {% set VALUE_ONOFF = printer["gcode_macro lights_var"].onoff %}         
+    {% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
+    ## Save change <ONOFF> Variable value (1 or 0) on RGB:
+    {% if R > 0.00 | float | round(2) %}         
+	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
+	SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
+    {% else %}
+        {% if G > 0.00 | float | round(2) %}         
 	   SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
 	   SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
 	{% else %}
-           {% if G > 0.00 | float | round(2) %}         
+           {% if B > 0.00 | float | round(2) %}         
 	      SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
 	      SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
 	   {% else %}
-              {% if B > 0.00 | float | round(2) %}         
-	         SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
-	         SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
-	      {% else %}
-	         SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 0 }
-	         SAVE_VARIABLE VARIABLE=onoff VALUE={ 0 }
-	      {% endif %}
+	      SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 0 }
+	      SAVE_VARIABLE VARIABLE=onoff VALUE={ 0 }
 	   {% endif %}
-	{% endif %}	
+	{% endif %}
+    {% endif %}	
     ## Save highest value of the R, G, or B element in the <BRIGHT> variable:
     {% if R > G and R > B %}          
-	   SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ R }
-	   SAVE_VARIABLE VARIABLE=bright VALUE={ R }
+	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ R }
+	SAVE_VARIABLE VARIABLE=bright VALUE={ R }
+    {% else %}
+	{% if G > R and G > B %}
+	    SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ G }
+	    SAVE_VARIABLE VARIABLE=bright VALUE={ G }
 	{% else %}
-	   {% if G > R and G > B %}
-	      SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ G }
-		  SAVE_VARIABLE VARIABLE=bright VALUE={ G }
-	   {% else %}
-		  {% if B > R and B > G %}
-	         SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ B }
-			 SAVE_VARIABLE VARIABLE=bright VALUE={ B }
-		  {% else %} 
-			 {% if R == 0.00 and G == 0.00 and B == 0.00 %}
-			    SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ 0 }
-			    SAVE_VARIABLE VARIABLE=bright VALUE={ 0 }
-			 {% else %} 
-			    {% if R == 1.00 and G == 1.00 and B == 1.00 %}
-			       SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ 1 }
-			       SAVE_VARIABLE VARIABLE=bright VALUE={ 1 }
-			    {% endif %}
-			 {% endif %}	
-		  {% endif %}
+	    {% if B > R and B > G %}
+	       SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ B }
+	       SAVE_VARIABLE VARIABLE=bright VALUE={ B }
+	    {% else %} 
+		{% if R == 0.00 and G == 0.00 and B == 0.00 %}
+		   SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ 0 }
+		   SAVE_VARIABLE VARIABLE=bright VALUE={ 0 }
+	        {% else %} 
+		   {% if R == 1.00 and G == 1.00 and B == 1.00 %}
+		      SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ 1 }
+		      SAVE_VARIABLE VARIABLE=bright VALUE={ 1 }
+		   {% endif %}
+		{% endif %}	
+	     {% endif %}
 	   {% endif %}
 	{% endif %}
     ## Set lights by Menu RGB variables values

@@ -159,7 +159,7 @@ input_max: 1.00
 input_step: 0.01
 gcode:
     {% set VALUE_RED = menu.input | float | round(2) %}                   ## Set variable <VAUUE_RED> by value of toggle button
-	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=red VALUE={ VALUE_RED }  ## Save variable value 
+    SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=red VALUE={ VALUE_RED }  ## Save variable value 
     SAVE_VARIABLE VARIABLE=red VALUE={ VALUE_RED }                        ## Save variable value (Write variable to the disk, for printer restart)
     set_rgb_lights                                                        ## Load variable values and set lights by them
 	
@@ -174,9 +174,9 @@ input_max: 1.00
 input_step: 0.01
 gcode:
     {% set VALUE_GREEN = menu.input | float | round(2) %}
-	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=green VALUE={ VALUE_GREEN }
+    SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=green VALUE={ VALUE_GREEN }
     SAVE_VARIABLE VARIABLE=green VALUE={ VALUE_GREEN }
-	set_rgb_lights
+    set_rgb_lights
 	
 [menu __main __lights __lights_blue]
 type: input
@@ -189,7 +189,7 @@ input_max: 1.00
 input_step: 0.01
 gcode:
     {% set VALUE_BLUE = menu.input | float | round(2) %}
-	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=blue VALUE={ VALUE_BLUE }
+    SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=blue VALUE={ VALUE_BLUE }
     SAVE_VARIABLE VARIABLE=blue VALUE={ VALUE_BLUE }	
     set_rgb_lights	
 	
@@ -237,9 +237,9 @@ gcode:
 description: Set Lights on <lights_var> variables
 gcode:
     {% set VALUE_RED = printer["gcode_macro lights_var"].red %}                               
-	{% set VALUE_GREEN = printer["gcode_macro lights_var"].green %}
-	{% set VALUE_BLUE = printer["gcode_macro lights_var"].blue %}
-	SET_LED LED=lights RED={VALUE_RED} GREEN={VALUE_GREEN} BLUE={VALUE_BLUE} TRANSMIT=1
+    {% set VALUE_GREEN = printer["gcode_macro lights_var"].green %}
+    {% set VALUE_BLUE = printer["gcode_macro lights_var"].blue %}
+    SET_LED LED=lights RED={VALUE_RED} GREEN={VALUE_GREEN} BLUE={VALUE_BLUE} TRANSMIT=1
 
 ## Settings for toogle LCD menu <Lights: ON/OFF> button:
 [gcode_macro set_onoff_lights]                                        
@@ -257,7 +257,7 @@ gcode:
 description: LCD Menu brightness Lights skript
 gcode:
     {% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
-	{% if VALUE_BRIGHT > 0.08 | float | round(2) %}                                                                    # Save change on/off variable value on BRIGHT
+	{% if VALUE_BRIGHT > 0.08 | float | round(2) %}                                                       # Save change on/off variable value on BRIGHT
         {% set VALUE_ONOFF = 1 | int %}    
     {% else %}
         {% set VALUE_ONOFF = 0 | int %}
@@ -275,15 +275,15 @@ gcode:
 	{% set VALUE_ONOFF = printer["gcode_macro lights_var"].onoff %}         
 	{% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
 	## Save change <ONOFF> Variable value (1 or 0) on RGB:
-    {% if R > 0.00 | float | round(2) %}         
+        {% if R > 0.00 | float | round(2) %}         
 	   SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
 	   SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
 	{% else %}
-       {% if G > 0.00 | float | round(2) %}         
+           {% if G > 0.00 | float | round(2) %}         
 	      SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
 	      SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
 	   {% else %}
-          {% if B > 0.00 | float | round(2) %}         
+              {% if B > 0.00 | float | round(2) %}         
 	         SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
 	         SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
 	      {% else %}
@@ -324,8 +324,8 @@ gcode:
 [gcode_macro lights_off]
 description: Lights OFF
 gcode:
-  SET_LED LED=lights RED=0 GREEN=0 BLUE=0 TRANSMIT=1 SYNC=0                            # Lights OFF
-  lights_var RED=0.0 GREEN=0.0 BLUE=0.0 ONOFF=0 BRIGHT=0.0                             # Save change to variables.
+    SET_LED LED=lights RED=0 GREEN=0 BLUE=0 TRANSMIT=1 SYNC=0                            # Lights OFF
+    lights_var RED=0.0 GREEN=0.0 BLUE=0.0 ONOFF=0 BRIGHT=0.0                             # Save change to variables.
   
 [gcode_macro lights_on]
 description: Lights ON

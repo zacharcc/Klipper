@@ -247,9 +247,9 @@ description: Lights ON/OF toogle for menu
 gcode:
     {% set VALUE_ONOFF = printer["gcode_macro lights_var"].onoff %} 
     {% if VALUE_ONOFF == 1 %}
-      lights_on    
+       lights_on    
     {% else %}
-      lights_off
+       lights_off
     {% endif %}
 
 ## Settings for toogle LCD Menu Brighttness
@@ -257,7 +257,7 @@ gcode:
 description: LCD Menu brightness Lights skript
 gcode:
     {% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
-	{% if VALUE_BRIGHT > 0.08 | float | round(2) %}                                                       # Save change on/off variable value on BRIGHT
+    {% if VALUE_BRIGHT > 0.08 | float | round(2) %}                                                       # Save change on/off variable value on BRIGHT
         {% set VALUE_ONOFF = 1 | int %}    
     {% else %}
         {% set VALUE_ONOFF = 0 | int %}
@@ -320,7 +320,8 @@ gcode:
     ## Set lights by Menu RGB variables values
     SET_LED LED=lights RED={R} GREEN={G} BLUE={B} TRANSMIT=1
 
-## Macros:
+
+## Individual Macros:
 [gcode_macro lights_off]
 description: Lights OFF
 gcode:
@@ -333,12 +334,12 @@ gcode:
     SET_LED LED=lights RED=0.3 GREEN=0.3 BLUE=0.3 TRANSMIT=1 SYNC=0                    # Lights ON (Default ON to 30% Bright).
     lights_var RED=0.3 GREEN=0.3 BLUE=0.3 ONOFF=1 BRIGHT=0.3                           # Save change to variables.
 
-# Lights on MAX
 [gcode_macro max_lights]
 description: Lights on MAX
 gcode:
-    SET_LED LED=lights RED=1 GREEN=1 BLUE=1 TRANSMIT=1 SYNC=0
+    SET_LED LED=lights RED=1 GREEN=1 BLUE=1 TRANSMIT=1 SYNC=0                          # Lights on MAX
     lights_var RED=1.0 GREEN=1.0 BLUE=1.0 ONOFF=1 BRIGHT=1.0                           # Save change to variables.
+
 
 ## BLINK Examples:
 [gcode_macro Green_Blink]  # For same status, idle_timeout etc

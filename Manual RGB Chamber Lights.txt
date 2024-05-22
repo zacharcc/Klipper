@@ -1,0 +1,372 @@
+## Description: Manual RGB Chamber Lights control - via LCD Display menu:
+
+###/// Start Notes:
+
+##   LCD Menu control tree look like this:
+##
+##  + Main:
+##   + Lights:
+##       + Lights: ON/OF         # Toogle: On or Off (ON to default 30% Bright)
+##       + Bright: 30%           # Toogle: 0-100% (in 10% steps)
+##       + Lights on Max.        # Command
+##       + Red: 0.30             # Toogle: 0.00 - 1.00 (in 0.01 steps)
+##       + Green: 0.30           # Toogle: 0.00 - 1.00 (in 0.01 steps)
+##       + Blue: 0.30            # Toogle: 0.00 - 1.00 (in 0.01 steps)
+
+## (Default ON 30% Brightness can be renamed in <gcode_macro ligths_on> (when is renamed: must both lines, set and save))
+
+## Setup for HARDWARE:
+## LCD Display: BIGTREETECH MINI 12864 V2.0 LCD Display Screen.
+## 2x Neopixel Led Lights: Voron 2.4 V2.4 3D, Printer Daylight Disco On a Stick PCB Kits, 5V Lamp Bar, Lenth 270mm.
+## Neo LEDs Connected to Octopus RGB output (Octopus 1.1 STM32F407 pin:PB0).
+
+
+## PREPARE:
+## Need to creat emtpy <variables.cfg> file in the path:  ~/printer_data/config/variables.cfg
+
+
+###/// End of Notes, add all codes below to printer.cfg >>>
+
+
+#####################################################################
+#   Save Variables:
+#####################################################################
+## stores variables that can be loaded on printer startup.
+
+[save_variables]     
+filename: ~/printer_data/config/variables.cfg
+
+#####################################################################
+#   Display SETUP:
+#####################################################################
+
+[display]
+lcd_type: uc1701
+cs_pin: EXP1_3
+a0_pin: EXP1_4
+rst_pin: EXP1_5
+encoder_pins: ^EXP2_5, ^EXP2_3
+click_pin: ^!EXP1_2
+contrast: 63
+spi_software_miso_pin: EXP2_1
+spi_software_mosi_pin: EXP2_6
+spi_software_sclk_pin: EXP2_2
+menu_timeout: 40
+
+[output_pin beeper]
+pin: EXP1_1
+
+[neopixel btt_mini12864]
+pin: EXP1_6
+chain_count: 3
+initial_RED: 0.025
+initial_GREEN: 0.05
+initial_BLUE: 0.1
+color_order: BRG
+
+[delayed_gcode setdisplay]
+initial_duration: 1
+gcode:
+    SET_LED LED=btt_mini12864 RED=0.025 GREEN=0.05 BLUE=0.1 INDEX=1 TRANSMIT=0
+    SET_LED LED=btt_mini12864 RED=0.025 GREEN=0.05 BLUE=0.1 INDEX=2 TRANSMIT=0
+    SET_LED LED=btt_mini12864 RED=0.025 GREEN=0.05 BLUE=0.1 INDEX=3 TRANSMIT=1
+	
+	
+################################################################
+# EXP1 / EXP2 pins Aliases (for LCD display):
+################################################################
+
+[board_pins]
+aliases:
+    # EXP1 header
+    EXP1_1=PE8, EXP1_2=PE7,
+    EXP1_3=PE9, EXP1_4=PE10,
+    EXP1_5=PE12, EXP1_6=PE13,    # Slot in the socket on this side
+    EXP1_7=PE14, EXP1_8=PE15,
+    EXP1_9=<GND>, EXP1_10=<5V>,
+
+    # EXP2 header
+    EXP2_1=PA6, EXP2_2=PA5,
+    EXP2_3=PB1, EXP2_4=PA4,
+    EXP2_5=PB2, EXP2_6=PA7,      # Slot in the socket on this side
+    EXP2_7=PC15, EXP2_8=<RST>,
+    EXP2_9=<GND>, EXP2_10=PC5
+
+
+#################################################################
+#   Neopixel RGB - Chamber Light - Config SETUP:
+#################################################################
+## Gcode usage: SET_LED LED=<config_name> RED=<value> GREEN=<value> BLUE=<value> [INDEX=<index>] [TRANSMIT=0] [SYNC=1]
+
+[neopixel lights]
+pin: PB0
+chain_count: 18
+color_order: GRB
+#initial_RED: 0.3
+#initial_GREEN: 0.3
+#initial_BLUE: 0.3
+
+#################################################################
+#    LCD Display Menu:                                    
+#################################################################
+
+[menu __main __lights]
+type: list
+enable: True  
+name: Lights
+index: 6
+
+[menu __main __lights __lightsonoff]
+type: input
+enable: True 
+name: Lights: {'ON ' if menu.input else 'OFF'}
+input: {printer["gcode_macro lights_var"].onoff | int}
+input_min: 0
+input_max: 1
+input_step: 1
+gcode:
+    {% set VALUE_ONOFF = menu.input | int %}
+    lights_var ONOFF={ VALUE_ONOFF }
+    set_onoff_lights
+
+[menu __main __lights __lightsbright]
+type: input
+enable: True 
+name: Bright: {'%3d' %(menu.input*100)}%
+input: {printer["gcode_macro lights_var"].bright | float | round(1)}
+input_min: 0.0
+input_max: 1.0
+input_step: 0.1
+gcode:
+    {% set VALUE_BRIGHT = menu.input | float | round(1) %}
+    lights_var BRIGHT={ VALUE_BRIGHT }
+    set_bright_lights	
+
+[menu __main __lights __max]
+type: command
+name: Bright on max.
+gcode:
+    max_lights
+
+[menu __main __lights __lights_red]
+type: input
+enable: True
+index: 4
+name: Red: {'%1.2f' %(menu.input)}
+input: {printer["gcode_macro lights_var"].red | float | round(2)}
+input_min: 0.00
+input_max: 1.00
+input_step: 0.01
+gcode:
+    {% set VALUE_RED = menu.input | float | round(2) %}                   ## Set variable <VAUUE_RED> by value of toggle button
+	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=red VALUE={ VALUE_RED }  ## Save variable value 
+    SAVE_VARIABLE VARIABLE=red VALUE={ VALUE_RED }                        ## Save variable value (Write variable to the disk, for printer restart)
+    set_rgb_lights                                                        ## Load variable values and set lights by them
+	
+[menu __main __lights __lights_green]
+type: input
+enable: True
+index: 5
+name: Green: {'%1.2f' %(menu.input)}
+input: {printer["gcode_macro lights_var"].green | float | round(2)}
+input_min: 0.00
+input_max: 1.00
+input_step: 0.01
+gcode:
+    {% set VALUE_GREEN = menu.input | float | round(2) %}
+	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=green VALUE={ VALUE_GREEN }
+    SAVE_VARIABLE VARIABLE=green VALUE={ VALUE_GREEN }
+	set_rgb_lights
+	
+[menu __main __lights __lights_blue]
+type: input
+enable: True
+index: 6
+name: Blue: {'%1.2f' %(menu.input)}
+input: {printer["gcode_macro lights_var"].blue | float | round(2)}
+input_min: 0.00
+input_max: 1.00
+input_step: 0.01
+gcode:
+    {% set VALUE_BLUE = menu.input | float | round(2) %}
+	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=blue VALUE={ VALUE_BLUE }
+    SAVE_VARIABLE VARIABLE=blue VALUE={ VALUE_BLUE }	
+    set_rgb_lights	
+	
+
+#####################################################################
+#   Manual Lights - MACROS
+#####################################################################
+## SETUP Variables:
+
+[gcode_macro lights_var]
+description: Lights Variables
+variable_red: 0.3           # Variable and default value
+variable_green: 0.3
+variable_blue: 0.3
+variable_onoff: 1
+variable_bright: 0.3
+gcode:
+   {% set VALUE_RED = params.RED | default(0.3) | float | round(2) %}              
+   {% set VALUE_GREEN = params.GREEN | default(0.3) | float | round(2) %}
+   {% set VALUE_BLUE = params.BLUE | default(0.3) | float | round(2) %}
+   {% set VALUE_ONOFF = params.ONOFF | default(1) | int %}
+   {% set VALUE_BRIGHT = params.BRIGHT | default(0.3) | float | round(1) %}
+   SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=red VALUE={ VALUE_RED }         
+   SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=green VALUE={ VALUE_GREEN }
+   SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=blue VALUE={ VALUE_BLUE }       
+   SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ VALUE_ONOFF }
+   SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ VALUE_BRIGHT }
+   SAVE_VARIABLE VARIABLE=red VALUE={ VALUE_RED }                             
+   SAVE_VARIABLE VARIABLE=green VALUE={ VALUE_GREEN }
+   SAVE_VARIABLE VARIABLE=blue VALUE={ VALUE_BLUE }
+   SAVE_VARIABLE VARIABLE=onoff VALUE={ VALUE_ONOFF }
+   SAVE_VARIABLE VARIABLE=bright VALUE={ VALUE_BRIGHT }
+
+## description: Restores saved lights settings on printer start / restart. 
+[delayed_gcode set_lights_onstartup]   
+initial_duration: 1
+gcode:
+   {% set svv = printer.save_variables.variables %}                                                  # Load values from <variables.cfg>
+   lights_var RED={svv.red} GREEN={svv.green} BLUE={svv.blue} ONOFF={svv.onoff} BRIGHT={svv.bright}  # Write values to variables
+   SET_LED LED=lights RED={svv.red} GREEN={svv.green} BLUE={svv.blue} TRANSMIT=1                     # Set Lights to variables values
+    
+## Description: Restores the lights to their previous state, for example after the <Green_Blink> macro, (also used as value low between individual blinks).
+## Function: Loads variables from the <lights_var> macro (<variable_red>, <variable_green> and <variable_blue>) and sets the lights to them.
+[gcode_macro restore_lights]
+description: Set Lights on <lights_var> variables
+gcode:
+    {% set VALUE_RED = printer["gcode_macro lights_var"].red %}                               
+	{% set VALUE_GREEN = printer["gcode_macro lights_var"].green %}
+	{% set VALUE_BLUE = printer["gcode_macro lights_var"].blue %}
+	SET_LED LED=lights RED={VALUE_RED} GREEN={VALUE_GREEN} BLUE={VALUE_BLUE} TRANSMIT=1
+
+## Settings for toogle LCD menu <Lights: ON/OFF> button:
+[gcode_macro set_onoff_lights]                                        
+description: Lights ON/OF toogle for menu
+gcode:
+    {% set VALUE_ONOFF = printer["gcode_macro lights_var"].onoff %} 
+    {% if VALUE_ONOFF == 1 %}
+      lights_on    
+    {% else %}
+      lights_off
+    {% endif %}
+
+## Settings for toogle LCD Menu Brighttness
+[gcode_macro set_bright_lights]                      
+description: LCD Menu brightness Lights skript
+gcode:
+    {% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
+	{% if VALUE_BRIGHT > 0.08 | float | round(2) %}                                                                    # Save change on/off variable value on BRIGHT
+        {% set VALUE_ONOFF = 1 | int %}    
+    {% else %}
+        {% set VALUE_ONOFF = 0 | int %}
+    {% endif %} 
+	SET_LED LED=lights RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} TRANSMIT=1                          # Set Lights to <bright> value
+	lights_var RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} ONOFF={VALUE_ONOFF} BRIGHT={VALUE_BRIGHT}   # Save change to variables
+
+## Setings For LCD Menu RGB control:
+[gcode_macro set_rgb_lights]
+description: Set Lights on <lights_var> variables
+gcode:
+    {% set R = printer["gcode_macro lights_var"].red | float | round(2) %}
+	{% set G = printer["gcode_macro lights_var"].green | float | round(2) %}
+	{% set B = printer["gcode_macro lights_var"].blue | float | round(2) %}           
+	{% set VALUE_ONOFF = printer["gcode_macro lights_var"].onoff %}         
+	{% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
+	## Save change <ONOFF> Variable value (1 or 0) on RGB:
+    {% if R > 0.00 | float | round(2) %}         
+	   SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
+	   SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
+	{% else %}
+       {% if G > 0.00 | float | round(2) %}         
+	      SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
+	      SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
+	   {% else %}
+          {% if B > 0.00 | float | round(2) %}         
+	         SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
+	         SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
+	      {% else %}
+	         SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 0 }
+	         SAVE_VARIABLE VARIABLE=onoff VALUE={ 0 }
+	      {% endif %}
+	   {% endif %}
+	{% endif %}	
+    ## Save highest value of the R, G, or B element in the <BRIGHT> variable:
+    {% if R > G and R > B %}          
+	   SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ R }
+	   SAVE_VARIABLE VARIABLE=bright VALUE={ R }
+	{% else %}
+	   {% if G > R and G > B %}
+	      SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ G }
+		  SAVE_VARIABLE VARIABLE=bright VALUE={ G }
+	   {% else %}
+		  {% if B > R and B > G %}
+	         SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ B }
+			 SAVE_VARIABLE VARIABLE=bright VALUE={ B }
+		  {% else %} 
+			 {% if R == 0.00 and G == 0.00 and B == 0.00 %}
+			    SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ 0 }
+			    SAVE_VARIABLE VARIABLE=bright VALUE={ 0 }
+			 {% else %} 
+			    {% if R == 1.00 and G == 1.00 and B == 1.00 %}
+			       SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ 1 }
+			       SAVE_VARIABLE VARIABLE=bright VALUE={ 1 }
+			    {% endif %}
+			 {% endif %}	
+		  {% endif %}
+	   {% endif %}
+	{% endif %}
+    ## Set lights by Menu RGB variables values
+    SET_LED LED=lights RED={R} GREEN={G} BLUE={B} TRANSMIT=1
+
+## Macros:
+[gcode_macro lights_off]
+description: Lights OFF
+gcode:
+  SET_LED LED=lights RED=0 GREEN=0 BLUE=0 TRANSMIT=1 SYNC=0                            # Lights OFF
+  lights_var RED=0.0 GREEN=0.0 BLUE=0.0 ONOFF=0 BRIGHT=0.0                             # Save change to variables.
+  
+[gcode_macro lights_on]
+description: Lights ON
+gcode:
+    SET_LED LED=lights RED=0.3 GREEN=0.3 BLUE=0.3 TRANSMIT=1 SYNC=0                    # Lights ON (Default ON to 30% Bright).
+    lights_var RED=0.3 GREEN=0.3 BLUE=0.3 ONOFF=1 BRIGHT=0.3                           # Save change to variables.
+
+# Lights on MAX
+[gcode_macro max_lights]
+description: Lights on MAX
+gcode:
+    SET_LED LED=lights RED=1 GREEN=1 BLUE=1 TRANSMIT=1 SYNC=0
+    lights_var RED=1.0 GREEN=1.0 BLUE=1.0 ONOFF=1 BRIGHT=1.0                           # Save change to variables.
+
+## BLINK Examples:
+[gcode_macro Green_Blink]  # For same status, idle_timeout etc
+description: Green Blink
+gcode:
+  {% for flashes in range (params.COUNT|default(2)|int) %}
+  SET_LED LED=lights RED=0 GREEN=0.2 BLUE=0 TRANSMIT=1
+  G4 P500
+  restore_lights                                                          # Low (delay) Lights value by previous Color, ON or OFF state.
+  G4 P500
+  {% endfor %}
+  restore_lights                                                          # After end of Blinks restore Lights to previous.
+
+[gcode_macro Red_Blink]
+description: Red Blink
+gcode:
+  {% for flashes in range (params.COUNT|default(3)|int) %}
+  SET_LED LED=lights RED=0.5 GREEN=0 BLUE=0 TRANSMIT=1
+  G4 P350
+  restore_lights
+  G4 P350
+  {% endfor %}
+  restore_lights
+
+
+## SET COLOURS Example:
+[gcode_macro blue]
+description: Lights blue
+gcode:
+  SET_LED LED=lights RED=0.0 GREEN=0.2 BLUE=0.33 TRANSMIT=1 SYNC=0       # Set Lights.
+  lights_var RED=0.0 GREEN=0.2 BLUE=0.33 ONOFF=1 BRIGHT=0.3              # Save change to variables.

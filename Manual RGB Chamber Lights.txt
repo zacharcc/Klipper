@@ -273,14 +273,14 @@ gcode:
 
 ## Setings For LCD Menu RGB control:
 [gcode_macro set_rgb_lights]
-description: Set Lights on <lights_var> variables
+description: LCD Menu RGB Lights script
 gcode:
     {% set R = printer["gcode_macro lights_var"].red | float | round(2) %}
     {% set G = printer["gcode_macro lights_var"].green | float | round(2) %}
     {% set B = printer["gcode_macro lights_var"].blue | float | round(2) %}           
     {% set VALUE_ONOFF = printer["gcode_macro lights_var"].onoff %}         
     {% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
-    ## Save change <ONOFF> Variable value (1 or 0) on RGB:
+    ## Save <ONOFF> variable value (1 or 0) on change of RGB:
     {% if R > 0.00 | float | round(2) %}         
 	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
 	SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
@@ -298,7 +298,7 @@ gcode:
 	   {% endif %}
 	{% endif %}
     {% endif %}	
-    ## Save highest value of the R, G, or B element in the <BRIGHT> variable:
+    ## Sifter: Save highest value of the R, G, or B element in the <BRIGHT> variable:
     {% if R > G and R > B %}          
 	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ R }
 	SAVE_VARIABLE VARIABLE=bright VALUE={ R }

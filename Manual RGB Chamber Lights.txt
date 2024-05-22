@@ -7,7 +7,7 @@
 ##  + Main:
 ##   + Lights:
 ##       + Lights: ON/OF         # Toogle: On or Off (ON to default 30% Bright)
-##       + Bright: 30%           # Toogle: 0-100% (in 10% steps)
+##       + Bright: 30%           # Toogle: 0-100% (in 10% steps, only white)
 ##       + Lights on Max.        # Command
 ##       + Red: 0.30             # Toogle: 0.00 - 1.00 (in 0.01 steps)
 ##       + Green: 0.30           # Toogle: 0.00 - 1.00 (in 0.01 steps)

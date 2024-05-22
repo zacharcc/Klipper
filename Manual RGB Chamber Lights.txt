@@ -34,7 +34,7 @@
 #####################################################################
 #   Save Variables:
 #####################################################################
-## stores variables that can be loaded on printer startup.
+## Saves variables to disk which can then be loaded when the printer is powered on.
 
 [save_variables]     
 filename: ~/printer_data/config/variables.cfg

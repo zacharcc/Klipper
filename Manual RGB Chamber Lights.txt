@@ -24,7 +24,7 @@
 ## - Setup for HARDWARE:
 ##   LCD Display: BIGTREETECH MINI 12864 V2.0 LCD Display Screen.
 ##   2x Neopixel Led Lights: Voron 2.4 V2.4 3D, Printer Daylight Disco On a Stick PCB Kits, 5V Lamp Bar, Lenth 270mm.
-##   Neo Daylight LEDs Connected to Octopus RGB output (on the Octopus 1.1 STM32F407 board it is a pin PB0).
+##   Neo Daylight LEDs connected to Octopus RGB output (on the Octopus 1.1 STM32F407 board it is a pin PB0).
 
 ## - PREPARE:
 ##   Need to creat emtpy <variables.cfg> file in the path:  ~/printer_data/config/variables.cfg

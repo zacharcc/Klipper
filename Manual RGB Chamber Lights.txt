@@ -297,7 +297,7 @@ gcode:
 	   {% endif %}
 	{% endif %}
     {% endif %}	
-    ## Sifter: Save highest value of the R, G, or B element in the <BRIGHT> variable:
+    ## Sifter: Save highest value of the <R>, <G>, or <B> element in the <BRIGHT> variable:
     {% if R > G and R > B %}          
 	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ R }
 	SAVE_VARIABLE VARIABLE=bright VALUE={ R }

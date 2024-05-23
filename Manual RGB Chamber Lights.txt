@@ -278,7 +278,7 @@ gcode:
     {% set B = printer["gcode_macro lights_var"].blue | float | round(2) %}           
     {% set VALUE_ONOFF = printer["gcode_macro lights_var"].onoff %}         
     {% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
-    ## Save change <ONOFF> Variable (1 or 0):
+    ## Save <ONOFF> Variable (1 or 0) on RGB change:
     {% if R > 0.00 | float | round(2) or G > 0.00 | float | round(2) or B > 0.00 | float | round(2) %}         
 	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
 	SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }

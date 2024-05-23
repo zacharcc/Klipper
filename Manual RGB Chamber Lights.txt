@@ -77,7 +77,7 @@ gcode:
 	
 	
 ################################################################
-# EXP1 / EXP2 Aliases pins (for BTT Mini LCD display):
+# EXP1 / EXP2 - Aliases pins (for BTT Mini LCD display):
 ################################################################
 
 [board_pins]

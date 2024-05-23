@@ -371,4 +371,9 @@ gcode:
   SET_LED LED=lights RED=0.0 GREEN=0.2 BLUE=0.33 TRANSMIT=1      # Set Lights.
   lights_var RED=0.0 GREEN=0.2 BLUE=0.33 ONOFF=1 BRIGHT=0.3      # Change needs to be saved to variables, <BRIGHT> then by highest (R, G or B) element.
                                                                  # Otherwise, without saving, the changes will not be reflected in the values on the display.
+[gcode_macro pink]
+description: Lights pink
+gcode:
+  SET_LED LED=lights RED=0.5 GREEN=0.1 BLUE=0.34 TRANSMIT=1      # Set Lights    
+  lights_var RED=0.5 GREEN=0.1 BLUE=0.34 ONOFF=1 BRIGHT=0.5      # Save change to variables   
 

@@ -42,6 +42,7 @@ filename: ~/printer_data/config/variables.cfg
 #####################################################################
 #   Display SETUP:
 #####################################################################
+##  SETUP for BIGTREETECH MINI 12864 V2.0 LCD Display Screen:
 
 [display]
 lcd_type: uc1701
@@ -76,7 +77,7 @@ gcode:
 	
 	
 ################################################################
-# EXP1 / EXP2 pins Aliases (for LCD display):
+# EXP1 / EXP2 Aliases pins (for BTT Mini LCD display):
 ################################################################
 
 [board_pins]
@@ -99,7 +100,7 @@ aliases:
 #################################################################
 #   Neopixel RGB - Chamber Light - Config SETUP:
 #################################################################
-## For Octopus 1.1 STM32F407 board (for another board, the <pin: PB0> may be different).
+## SETUP for Octopus 1.1 STM32F407 board (for another board, the <pin: PB0> may be different).
 ## Gcode usage: SET_LED LED=<config_name> RED=<value> GREEN=<value> BLUE=<value> [INDEX=<index>] [TRANSMIT=0] [SYNC=1]
 
 [neopixel lights]

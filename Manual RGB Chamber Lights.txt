@@ -1,6 +1,5 @@
-## - Description: Manual RGB Chamber Lights control - via LCD Display menu:
-
 ## - /// Start Notes:
+## - Description: Manual RGB Chamber Lights control - via LCD Display menu:
 
 #######################################################################################
 ##  On the LCD Display, the control menu tree will look like this:

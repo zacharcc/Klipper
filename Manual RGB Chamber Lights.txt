@@ -9,12 +9,12 @@
 ##    + Temperature
 ##    + ...
 ##    + Lights:
-##        + Lights: ON/OFF        # Toogle: ON or Off (The default ON value is 30% brightness)
-##        + Bright: 30%           # Toogle: 0-100% (in 10% steps, only white)
+##        + Lights: ON/OFF        # Toggle: ON or Off (The default ON value is 30% brightness)
+##        + Bright: 30%           # Toggle: 0-100% (in 10% steps, only white)
 ##        + Lights on Max         # Command macro
-##        + Red: 0.30             # Toogle: 0.00-1.00 (in 0.01 steps)
-##        + Green: 0.30           # Toogle: 0.00-1.00 (in 0.01 steps)
-##        + Blue: 0.30            # Toogle: 0.00-1.00 (in 0.01 steps)
+##        + Red: 0.30             # Toggle: 0.00-1.00 (in 0.01 steps)
+##        + Green: 0.30           # Toggle: 0.00-1.00 (in 0.01 steps)
+##        + Blue: 0.30            # Toggle: 0.00-1.00 (in 0.01 steps)
 ##
 #######################################################################################
 
@@ -246,9 +246,9 @@ gcode:
     {% set VALUE_BLUE = printer["gcode_macro lights_var"].blue %}
     SET_LED LED=lights RED={VALUE_RED} GREEN={VALUE_GREEN} BLUE={VALUE_BLUE} TRANSMIT=1
 
-## Settings for toogle LCD menu <Lights: ON/OFF> button:
+## Settings for toggle <Lights: ON/OFF>: in the LCD menu: 
 [gcode_macro set_onoff_lights]                                        
-description: Lights ON/OF toogle for menu
+description: Lights ON/OF toggle for menu
 gcode:
     {% set VALUE_ONOFF = printer["gcode_macro lights_var"].onoff %} 
     {% if VALUE_ONOFF == 1 %}
@@ -257,7 +257,7 @@ gcode:
        lights_off
     {% endif %}
 
-## Settings for toogle LCD Menu Brighttness
+## Settings for toggle brightness in the LCD menu:
 [gcode_macro set_bright_lights]                      
 description: LCD Menu brightness Lights skript
 gcode:
@@ -270,7 +270,7 @@ gcode:
     SET_LED LED=lights RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} TRANSMIT=1                          # Set Lights to <bright> value.
     lights_var RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} ONOFF={VALUE_ONOFF} BRIGHT={VALUE_BRIGHT}   # Save change to variables.
 
-## Setings For LCD Menu RGB control:
+## Settings for toggle RGB in the LCD menu:
 [gcode_macro set_rgb_lights]
 description: LCD Menu RGB Lights script
 gcode:

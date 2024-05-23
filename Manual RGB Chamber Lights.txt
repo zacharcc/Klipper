@@ -10,7 +10,7 @@
 ##    + Temperature
 ##    + ...
 ##    + Lights:
-##        + Lights: ON/OF         # Toogle: On or Off (ON has a default brightness of 30%.)
+##        + Lights: ON/OF         # Toogle: On or Off (Default ON is to 30% Bright)
 ##        + Bright: 30%           # Toogle: 0-100% (in 10% steps, only white)
 ##        + Lights on Max         # Command
 ##        + Red: 0.30             # Toogle: 0.00 - 1.00 (in 0.01 steps)
@@ -331,13 +331,13 @@ gcode:
 [gcode_macro lights_off]
 description: Lights OFF
 gcode:
-    SET_LED LED=lights RED=0 GREEN=0 BLUE=0 TRANSMIT=1 SYNC=0                            # Lights OFF.
-    lights_var RED=0.0 GREEN=0.0 BLUE=0.0 ONOFF=0 BRIGHT=0.0                             # Save change to variables.
+    SET_LED LED=lights RED=0 GREEN=0 BLUE=0 TRANSMIT=1 SYNC=0                          # Lights OFF.
+    lights_var RED=0.0 GREEN=0.0 BLUE=0.0 ONOFF=0 BRIGHT=0.0                           # Save change to variables.
   
 [gcode_macro lights_on]
 description: Lights ON
 gcode:
-    SET_LED LED=lights RED=0.3 GREEN=0.3 BLUE=0.3 TRANSMIT=1 SYNC=0                    # Lights ON (Default ON to 30% Bright).
+    SET_LED LED=lights RED=0.3 GREEN=0.3 BLUE=0.3 TRANSMIT=1 SYNC=0                    # Lights ON (Default ON is to 30% Bright, 0.3=30%, 0.5=50% etc..).
     lights_var RED=0.3 GREEN=0.3 BLUE=0.3 ONOFF=1 BRIGHT=0.3                           # Save change to variables.
 
 [gcode_macro max_lights]

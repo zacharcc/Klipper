@@ -379,4 +379,5 @@ gcode:
 description: Lights blue
 gcode:
   SET_LED LED=lights RED=0.0 GREEN=0.2 BLUE=0.33 TRANSMIT=1 SYNC=0       # Set Lights.
-  lights_var RED=0.0 GREEN=0.2 BLUE=0.33 ONOFF=1 BRIGHT=0.3              # Save change to variables.
+  lights_var RED=0.0 GREEN=0.2 BLUE=0.33 ONOFF=1 BRIGHT=0.3              # Change needs to be saved to variables, <BRIGHT> then by highest (R,G or B) element.
+

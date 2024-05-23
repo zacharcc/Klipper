@@ -346,12 +346,16 @@ gcode:
     lights_var RED=1.0 GREEN=1.0 BLUE=1.0 ONOFF=1 BRIGHT=1.0                           # Save change to variables.
 
 
+#####################################################################
+#   Examples:
+#####################################################################
+
 ## BLINK Examples:
 [gcode_macro Green_Blink]
 description: Green Blink
 gcode:
   {% for flashes in range (params.COUNT|default(2)|int) %}
-  SET_LED LED=lights RED=0 GREEN=0.2 BLUE=0 TRANSMIT=1
+  SET_LED LED=lights RED=0 GREEN=0.3 BLUE=0 TRANSMIT=1
   G4 P500
   restore_lights                                                          # Low (delay) Lights value by previous Color, ON or OFF state.
   G4 P500

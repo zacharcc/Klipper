@@ -248,7 +248,7 @@ gcode:
 
 ## Settings for toggle <Lights: ON/OFF>: in the LCD menu: 
 [gcode_macro set_onoff_lights]                                        
-description: Lights ON/OF toggle for menu
+description: LCD menu Lights ON/OFF script
 gcode:
     {% set VALUE_ONOFF = printer["gcode_macro lights_var"].onoff %} 
     {% if VALUE_ONOFF == 1 %}
@@ -259,7 +259,7 @@ gcode:
 
 ## Settings for toggle brightness in the LCD menu:
 [gcode_macro set_bright_lights]                      
-description: LCD Menu brightness Lights skript
+description: LCD Menu Lights brightness skript
 gcode:
     {% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
     {% if VALUE_BRIGHT > 0.08 | float | round(2) %}                                                       # Save change on/off variable value on BRIGHT.
@@ -272,7 +272,7 @@ gcode:
 
 ## Settings for toggle RGB in the LCD menu:
 [gcode_macro set_rgb_lights]
-description: LCD Menu RGB Lights script
+description: LCD Menu Lights RGB script
 gcode:
     {% set R = printer["gcode_macro lights_var"].red | float | round(2) %}
     {% set G = printer["gcode_macro lights_var"].green | float | round(2) %}

@@ -12,9 +12,9 @@
 ##        + Lights: ON/OFF        # Toogle: ON or Off (The default ON value is 30% brightness)
 ##        + Bright: 30%           # Toogle: 0-100% (in 10% steps, only white)
 ##        + Lights on Max         # Command macro
-##        + Red: 0.30             # Toogle: 0.00 - 1.00 (in 0.01 steps)
-##        + Green: 0.30           # Toogle: 0.00 - 1.00 (in 0.01 steps)
-##        + Blue: 0.30            # Toogle: 0.00 - 1.00 (in 0.01 steps)
+##        + Red: 0.30             # Toogle: 0.00-1.00 (in 0.01 steps)
+##        + Green: 0.30           # Toogle: 0.00-1.00 (in 0.01 steps)
+##        + Blue: 0.30            # Toogle: 0.00-1.00 (in 0.01 steps)
 ##
 #######################################################################################
 

@@ -28,7 +28,7 @@
 ## - PREPARE:
 ##   Need to creat emtpy <variables.cfg> file in the path:  ~/printer_data/config/variables.cfg
 
-## - /// End of Notes, add all codes below to printer.cfg >>>
+## - /// End of Notes, add all codes below copy to printer.cfg >>>
 
 
 #####################################################################

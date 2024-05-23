@@ -3,7 +3,7 @@
 ## - /// Start Notes:
 
 #######################################################################################
-##  LCD Menu control tree look like this:
+##  On the LCD Display, the control menu tree will look like this:
 ##
 ##  Main:
 ##    + Control

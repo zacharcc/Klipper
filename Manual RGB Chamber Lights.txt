@@ -19,7 +19,7 @@
 ##
 #######################################################################################
 
-## - (Default ON 30% Brightness can be renamed in <gcode_macro ligths_on> (when is renamed: must both lines, set and save))
+## - (Default ON 30% Brightness can be renamed in <gcode_macro ligths_on> (when is renamed: must both lines, set and save)).
 
 ## - Setup for HARDWARE:
 ##   LCD Display: BIGTREETECH MINI 12864 V2.0 LCD Display Screen.
@@ -164,10 +164,10 @@ input_min: 0.00
 input_max: 1.00
 input_step: 0.01
 gcode:
-    {% set VALUE_RED = menu.input | float | round(2) %}                   ## Set variable <VAUUE_RED> by value of toggle button
-    SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=red VALUE={ VALUE_RED }  ## Save variable value 
-    SAVE_VARIABLE VARIABLE=red VALUE={ VALUE_RED }                        ## Save variable value (Write variable to the disk, for printer restart)
-    set_rgb_lights                                                        ## Load variable values and set lights by them
+    {% set VALUE_RED = menu.input | float | round(2) %}                   ## Set variable <VAUUE_RED> by value of toggle button.
+    SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=red VALUE={ VALUE_RED }  ## Save variable value.
+    SAVE_VARIABLE VARIABLE=red VALUE={ VALUE_RED }                        ## Save variable value (Write variable to the disk, for printer restart).
+    set_rgb_lights                                                        ## Load variable values and set lights by them.
 	
 [menu __main __lights __lights_green]
 type: input
@@ -203,11 +203,11 @@ gcode:
 #####################################################################
 #   Manual Lights - MACROS
 #####################################################################
-## SETUP Variables:
+## SETUP variables and set saving:
 
 [gcode_macro lights_var]
 description: Lights Variables
-variable_red: 0.3           # Variable and default value
+variable_red: 0.3           # Variable _name and default <value>.
 variable_green: 0.3
 variable_blue: 0.3
 variable_onoff: 1
@@ -233,11 +233,11 @@ gcode:
 [delayed_gcode set_lights_onstartup]   
 initial_duration: 1
 gcode:
-   {% set svv = printer.save_variables.variables %}                                                  # Load values from <variables.cfg>
-   lights_var RED={svv.red} GREEN={svv.green} BLUE={svv.blue} ONOFF={svv.onoff} BRIGHT={svv.bright}  # Write values to variables
-   SET_LED LED=lights RED={svv.red} GREEN={svv.green} BLUE={svv.blue} TRANSMIT=1                     # Set Lights to variables values
+   {% set svv = printer.save_variables.variables %}                                                  # Load values from <variables.cfg>.
+   lights_var RED={svv.red} GREEN={svv.green} BLUE={svv.blue} ONOFF={svv.onoff} BRIGHT={svv.bright}  # Write values to variables for LCD show.
+   SET_LED LED=lights RED={svv.red} GREEN={svv.green} BLUE={svv.blue} TRANSMIT=1                     # Set Lights to variables values.
     
-## Description: Restores the lights to their previous state, for example after the <Green_Blink> macro, (also used as value low between individual blinks).
+## Description: Restores the lights to their previous state, for example after the <Green_Blink> macro done, (also used as value low between individual blinks).
 ## Function: Loads variables from the <lights_var> macro (<variable_red>, <variable_green> and <variable_blue>) and sets the lights to them.
 [gcode_macro restore_lights]
 description: Set Lights on <lights_var> variables
@@ -263,13 +263,13 @@ gcode:
 description: LCD Menu brightness Lights skript
 gcode:
     {% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
-    {% if VALUE_BRIGHT > 0.08 | float | round(2) %}                                                       # Save change on/off variable value on BRIGHT
+    {% if VALUE_BRIGHT > 0.08 | float | round(2) %}                                                       # Save change on/off variable value on BRIGHT.
         {% set VALUE_ONOFF = 1 | int %}    
     {% else %}
         {% set VALUE_ONOFF = 0 | int %}
     {% endif %} 
-    SET_LED LED=lights RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} TRANSMIT=1                          # Set Lights to <bright> value
-    lights_var RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} ONOFF={VALUE_ONOFF} BRIGHT={VALUE_BRIGHT}   # Save change to variables
+    SET_LED LED=lights RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} TRANSMIT=1                          # Set Lights to <bright> value.
+    lights_var RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} ONOFF={VALUE_ONOFF} BRIGHT={VALUE_BRIGHT}   # Save change to variables.
 
 ## Setings For LCD Menu RGB control:
 [gcode_macro set_rgb_lights]
@@ -331,7 +331,7 @@ gcode:
 [gcode_macro lights_off]
 description: Lights OFF
 gcode:
-    SET_LED LED=lights RED=0 GREEN=0 BLUE=0 TRANSMIT=1 SYNC=0                            # Lights OFF
+    SET_LED LED=lights RED=0 GREEN=0 BLUE=0 TRANSMIT=1 SYNC=0                            # Lights OFF.
     lights_var RED=0.0 GREEN=0.0 BLUE=0.0 ONOFF=0 BRIGHT=0.0                             # Save change to variables.
   
 [gcode_macro lights_on]
@@ -343,7 +343,7 @@ gcode:
 [gcode_macro max_lights]
 description: Lights on MAX
 gcode:
-    SET_LED LED=lights RED=1 GREEN=1 BLUE=1 TRANSMIT=1 SYNC=0                          # Lights on MAX
+    SET_LED LED=lights RED=1 GREEN=1 BLUE=1 TRANSMIT=1 SYNC=0                          # Lights on MAX.
     lights_var RED=1.0 GREEN=1.0 BLUE=1.0 ONOFF=1 BRIGHT=1.0                           # Save change to variables.
 
 

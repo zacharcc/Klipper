@@ -348,7 +348,7 @@ gcode:
 
 
 ## BLINK Examples:
-[gcode_macro Green_Blink]  # For same status, idle_timeout etc
+[gcode_macro Green_Blink]
 description: Green Blink
 gcode:
   {% for flashes in range (params.COUNT|default(2)|int) %}

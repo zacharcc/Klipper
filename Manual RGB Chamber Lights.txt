@@ -364,7 +364,7 @@ gcode:
   restore_lights
 
 
-## SET COLOURS Example:
+## SET COLOURS Examples:
 [gcode_macro blue]
 description: Lights blue
 gcode:

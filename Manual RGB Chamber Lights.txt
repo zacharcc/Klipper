@@ -10,7 +10,7 @@
 ##    + Temperature
 ##    + ...
 ##    + Lights:
-##        + Lights: ON/OF         # Toogle: On or Off (ON defaults to 30% brightnesst)
+##        + Lights: ON/OF         # Toogle: On or Off (ON has a default brightness of 30%.)
 ##        + Bright: 30%           # Toogle: 0-100% (in 10% steps, only white)
 ##        + Lights on Max         # Command
 ##        + Red: 0.30             # Toogle: 0.00 - 1.00 (in 0.01 steps)
@@ -35,7 +35,7 @@
 #####################################################################
 #   Save Variables:
 #####################################################################
-## Saves variables to disk which can then be loaded when the printer is powered on.
+## Saves variables to disk which can then be loaded (and restored) when the printer is powered on.
 
 [save_variables]     
 filename: ~/printer_data/config/variables.cfg
@@ -201,7 +201,7 @@ gcode:
 	
 
 #####################################################################
-#   Manual Lights - MACROS
+#   Manual Lights - MACROS:
 #####################################################################
 ## SETUP variables and set saving:
 

@@ -205,7 +205,7 @@ gcode:
 
 [gcode_macro lights_var]
 description: Lights Variables
-variable_red: 0.3           # Variable _name and default <value>.
+variable_red: 0.3                 # Variable _name and default <value>.
 variable_green: 0.3
 variable_blue: 0.3
 variable_onoff: 1

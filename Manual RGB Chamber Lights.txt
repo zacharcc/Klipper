@@ -43,7 +43,6 @@ filename: ~/printer_data/config/variables.cfg
 #####################################################################
 #   Display SETUP:
 #####################################################################
-## For Octopus 1.1 STM32F407 board, can be different.
 
 [display]
 lcd_type: uc1701
@@ -101,7 +100,7 @@ aliases:
 #################################################################
 #   Neopixel RGB - Chamber Light - Config SETUP:
 #################################################################
-## For Octopus 1.1 STM32F407 board, can be different.
+## For Octopus 1.1 STM32F407 board (for another board, the <pin: PB0> may be different).
 ## Gcode usage: SET_LED LED=<config_name> RED=<value> GREEN=<value> BLUE=<value> [INDEX=<index>] [TRANSMIT=0] [SYNC=1]
 
 [neopixel lights]

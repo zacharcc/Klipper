@@ -10,7 +10,7 @@
 ##    + Temperature
 ##    + ...
 ##    + Lights:
-##        + Lights: ON/OF         # Toogle: On or Off (Default ON is to 30% brightness)
+##        + Lights: ON/OF         # Toogle: ON or Off (Default ON is to 30% brightness)
 ##        + Bright: 30%           # Toogle: 0-100% (in 10% steps, only white)
 ##        + Lights on Max         # Command macro
 ##        + Red: 0.30             # Toogle: 0.00 - 1.00 (in 0.01 steps)

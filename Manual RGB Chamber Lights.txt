@@ -151,7 +151,7 @@ gcode:
 type: command
 name: Bright on max
 gcode:
-    max_lights
+    lights_max
 
 [menu __main __lights __lights_red]
 type: input
@@ -329,7 +329,7 @@ gcode:
     SET_LED LED=lights RED=0.3 GREEN=0.3 BLUE=0.3 TRANSMIT=1 SYNC=0                    # Lights ON (Default ON is to 30% Bright, 0.3=30%, 0.5=50% etc..).
     lights_var RED=0.3 GREEN=0.3 BLUE=0.3 ONOFF=1 BRIGHT=0.3                           # Save change to variables.
 
-[gcode_macro max_lights]
+[gcode_macro lights_max]
 description: Lights on MAX
 gcode:
     SET_LED LED=lights RED=1 GREEN=1 BLUE=1 TRANSMIT=1 SYNC=0                          # Lights on MAX.

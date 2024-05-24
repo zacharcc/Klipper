@@ -267,7 +267,7 @@ gcode:
     {% else %}
         {% set VALUE_ONOFF = 0 | int %}
     {% endif %} 
-    SET_LED LED=lights RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} TRANSMIT=1                          # Set Lights to <bright> value.
+    SET_LED LED=lights RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} TRANSMIT=1 SYNC=0                   # Set Lights to <bright> value.
     lights_var RED={VALUE_BRIGHT} GREEN={VALUE_BRIGHT} BLUE={VALUE_BRIGHT} ONOFF={VALUE_ONOFF} BRIGHT={VALUE_BRIGHT}   # Save change to variables.
 
 ## Settings for toggle RGB in the LCD menu:
@@ -313,7 +313,7 @@ gcode:
 	   {% endif %}
 	{% endif %}
     ## Set lights by Menu RGB variables values
-    SET_LED LED=lights RED={R} GREEN={G} BLUE={B} TRANSMIT=1
+    SET_LED LED=lights RED={R} GREEN={G} BLUE={B} TRANSMIT=1 SYNC=0
 
 
 ## Individual Macros:

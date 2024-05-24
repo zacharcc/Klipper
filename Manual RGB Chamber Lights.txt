@@ -329,7 +329,7 @@ gcode:
     SET_LED LED=lights RED=0.3 GREEN=0.3 BLUE=0.3 TRANSMIT=1 SYNC=0                    # Lights ON (Default ON is to 30% Bright, 0.3=30%, 0.5=50% etc..).
     lights_var RED=0.3 GREEN=0.3 BLUE=0.3 ONOFF=1 BRIGHT=0.3                           # Save change to variables.
 
-## For Example: To rename above <lights_on> to 50% will look like this:
+## For Example: To rename above <lights_on> to 50% default brightness will look like this:
 ## [gcode_macro lights_on]
 ## description: Lights ON
 ## gcode:

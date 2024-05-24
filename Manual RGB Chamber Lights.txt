@@ -344,7 +344,7 @@ gcode:
 
 
 #####################################################################
-#   Gcode macro usage example:
+#   Examples of using the sample gcode macro:
 #####################################################################
 
 ## BLINK Examples:

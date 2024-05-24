@@ -202,7 +202,7 @@ gcode:
 #####################################################################
 #   Manual Lights - MACROS:
 #####################################################################
-## SETUP variables and set saving:
+## SETUP variables, adding parameters to the macro and set saving:
 
 [gcode_macro lights_var]
 description: Lights Variables

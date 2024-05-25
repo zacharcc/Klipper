@@ -352,7 +352,7 @@ gcode:
   {% for flashes in range (params.COUNT|default(2)|int) %}        # Double flash
   SET_LED LED=lights RED=0 GREEN=0.3 BLUE=0 TRANSMIT=1
   G4 P500
-  restore_lights                                                  # Low (delay) Lights value by previous Color, ON white or OFF state.
+  restore_lights                                                  # Lights low value by previous Color, ON white or OFF state.
   G4 P500
   {% endfor %}
   restore_lights                                                  # After end of Blinks restore Lights to previous.

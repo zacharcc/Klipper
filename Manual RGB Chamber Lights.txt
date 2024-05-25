@@ -9,7 +9,7 @@
 ##    + Temperature
 ##    + ...
 ##    + Lights:
-##        + Lights: ON/OFF        # Toggle: ON or Off (The default ON value is 30% brightness)
+##        + Lights: ON/OFF        # Toggle: ON or Off (The default value of this ON button is 30% brightness)
 ##        + Bright: 30%           # Toggle: 0-100% (in 10% steps, only white)
 ##        + Lights on Max         # Command macro
 ##        + Red: 0.30             # Toggle: 0.00-1.00 (in 0.01 steps)
@@ -18,7 +18,8 @@
 ##
 #######################################################################################
 
-## - (Default button On at 30% Brightness can be renamed in below <gcode_macro ligths_on> (when is renamed: must both lines, set and save)).
+## - (Default button On at 30% Brightness can be renamed in below <gcode_macro ligths_on> (when is renamed: must both lines, set and save)),
+##   other variable light values are written to a file and restored on reboot.
 
 ## - Setup for HARDWARE:
 ##   LCD Display: BIGTREETECH MINI 12864 V2.0 LCD Display Screen.

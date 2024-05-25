@@ -27,7 +27,7 @@
 ##   Neo Daylight LEDs connected to Octopus RGB output (on the Octopus 1.1 STM32F407 board it is a pin PB0).
 
 ## - PREPARE:
-##   Need to creat emtpy <variables.cfg> file in the path:  ~/printer_data/config/variables.cfg
+##   Need to creat empty <variables.cfg> file in the path:  ~/printer_data/config/variables.cfg
 
 ## - /// End of Notes, add (copy) all codes below to printer.cfg >>>
 

@@ -18,7 +18,7 @@
 ##
 #######################################################################################
 
-## - (Default ON 30% Brightness can be renamed in below <gcode_macro ligths_on> (when is renamed: must both lines, set and save)).
+## - (Default button On at 30% Brightness can be renamed in below <gcode_macro ligths_on> (when is renamed: must both lines, set and save)).
 
 ## - Setup for HARDWARE:
 ##   LCD Display: BIGTREETECH MINI 12864 V2.0 LCD Display Screen.
@@ -34,7 +34,7 @@
 #####################################################################
 #   Save Variables:
 #####################################################################
-## Saves variables to the <variables.cfg> file, which can then be loaded (and restored) when the printer is powered on.
+## Saves lights variables to the <variables.cfg> file, which can then be loaded (and restored) when the printer is powered on.
 
 [save_variables]     
 filename: ~/printer_data/config/variables.cfg

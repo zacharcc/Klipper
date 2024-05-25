@@ -112,7 +112,7 @@ color_order: GRB
 #initial_BLUE: 0.3
 
 #################################################################
-#   LCD Display Menu:                                    
+#   Menu tree on the LCD display:                                    
 #################################################################
 
 [menu __main __lights]

@@ -310,6 +310,21 @@ gcode:
                       {% if R == G and G == B %}
                          SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ B }
 		         SAVE_VARIABLE VARIABLE=bright VALUE={ B }
+		      {% else %}
+			 {% if R == G and R > B %}
+                            SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ R }
+			    SAVE_VARIABLE VARIABLE=bright VALUE={ R } 
+			 {% else %}
+			    {% if G == B and G > R %}
+                               SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ G }
+			       SAVE_VARIABLE VARIABLE=bright VALUE={ G } 
+			    {% else %}
+			       {% if B == R and B > G %}
+                                  SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=bright VALUE={ B }
+			          SAVE_VARIABLE VARIABLE=bright VALUE={ B } 					  
+			       {% endif %}
+			    {% endif %}
+			 {% endif %}
                       {% endif %}
 		   {% endif %}
 		{% endif %}	

@@ -206,7 +206,7 @@ gcode:
 ## SETUP variables, adding parameters to the macro and set saving:
 
 [gcode_macro lights_var]
-description: Lights Variables
+description: Variables of lights
 variable_red: 0.3                 # Variable _name and default <value>.
 variable_green: 0.3
 variable_blue: 0.3
@@ -240,7 +240,7 @@ gcode:
 ## Description: Restores the lights to their previous state, for example after the <Green_Blink> macro done, (also used as value low between individual blinks).
 ## Function: Loads variables from the <lights_var> macro (<variable_red>, <variable_green> and <variable_blue>) and sets the lights to them.
 [gcode_macro restore_lights]
-description: Set Lights by <lights_var> variables
+description: Set Lights by lights_var variables
 gcode:
     {% set VALUE_RED = printer["gcode_macro lights_var"].red %}                               
     {% set VALUE_GREEN = printer["gcode_macro lights_var"].green %}

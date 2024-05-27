@@ -166,7 +166,7 @@ input_step: 0.01
 gcode:
     {% set VALUE_RED = menu.input | float | round(2) %}                   ## Set variable <VAUUE_RED> by value of toggle button.
     SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=red VALUE={ VALUE_RED }  ## Save variable value.
-    SAVE_VARIABLE VARIABLE=red VALUE={ VALUE_RED }                        ## Save variable value (Write variable to the disk, for printer restart).
+    SAVE_VARIABLE VARIABLE=red VALUE={ VALUE_RED }                        ## Save variable value (Write variable to the file, for printer restart).
     set_rgb_lights                                                        ## Load variable values and set lights by them.
 	
 [menu __main __lights __lights_green]
@@ -263,7 +263,7 @@ gcode:
 description: Brightness script of lights on LCD menu
 gcode:
     {% set VALUE_BRIGHT = printer["gcode_macro lights_var"].bright %}
-    {% if VALUE_BRIGHT > 0.08 | float | round(2) %}                                                       # Save change on/off variable value on BRIGHT.
+    {% if VALUE_BRIGHT > 0.08 | float | round(2) %}
         {% set VALUE_ONOFF = 1 | int %}    
     {% else %}
         {% set VALUE_ONOFF = 0 | int %}

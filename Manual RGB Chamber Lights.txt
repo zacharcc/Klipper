@@ -318,7 +318,6 @@ gcode:
     ## Set lights by RGB variables values of toggle menu:
     SET_LED LED=lights RED={R} GREEN={G} BLUE={B} TRANSMIT=1 SYNC=0
 
-
 ## Individual Macros:
 [gcode_macro lights_off]
 description: Lights OFF

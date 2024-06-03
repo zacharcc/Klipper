@@ -280,11 +280,11 @@ gcode:
     {% set B = printer["gcode_macro lights_var"].blue | float | round(2) %}           
     ## Save to <ONOFF> variable value (1 or 0) on RGB change:
     {% if R > 0.00 or G > 0.00 or B > 0.00 |float|round(2) %}         
-	SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
-	SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
+       SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 1 }
+       SAVE_VARIABLE VARIABLE=onoff VALUE={ 1 }
     {% else %}
-        SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 0 }
-	SAVE_VARIABLE VARIABLE=onoff VALUE={ 0 }  
+       SET_GCODE_VARIABLE MACRO=lights_var VARIABLE=onoff VALUE={ 0 }
+       SAVE_VARIABLE VARIABLE=onoff VALUE={ 0 }  
     {% endif %}	
     ## Sifter: Save highest value of the <R>, <G>, or <B> element in the <BRIGHT> variable on RGB change:
     {% if R > G and R > B %}          

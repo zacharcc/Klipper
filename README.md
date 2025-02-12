@@ -1,4 +1,4 @@
-A selection of some Klipper macros from my project.
+A selection of some Klipper macros from my project. (some older codes to update, but functional)
 
 
 - <b>mainsail_custom.cfg:</b><br>

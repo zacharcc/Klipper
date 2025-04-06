@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SANDWORM_REPO="$HOME/Sandworm/config"
-CONFIG_DIR="$HOME/printer_data/config"
+CONFIG_DIR="$HOME/printer_data/config/TEST/update_test/"
 BACKUP_DIR="$HOME/Sandworm/Backup/backup_config_$(date +%Y%m%d_%H%M%S)"
 
 ## Colors:

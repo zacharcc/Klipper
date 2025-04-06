@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Checking if a folder ~/Sandworm exists:
+if [ ! -d ~/Sandworm ]; then
+    echo "[install.sh] Creating the missing folder ~/Sandworm"
+    mkdir -p ~/Sandworm/config
+fi
+
 SANDWORM_REPO="$HOME/Sandworm/test/"
 CONFIG_DIR="$HOME/printer_data/config/TEST/update_test/"
 BACKUP_DIR="$HOME/Sandworm/Backup/backup_config_$(date +%Y%m%d_%H%M%S)"

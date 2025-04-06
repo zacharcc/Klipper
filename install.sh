@@ -35,14 +35,15 @@ backup_files() {
     echo "📂 Creating backup of your current config in $BACKUP_DIR..."
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup copy error!" 
-	}
+    }
 
 ## Functions for copying files with control:
 copy_files() {
     echo "🚀 Updating Sandworm config..."
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/" || echo -e "$ERROR Update copy error!" 
-	}
+    rsync -av --itemize-changes "$SANDWORM_REPO/" "$CONFIG_DIR/"
+    }
 
 ## Version check function:
 version() {
@@ -58,7 +59,7 @@ cleanup() {
     echo "🧹 Cleaning up outdated files..."
     find "$CONFIG_DIR" -name '*.bak' -type f -delete
     echo -e "$OK Cleaning completed." 
-	}
+    }
 
 ## Dependency installation (optional - currently disabled)
 # -------------------------------------------------------------

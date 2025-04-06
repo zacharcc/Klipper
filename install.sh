@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SANDWORM_REPO="$HOME/Sandworm/config"
-CONFIG_DIR="$HOME/printer_data/config/TEST/update_test/"
+CONFIG_DIR="$HOME/printer_data/config"
 BACKUP_DIR="$HOME/Sandworm/Backup/backup_config_$(date +%Y%m%d_%H%M%S)"
 
 ## Colors:
@@ -14,21 +14,10 @@ echo "🔄 Starting Sandworm update..."
 set -Ee
 trap 'echo -e "\e[31mERROR:\e[0m Script failed at line $LINENO"' ERR
 
-## Root check (optional - currently not needed)
-# -------------------------------------------------------------
-# The following block checks if the script is run as root.
-# If not, it automatically re-executes itself using sudo.
-# This is only necessary if the script includes operations
-# requiring root privileges (e.g. system-wide apt installs).
-#
-# Currently, all operations are done within the user's home
-# directory, so this block is not required.
-# You can re-enable it if root access becomes necessary.
-#
-# if [[ $EUID -ne 0 ]]; then
-#     echo -e "$ERROR This script must be run as root! I'm trying to run it with sudo..."
-#     exec sudo "$0" "$@"
-# fi
+if [ ! -d "$SANDWORM_REPO" ]; then
+    echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"
+    exit 1
+fi
 
 ## Functions for backing up files with control:
 backup_files() {
@@ -61,37 +50,15 @@ cleanup() {
     echo -e "$OK Cleaning completed." 
     }
 
-## Dependency installation (optional - currently disabled)
-# -------------------------------------------------------------
-# This function is a placeholder for installing additional
-# dependencies your project might need in the future.
-#
-# If you decide to use apt-get or other system package managers
-# that require root access, make sure to also enable the
-# root check block above, so the script can elevate privileges.
-#
-# To use this, simply uncomment the apt-get lines and make sure
-# you add the necessary package names:
-#
-# sudo apt-get update
-# sudo apt-get install -y your-package-name
-#
-# For example:
-# sudo apt-get install -y git python3-pip
-
-install_dependencies() {
-    echo "🛠 Installing dependencies..."
-    # sudo apt-get update
-    # sudo apt-get install -y your-package-name
-    echo -e "$SKIPPED No dependencies needed."
-    }
-
 ## Launching functions:
-# install_dependencies
 backup_files
 copy_files
 version
 cleanup
+
+LOGFILE="$HOME/Sandworm/update_logs/update_$(date +%Y%m%d_%H%M%S).log"
+mkdir -p "$(dirname "$LOGFILE")"
+exec > >(tee -a "$LOGFILE") 2>&1
 
 echo -e "✅ $OK Update complete! Your old config is backed up at $BACKUP_DIR"
 echo -e "⚠️ $SKIPPED If you had custom modifications, check the backup folder!"

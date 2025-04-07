@@ -1,9 +1,9 @@
-#!/bin/bash
-
 # --- Paths ---
 SANDWORM_REPO="$HOME/Sandworm/config"
-CONFIG_DIR="$HOME/printer_data/config"
-MOONRAKER_CONF="$HOME/printer_data/moonraker.conf"
+# CONFIG_DIR="$HOME/printer_data/config
+# MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
+CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
+MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/Backup/backup_config_$(date +%Y%m%d_%H%M%S)"
 LOGFILE="$HOME/Sandworm/update_logs/update_$(date +%Y%m%d_%H%M%S).log"
 
@@ -71,7 +71,7 @@ restart_moonraker() {
 # --- Cold Install Detection ---
 IS_COLD_INSTALL=false
 if [ ! -f "$MOONRAKER_CONF" ]; then
-    echo -e "$ERROR moonraker.conf not found in $CONFIG_DIR"
+	echo -e "$ERROR moonraker.conf not found: $MOONRAKER_CONF"
     IS_COLD_INSTALL=true
 elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
     IS_COLD_INSTALL=true

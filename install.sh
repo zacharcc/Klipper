@@ -26,7 +26,6 @@ trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 
 # --- Functions ---
 add_update_manager_block() {
-    VERSION=$(cat "$SANDWORM_REPO/version.txt" | tr -d '\r')  # Načítá verzi z version.txt
     echo -e "\n[update_manager Sandworm]
 type: git_repo
 origin: https://github.com/zacharcc/Klipper.git
@@ -34,8 +33,7 @@ path: ~/Sandworm
 primary_branch: main
 managed_services: klipper
 install_script: install.sh
-version: $VERSION" >> "$MOONRAKER_CONF"
-    echo -e "$OK Added update_manager block to moonraker.conf with version $VERSION"
+version: ~/Sandworm/version.txt" >> "$MOONRAKER_CONF"
 }
 
 backup_files() {
@@ -48,6 +46,15 @@ copy_files() {
     echo "🚀 Updating Sandworm config..."
     mkdir -p "$CONFIG_DIR"
 	rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
+}
+
+version() {
+    if [ -f "$HOME/Sandworm/version.txt" ]; then
+        VERSION=$(cat "$HOME/Sandworm/version.txt")
+        echo "📌 Updating to Sandworm version $VERSION"
+    else
+        echo "⚠️ version.txt not found!"
+    fi
 }
 
 restart_klipper() {
@@ -99,6 +106,7 @@ else
 
     backup_files
     copy_files
+    version
 
     echo -e "$OK Update complete! Your config was backed up at $BACKUP_DIR"
     echo -e "$SKIPPED If you had custom changes, check backup manually."

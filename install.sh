@@ -19,6 +19,14 @@ ERROR="\e[31m[ERROR]\e[0m"
 mkdir -p "$(dirname "$LOGFILE")"
 exec > >(tee -a "$LOGFILE") 2>&1
 
+# --- Version ---
+VERSION_FILE="$HOME/Sandworm/version.txt"
+if [ -f "$VERSION_FILE" ]; then
+    VERSION=$(cat "$VERSION_FILE" | tr -d '\r')
+else
+    VERSION="unknown"
+fi
+
 echo "🔄 Starting Sandworm install/update script..."
 
 set -Ee
@@ -26,7 +34,6 @@ trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 
 # --- Functions ---
 add_update_manager_block() {
-    VERSION=$(cat "$SANDWORM_REPO/version.txt" | tr -d '\r')  # Načítá verzi z version.txt
     echo -e "\n[update_manager Sandworm]
 type: git_repo
 origin: https://github.com/zacharcc/Klipper.git
@@ -34,10 +41,9 @@ path: ~/Sandworm
 primary_branch: main
 managed_services: klipper
 install_script: install.sh
-version: \"$VERSION\"" >> "$MOONRAKER_CONF"
+version: $VERSION" >> "$MOONRAKER_CONF"
     echo -e "$OK Added update_manager block to moonraker.conf with version $VERSION"
 }
-
 
 backup_files() {
     echo "📂 Creating backup of your current config in $BACKUP_DIR..."
@@ -49,15 +55,6 @@ copy_files() {
     echo "🚀 Updating Sandworm config..."
     mkdir -p "$CONFIG_DIR"
 	rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
-}
-
-version() {
-    if [ -f "$HOME/Sandworm/version.txt" ]; then
-        VERSION=$(cat "$HOME/Sandworm/version.txt")
-        echo "📌 Updating to Sandworm version $VERSION"
-    else
-        echo "⚠️ version.txt not found!"
-    fi
 }
 
 restart_klipper() {
@@ -109,7 +106,6 @@ else
 
     backup_files
     copy_files
-    version
 
     echo -e "$OK Update complete! Your config was backed up at $BACKUP_DIR"
     echo -e "$SKIPPED If you had custom changes, check backup manually."

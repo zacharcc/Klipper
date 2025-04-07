@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # --- Paths ---
-SANDWORM_REPO="$HOME/Sandworm/test"
-CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
-MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
+SANDWORM_REPO="$HOME/Sandworm/config"
+CONFIG_DIR="$HOME/printer_data/config"
+MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/Backup/backup_config_$(date +%Y%m%d_%H%M%S)"
 LOGFILE="$HOME/Sandworm/update_logs/update_$(date +%Y%m%d_%H%M%S).log"
 
@@ -19,7 +19,7 @@ exec > >(tee -a "$LOGFILE") 2>&1
 echo "🔄 Starting Sandworm install/update script..."
 
 set -Ee
-trap 'echo -e "\e[31mERROR:\e[0m Script failed at line $LINENO"' ERR
+trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 
 # --- Functions ---
 add_update_manager_block() {
@@ -30,20 +30,20 @@ path: ~/Sandworm
 primary_branch: main
 managed_services: klipper
 install_script: install.sh
-version: ~/Sandworm/version.txt" >> "$MOONRAKER_CONF" 
+version: ~/Sandworm/version.txt" >> "$MOONRAKER_CONF"
 }
 
 backup_files() {
     echo "📂 Creating backup of your current config in $BACKUP_DIR..."
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
-    }
+}
 
 copy_files() {
     echo "🚀 Updating Sandworm config..."
     mkdir -p "$CONFIG_DIR"
-    rsync -av --delete "$SANDWORM_REPO/" "$CONFIG_DIR/" || echo -e "$ERROR Copy failed!"
-    }
+    rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/" || echo -e "$ERROR Copy failed!"
+}
 
 version() {
     if [ -f "$HOME/Sandworm/version.txt" ]; then
@@ -51,8 +51,8 @@ version() {
         echo "📌 Updating to Sandworm version $VERSION"
     else
         echo "⚠️ version.txt not found!"
-    fi 
-	}
+    fi
+}
 
 restart_klipper() {
     echo "♻️ Restarting Klipper to load new config..."
@@ -60,23 +60,31 @@ restart_klipper() {
         echo "Restarting in $i seconds..."
         sleep 1
     done
-    curl -X POST 'http://localhost:7125/printer/restart' 
-	}
+    curl -X POST 'http://localhost:7125/printer/restart'
+}
 
 restart_moonraker() {
     echo "♻️ Restarting Moonraker to apply config changes..."
-    sudo systemctl restart moonraker 
-	}
+    sudo systemctl restart moonraker
+}
 
-# --- Condition for the first cold installation ---
-if [ ! -d "$HOME/Sandworm" ] || ! grep -q "\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
+# --- Cold Install Detection ---
+IS_COLD_INSTALL=false
+if [ ! -f "$MOONRAKER_CONF" ]; then
+    echo -e "$ERROR moonraker.conf not found in $CONFIG_DIR"
+    IS_COLD_INSTALL=true
+elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
+    IS_COLD_INSTALL=true
+fi
+
+if [ "$IS_COLD_INSTALL" = true ]; then
     echo "🧊 Cold install detected..."
 
     mkdir -p "$HOME/Sandworm/config"
     backup_files
     copy_files
 
-    if ! grep -q "\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
+    if ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF" 2>/dev/null; then
         add_update_manager_block
         echo -e "$OK Added update_manager block to moonraker.conf"
     else
@@ -85,7 +93,6 @@ if [ ! -d "$HOME/Sandworm" ] || ! grep -q "\[update_manager Sandworm\]" "$MOONRA
 
     restart_moonraker
     echo -e "$OK Cold install finished."
-
 else
     echo "🔁 Regular update mode..."
     if [ ! -d "$SANDWORM_REPO" ]; then
@@ -102,3 +109,5 @@ else
 
     restart_klipper
 fi
+
+echo -e "\n$OK Script finished successfully!"

@@ -2,8 +2,8 @@
 
 # --- Paths ---
 SANDWORM_REPO="$HOME/Sandworm/test"
-CONFIG_DIR="$HOME/printer_data/config/TEST/update_test/"
-MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
+CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
+MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/Backup/backup_config_$(date +%Y%m%d_%H%M%S)"
 LOGFILE="$HOME/Sandworm/update_logs/update_$(date +%Y%m%d_%H%M%S).log"
 

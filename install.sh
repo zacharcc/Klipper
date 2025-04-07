@@ -44,7 +44,7 @@ backup_files() {
 copy_files() {
     echo "🚀 Updating Sandworm config..."
     mkdir -p "$CONFIG_DIR"
-    rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/" || echo -e "$ERROR Copy failed!"
+	rsync -av --checksum "$SANDWORM_REPO/" "$CONFIG_DIR/" || echo -e "$ERROR Copy failed!"
 }
 
 version() {
@@ -92,9 +92,10 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     else
         echo -e "$SKIPPED update_manager already exists in moonraker.conf"
     fi
-
-    restart_moonraker
+	
     echo -e "$OK Cold install finished."
+    restart_moonraker
+    
 else
     echo "🔁 Regular update mode..."
     if [ ! -d "$SANDWORM_REPO" ]; then
@@ -111,5 +112,3 @@ else
 
     restart_klipper
 fi
-
-echo -e "\n$OK Script finished successfully!"

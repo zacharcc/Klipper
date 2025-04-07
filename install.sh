@@ -30,7 +30,8 @@ path: ~/Sandworm
 primary_branch: main
 managed_services: klipper
 install_script: install.sh
-version: ~/Sandworm/version.txt" >> "$MOONRAKER_CONF" }
+version: ~/Sandworm/version.txt" >> "$MOONRAKER_CONF" 
+}
 
 backup_files() {
     echo "📂 Creating backup of your current config in $BACKUP_DIR..."
@@ -50,7 +51,8 @@ version() {
         echo "📌 Updating to Sandworm version $VERSION"
     else
         echo "⚠️ version.txt not found!"
-    fi }
+    fi 
+	}
 
 restart_klipper() {
     echo "♻️ Restarting Klipper to load new config..."
@@ -58,11 +60,13 @@ restart_klipper() {
         echo "Restarting in $i seconds..."
         sleep 1
     done
-    curl -X POST 'http://localhost:7125/printer/restart' }
+    curl -X POST 'http://localhost:7125/printer/restart' 
+	}
 
 restart_moonraker() {
     echo "♻️ Restarting Moonraker to apply config changes..."
-    sudo systemctl restart moonraker }
+    sudo systemctl restart moonraker 
+	}
 
 # --- Condition for the first cold installation ---
 if [ ! -d "$HOME/Sandworm" ] || ! grep -q "\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then

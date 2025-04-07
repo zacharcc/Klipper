@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # --- Paths ---
 SANDWORM_REPO="$HOME/Sandworm/config"
 # CONFIG_DIR="$HOME/printer_data/config

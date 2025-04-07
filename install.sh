@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # --- Paths ---
-SANDWORM_REPO="$HOME/Sandworm/config"
+#SANDWORM_REPO="$HOME/Sandworm/config"
 # CONFIG_DIR="$HOME/printer_data/config
 # MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
+SANDWORM_REPO="$HOME/Sandworm/test"
 CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
 MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/Backup/backup_config_$(date +%Y%m%d_%H%M%S)"
@@ -44,34 +45,7 @@ backup_files() {
 copy_files() {
     echo "🚀 Updating Sandworm config..."
     mkdir -p "$CONFIG_DIR"
-
-    echo "📋 DEBUG: comparing macro_test.cfg"
-
-    SRC="$SANDWORM_REPO/macro_test.cfg"
-    DST="$CONFIG_DIR/macro_test.cfg"
-
-    if [ -f "$SRC" ]; then
-        echo "--- Source file:"
-        cat "$SRC"
-    else
-        echo -e "$ERROR Source file not found: $SRC"
-    fi
-
-    if [ -f "$DST" ]; then
-        echo "--- Destination file before rsync:"
-        cat "$DST"
-
-        echo "--- DIFF:"
-        diff -u "$DST" "$SRC" || echo "(diff found)"
-    else
-        echo "--- Destination file not found: will be created"
-    fi
-
-    echo "📦 Running rsync..."
-    rsync -av --checksum --itemize-changes "$SANDWORM_REPO/" "$CONFIG_DIR/"
-
-    echo "--- Destination file after rsync:"
-    cat "$DST"
+	rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
 }
 
 version() {

@@ -34,7 +34,7 @@ path: ~/Sandworm
 primary_branch: main
 managed_services: klipper
 install_script: install.sh
-version: $VERSION" >> "$MOONRAKER_CONF"
+version: \"$VERSION\"" >> "$MOONRAKER_CONF"
     echo -e "$OK Added update_manager block to moonraker.conf with version $VERSION"
 }
 

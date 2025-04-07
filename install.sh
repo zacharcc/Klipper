@@ -42,10 +42,17 @@ backup_files() {
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
 }
 
-copy_files() {
-    echo "🚀 Updating Sandworm config..."
-    mkdir -p "$CONFIG_DIR"
-	rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
+add_update_manager_block() {
+    VERSION=$(cat "$SANDWORM_REPO/version.txt" | tr -d '\r')  # Načítá verzi z version.txt
+    echo -e "\n[update_manager Sandworm]
+    type: git_repo
+    origin: https://github.com/zacharcc/Klipper.git
+    path: ~/Sandworm
+    primary_branch: main
+    managed_services: klipper
+    install_script: install.sh
+    version: $VERSION" >> "$MOONRAKER_CONF"
+    echo -e "$OK Added update_manager block to moonraker.conf with version $VERSION"
 }
 
 version() {

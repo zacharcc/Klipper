@@ -55,15 +55,6 @@ add_update_manager_block() {
     echo -e "$OK Added update_manager block to moonraker.conf with version $VERSION"
 }
 
-version() {
-    if [ -f "$HOME/Sandworm/version.txt" ]; then
-        VERSION=$(cat "$HOME/Sandworm/version.txt")
-        echo "📌 Updating to Sandworm version $VERSION"
-    else
-        echo "⚠️ version.txt not found!"
-    fi
-}
-
 restart_klipper() {
     echo "♻️ Restarting Klipper to load new config..."
     for i in {5..1}; do
@@ -113,7 +104,6 @@ else
 
     backup_files
     copy_files
-    version
 
     echo -e "$OK Update complete! Your config was backed up at $BACKUP_DIR"
     echo -e "$SKIPPED If you had custom changes, check backup manually."

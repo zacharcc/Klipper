@@ -44,7 +44,34 @@ backup_files() {
 copy_files() {
     echo "🚀 Updating Sandworm config..."
     mkdir -p "$CONFIG_DIR"
-	rsync -av --checksum "$SANDWORM_REPO/" "$CONFIG_DIR/" || echo -e "$ERROR Copy failed!"
+
+    echo "📋 DEBUG: comparing macro_test.cfg"
+
+    SRC="$SANDWORM_REPO/macro_test.cfg"
+    DST="$CONFIG_DIR/macro_test.cfg"
+
+    if [ -f "$SRC" ]; then
+        echo "--- Source file:"
+        cat "$SRC"
+    else
+        echo -e "$ERROR Source file not found: $SRC"
+    fi
+
+    if [ -f "$DST" ]; then
+        echo "--- Destination file before rsync:"
+        cat "$DST"
+
+        echo "--- DIFF:"
+        diff -u "$DST" "$SRC" || echo "(diff found)"
+    else
+        echo "--- Destination file not found: will be created"
+    fi
+
+    echo "📦 Running rsync..."
+    rsync -av --checksum --itemize-changes "$SANDWORM_REPO/" "$CONFIG_DIR/"
+
+    echo "--- Destination file after rsync:"
+    cat "$DST"
 }
 
 version() {

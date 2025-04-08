@@ -19,13 +19,13 @@ LOGFILE="$HOME/printer_data/logs/sandworm_update.log"
 TMP_LOG_DIR="$HOME/Sandworm/tmp"
 TMP_UPDATE_LOG="$TMP_LOG_DIR/sandworm_tmp_update.log"
 
-# --- Colors (plain text for universal compatibility) ---
+# --- Colors (for plain SSH/logs compatibility) ---
 OK="[OK]"
 INFO="[INFO]"
 SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
 
-# --- Version from Git tag or fallback to commit hash ---
+# --- Git Version ---
 if git -C "$HOME/Sandworm" tag | grep -q .; then
     VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null)
     if [ -z "$VERSION" ]; then
@@ -35,7 +35,7 @@ else
     VERSION=$(git -C "$HOME/Sandworm" rev-parse --short HEAD)
 fi
 
-# --- Optional custom name (from version.txt) ---
+# --- Optional version from version.txt ---
 VERSION_FILE="$HOME/Sandworm/version.txt"
 if [ -f "$VERSION_FILE" ]; then
     CUSTOM_VERSION=$(head -n 1 "$VERSION_FILE" | tr -d '\r')
@@ -55,9 +55,9 @@ fi
 # --- Logging ---
 mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
-    exec > >(tee -a "$LOGFILE") 2>&1
+    exec > >(tee "$LOGFILE") 2>&1  # přepíše celý log při cold instalaci
 else
-    exec > >(tee "$TMP_UPDATE_LOG") 2>&1
+    exec > >(tee "$TMP_UPDATE_LOG") 2>&1  # temporary update log
 fi
 
 # --- Message Header ---
@@ -140,8 +140,6 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     restart_moonraker
 
 else
-    echo "Regular update mode..."
-
     if [ ! -d "$SANDWORM_REPO" ]; then
         echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"
         exit 1
@@ -154,8 +152,19 @@ else
     echo -e "$OK Update complete! Your config was backed up at $BACKUP_DIR"
     echo -e "$INFO If you had custom changes, check backup manually."
 
-    # Append update log to main log
-    cat "$TMP_UPDATE_LOG" >> "$LOGFILE"
+    # Replace previous update block with new one in log
+    if [ -f "$LOGFILE" ]; then
+        awk '
+            BEGIN { skip=0 }
+            /^=+ Update =+/ { skip=1; next }
+            skip && /^=+/ && !/^=+ Update =+/ { skip=0 }
+            !skip
+        ' "$LOGFILE" > "${LOGFILE}.tmp"
+        cat "$TMP_UPDATE_LOG" >> "${LOGFILE}.tmp"
+        mv "${LOGFILE}.tmp" "$LOGFILE"
+    else
+        cat "$TMP_UPDATE_LOG" > "$LOGFILE"
+    fi
     rm "$TMP_UPDATE_LOG"
 
     restart_klipper

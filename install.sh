@@ -14,7 +14,7 @@ echo ""
 SANDWORM_REPO="$HOME/Sandworm/test"
 CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
 MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
-BACKUP_DIR="$HOME/Sandworm/backup/backup_config_$(date +%Y%m%d_%H%M%S)"
+BACKUP_DIR="$HOME/Sandworm/backup/backup_config_$(date +%Y_%m_%d-%H:%M)"
 LOGFILE="$HOME/printer_data/logs/sandworm_update.log"
 TMP_LOG_DIR="$HOME/Sandworm/tmp"
 TMP_UPDATE_LOG="$TMP_LOG_DIR/sandworm_tmp_update.log"
@@ -95,7 +95,7 @@ install_script: install.sh" >> "$MOONRAKER_CONF"
 }
 
 backup_files() {
-    echo "Creating backup of the config directory in: $BACKUP_DIR..."
+    echo "Creating backup of the config directory in: $BACKUP_DIR"
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     echo "$OK Backup complete – Saved to: $BACKUP_DIR"

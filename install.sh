@@ -52,8 +52,7 @@ start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "Starting installation of automatic Sandworm updates..."
     else
-        echo "🔄 Starting update of Sandworm macros..."
-        echo "hint: 🔄 Starting update of Sandworm macros..."
+        echo "Starting update of Sandworm macros..."
     fi
 }
 
@@ -68,34 +67,26 @@ managed_services: klipper
 install_script: install.sh
 version: ~/Sandworm/version.txt " >> "$MOONRAKER_CONF"
     echo -e "$OK Added update_manager config block to moonraker.conf"
-    echo "hint: 📝 update_manager block added"
 }
 
 backup_files() {
-    if [[ "$IS_COLD_INSTALL" = true ]]; then
-        echo "Creating backup of your current config in $BACKUP_DIR..."
-    else
-        echo "📂 Creating backup of your current config in $BACKUP_DIR..."
-        echo "hint: 📂 Creating backup of config in $BACKUP_DIR..."
+    echo "Creating backup of your current config in $BACKUP_DIR..."
     fi
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
+    echo "$OK Backup complete – Saved to $BACKUP_DIR"
 }
 
 copy_files() {
-    if [[ "$IS_COLD_INSTALL" = true ]]; then
-        echo "Updating Sandworm config..."
-    else
-        echo "🚀 Updating Sandworm config..."
-        echo "hint: 🚀 Copying files from $SANDWORM_REPO to $CONFIG_DIR"
+    echo "Copying new files from $SANDWORM_REPO to $CONFIG_DIR"
     fi
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
+    echo "$OK Copying completed."
 }
 
 restart_klipper() {
-    echo "♻ Restarting Klipper to load new config..."
-    echo "hint: ♻ Restarting Klipper..."
+    echo "Restarting Klipper to load new config..."
     for i in {5..1}; do
         echo "Restarting in $i seconds..."
         sleep 1
@@ -129,26 +120,18 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     restart_moonraker
 
 else
-    echo "🔁 Regular update mode..."
-    echo "hint: 🔁 Regular update mode..."
+    echo "Regular update mode..."
 
     if [ ! -d "$SANDWORM_REPO" ]; then
         echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"
-        echo "hint: ❌ ERROR – Source repo directory not found: $SANDWORM_REPO"
         exit 1
     fi
 
     backup_files
-    echo "hint: ✅ Backup complete – saved to $BACKUP_DIR"
-
     copy_files
-    echo "hint: 🧩 Files copied from $SANDWORM_REPO to $CONFIG_DIR"
 
-    echo -e "✅ $OK Update complete! Your config was backed up at $BACKUP_DIR"
-    echo "hint: ✅ Update complete! Backup saved at $BACKUP_DIR"
-
-    echo -e "ℹ $INFO If you had custom changes, check backup manually."
-    echo "hint: ℹ Check backup manually if you had custom changes."
+    echo -e "$OK Update complete! Your config was backed up at $BACKUP_DIR"
+    echo -e "$INFO If you had custom changes, check backup manually."
 
     restart_klipper
 fi

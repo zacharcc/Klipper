@@ -141,7 +141,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
         echo -e "$SKIPPED update_manager already exists in moonraker.conf"
     fi
 
-    echo -e "$OK Cold install finished."
+    echo -e "$OK The Sandworm installation was completed successfully!"
     restart_moonraker
 
 else
@@ -153,8 +153,9 @@ else
     backup_files
     copy_files
 
-    echo -e "$OK Update complete! Your config was backed up at: $BACKUP_DIR"
-    echo -e "$INFO If you had custom changes, check backup manually."
+    echo -e "$OK The Sandworm update was completed successfully!
+    echo -e "$INFO (Your config was backed up at: $BACKUP_DIR ,"
+    echo -e "$INFO so if you had custom changes, check backup manually)."
 
     # Replace previous update block with new one in log
     if [ -f "$LOGFILE" ]; then

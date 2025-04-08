@@ -25,12 +25,18 @@ mkdir -p "$(dirname "$LOGFILE")"
 exec > >(tee -a "$LOGFILE") 2>&1
 
 # --- Version ---
-# VERSION=$(git -C "$HOME/Sandworm" describe --tags --always)
 VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null)
 if [ -z "$VERSION" ]; then
     VERSION=$(git -C "$HOME/Sandworm" describe --tags --always | cut -d '-' -f 1)
 fi
-echo "Detected version: $VERSION"
+
+# --- Optional custom name (from version.txt) ---
+VERSION_FILE="$HOME/Sandworm/version.txt"
+if [ -f "$VERSION_FILE" ]; then
+    GAME_VERSION=$(head -n 1 "$VERSION_FILE" | tr -d '\r')
+else
+    GAME_VERSION="N/A"
+fi
 
 # --- Cold Install Detection ---
 IS_COLD_INSTALL=false
@@ -59,8 +65,7 @@ origin: https://github.com/zacharcc/Klipper.git
 path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
-install_script: install.sh
-version: " >> "$MOONRAKER_CONF"
+install_script: install.sh " >> "$MOONRAKER_CONF"
     echo -e "$OK Added update_manager config block to moonraker.conf"
     echo "hint: 📝 update_manager block added"
 }

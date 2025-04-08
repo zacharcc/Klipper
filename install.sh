@@ -104,7 +104,7 @@ restart_klipper() {
 
 restart_moonraker() {
     echo "Restarting Moonraker to apply config changes..."
-    sleep 1
+    sleep 2
     sudo systemctl restart moonraker
 }
 
@@ -147,7 +147,7 @@ else
     echo "hint: ✅ Update complete! Backup saved at $BACKUP_DIR"
 
     echo -e "ℹ $INFO If you had custom changes, check backup manually."
-    echo "hint: ℹ️ Check backup manually if you had custom changes."
+    echo "hint: ℹ Check backup manually if you had custom changes."
 
     restart_klipper
 fi

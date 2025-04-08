@@ -25,6 +25,7 @@ mkdir -p "$(dirname "$LOGFILE")"
 exec > >(tee -a "$LOGFILE") 2>&1
 
 # --- Version ---
+# VERSION=$(git -C "$HOME/Sandworm" describe --tags --always)
 VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null)
 if [ -z "$VERSION" ]; then
     VERSION=$(git -C "$HOME/Sandworm" describe --tags --always | cut -d '-' -f 1)
@@ -58,8 +59,8 @@ origin: https://github.com/zacharcc/Klipper.git
 path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
-install_script: install.sh" >> "$MOONRAKER_CONF"
-version:
+install_script: install.sh
+version: " >> "$MOONRAKER_CONF"
     echo -e "$OK Added update_manager config block to moonraker.conf"
     echo "hint: 📝 update_manager block added"
 }

@@ -102,10 +102,12 @@ backup_files() {
 
 copy_files() {
     echo ""
+    echo "-------------------------------------"
     echo "Copying new files from: $SANDWORM_REPO to $CONFIG_DIR"
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
     echo "$OK Copying completed."
+    echo "-------------------------------------"
 }
 
 restart_klipper() {

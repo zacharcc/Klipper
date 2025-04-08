@@ -104,13 +104,14 @@ backup_files() {
 copy_files() {
     echo ""
     echo "-------------------------------------"
-    echo "Copying new files from: $SANDWORM_REPO to $CONFIG_DIR"
+    echo "Copying new files from: $SANDWORM_REPO to: $CONFIG_DIR"
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
     echo "$OK Copying completed."
 }
 
 restart_klipper() {
+    echo ""
     echo "Restarting Klipper to load new config..."
     for i in {5..1}; do
         echo "Restarting in $i seconds..."
@@ -120,6 +121,7 @@ restart_klipper() {
 }
 
 restart_moonraker() {
+    echo ""
     echo "Restarting Moonraker to apply config changes..."
     sleep 2
     sudo systemctl restart moonraker
@@ -139,7 +141,6 @@ if [ "$IS_COLD_INSTALL" = true ]; then
         echo -e "$SKIPPED update_manager already exists in moonraker.conf"
     fi
 
-    echo ""
     echo -e "$OK Cold install finished."
     restart_moonraker
 
@@ -152,7 +153,6 @@ else
     backup_files
     copy_files
 
-    echo ""
     echo -e "$OK Update complete! Your config was backed up at: $BACKUP_DIR"
     echo -e "$INFO If you had custom changes, check backup manually."
 

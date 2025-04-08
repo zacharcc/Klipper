@@ -153,7 +153,7 @@ else
     backup_files
     copy_files
 
-    echo -e "$OK The Sandworm update was completed successfully!
+    echo -e "$OK The Sandworm update was completed successfully!"
     echo -e "$INFO (Your config was backed up at: $BACKUP_DIR ,"
     echo -e "$INFO so if you had custom changes, check backup manually)."
 

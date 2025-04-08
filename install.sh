@@ -25,7 +25,11 @@ mkdir -p "$(dirname "$LOGFILE")"
 exec > >(tee -a "$LOGFILE") 2>&1
 
 # --- Version ---
-VERSION=$(git -C "$HOME/Sandworm" describe --tags --always)
+VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null)
+if [ -z "$VERSION" ]; then
+    VERSION=$(git -C "$HOME/Sandworm" describe --tags --always | cut -d '-' -f 1)
+fi
+echo "Detected version: $VERSION"
 
 # --- Cold Install Detection ---
 IS_COLD_INSTALL=false

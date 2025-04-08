@@ -35,7 +35,7 @@ else
     VERSION=$(git -C "$HOME/Sandworm" rev-parse --short HEAD)
 fi
 
-# --- Optional version from version.txt ---
+# --- Custom version from version.txt ---
 VERSION_FILE="$HOME/Sandworm/version.txt"
 if [ -f "$VERSION_FILE" ]; then
     CUSTOM_VERSION=$(head -n 1 "$VERSION_FILE" | tr -d '\r')

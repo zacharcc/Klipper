@@ -1,7 +1,11 @@
 #!/bin/bash
 
+# --- Trap ---
+set -Ee
+trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
+
 # --- Paths ---
-#SANDWORM_REPO="$HOME/Sandworm/config"
+# SANDWORM_REPO="$HOME/Sandworm/config"
 # CONFIG_DIR="$HOME/printer_data/config
 # MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 SANDWORM_REPO="$HOME/Sandworm/test"
@@ -12,7 +16,8 @@ LOGFILE="$HOME/Sandworm/update_logs/update_$(date +%Y%m%d_%H%M%S).log"
 
 # --- Colors ---
 OK="\e[32m[OK]\e[0m"
-SKIPPED="\e[33m[SKIPPED]\e[0m"
+INFO="\e[37m[INFO]\e[0m"
+SKIPPED="\e[90m[SKIPPED]\e[0m"
 ERROR="\e[31m[ERROR]\e[0m"
 
 # --- Logging ---
@@ -20,17 +25,26 @@ mkdir -p "$(dirname "$LOGFILE")"
 exec > >(tee -a "$LOGFILE") 2>&1
 
 # --- Version ---
-VERSION_FILE="$HOME/Sandworm/version.txt"
-if [ -f "$VERSION_FILE" ]; then
-    VERSION=$(cat "$VERSION_FILE" | tr -d '\r')
-else
-    VERSION="unknown"
+VERSION=$(git -C "$HOME/Sandworm" describe --tags --always)
+
+# --- Cold Install Detection ---
+IS_COLD_INSTALL=false
+if [ ! -f "$MOONRAKER_CONF" ]; then
+    echo -e "$ERROR moonraker.conf not found: $MOONRAKER_CONF"
+    IS_COLD_INSTALL=true
+elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
+    IS_COLD_INSTALL=true
 fi
 
-echo "🔄 Starting Sandworm install/update script..."
-
-set -Ee
-trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
+# --- Message wrapper ---
+start_message() {
+    if [[ "$IS_COLD_INSTALL" = true ]]; then
+        echo "Starting Sandworm install/update script..."
+    else
+        echo "🔄 Starting Sandworm install/update script..."
+        echo "hint: 🔄 Starting Sandworm install/update script..."
+    fi
+}
 
 # --- Functions ---
 add_update_manager_block() {
@@ -38,27 +52,40 @@ add_update_manager_block() {
 type: git_repo
 origin: https://github.com/zacharcc/Klipper.git
 path: ~/Sandworm
-primary_branch: main
+primary_branch: test
 managed_services: klipper
 install_script: install.sh
-remote_version: $VERSION" >> "$MOONRAKER_CONF"
+version: $VERSION" >> "$MOONRAKER_CONF"
+
     echo -e "$OK Added update_manager block to moonraker.conf with version $VERSION"
+    echo "hint: 📝 update_manager block added with version $VERSION"
 }
 
 backup_files() {
-    echo "📂 Creating backup of your current config in $BACKUP_DIR..."
+    if [[ "$IS_COLD_INSTALL" = true ]]; then
+        echo "Creating backup of your current config in $BACKUP_DIR..."
+    else
+        echo "📂 Creating backup of your current config in $BACKUP_DIR..."
+        echo "hint: 📂 Creating backup of config in $BACKUP_DIR..."
+    fi
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
 }
 
 copy_files() {
-    echo "🚀 Updating Sandworm config..."
+    if [[ "$IS_COLD_INSTALL" = true ]]; then
+        echo "Updating Sandworm config..."
+    else
+        echo "🚀 Updating Sandworm config..."
+        echo "hint: 🚀 Copying files from $SANDWORM_REPO to $CONFIG_DIR"
+    fi
     mkdir -p "$CONFIG_DIR"
-	rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
+    rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
 }
 
 restart_klipper() {
-    echo "♻️ Restarting Klipper to load new config..."
+    echo "♻ Restarting Klipper to load new config..."
+    echo "hint: ♻ Restarting Klipper..."
     for i in {5..1}; do
         echo "Restarting in $i seconds..."
         sleep 1
@@ -67,21 +94,16 @@ restart_klipper() {
 }
 
 restart_moonraker() {
-    echo "♻️ Restarting Moonraker to apply config changes..."
+    echo "Restarting Moonraker to apply config changes..."
+    echo "hint: Restarting Moonraker..."
     sudo systemctl restart moonraker
 }
 
-# --- Cold Install Detection ---
-IS_COLD_INSTALL=false
-if [ ! -f "$MOONRAKER_CONF" ]; then
-	echo -e "$ERROR moonraker.conf not found: $MOONRAKER_CONF"
-    IS_COLD_INSTALL=true
-elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
-    IS_COLD_INSTALL=true
-fi
+# --- Execution ---
+start_message
 
 if [ "$IS_COLD_INSTALL" = true ]; then
-    echo "🧊 Cold install detected..."
+    echo "Cold install detected..."
 
     mkdir -p "$HOME/Sandworm/config"
     backup_files
@@ -89,26 +111,36 @@ if [ "$IS_COLD_INSTALL" = true ]; then
 
     if ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF" 2>/dev/null; then
         add_update_manager_block
-        echo -e "$OK Added update_manager block to moonraker.conf"
     else
         echo -e "$SKIPPED update_manager already exists in moonraker.conf"
+        echo "hint: ⚠ update_manager block already exists, skipping..."
     fi
-	
+
     echo -e "$OK Cold install finished."
+    echo "hint: ✅ Cold install complete"
     restart_moonraker
-    
+
 else
     echo "🔁 Regular update mode..."
+    echo "hint: 🔁 Regular update mode..."
+
     if [ ! -d "$SANDWORM_REPO" ]; then
         echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"
+        echo "hint: ❌ ERROR – Source repo directory not found: $SANDWORM_REPO"
         exit 1
     fi
 
     backup_files
-    copy_files
+    echo "hint: ✅ Backup complete – saved to $BACKUP_DIR"
 
-    echo -e "$OK Update complete! Your config was backed up at $BACKUP_DIR"
-    echo -e "$SKIPPED If you had custom changes, check backup manually."
+    copy_files
+    echo "hint: 🧩 Files copied from $SANDWORM_REPO to $CONFIG_DIR"
+
+    echo -e "✅ $OK Update complete! Your config was backed up at $BACKUP_DIR"
+    echo "hint: ✅ Update complete! Backup saved at $BACKUP_DIR"
+
+    echo -e "ℹ $INFO If you had custom changes, check backup manually."
+    echo "hint: ℹ️ Check backup manually if you had custom changes."
 
     restart_klipper
 fi

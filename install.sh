@@ -6,13 +6,13 @@ trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 
 # --- Paths ---
 # SANDWORM_REPO="$HOME/Sandworm/config"
-# CONFIG_DIR="$HOME/printer_data/config
+# CONFIG_DIR="$HOME/printer_data/config"
 # MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 SANDWORM_REPO="$HOME/Sandworm/test"
 CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
 MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/backup/backup_config_$(date +%Y%m%d_%H%M%S)"
-LOGFILE="$HOME/Sandworm/update_logs/update_$(date +%Y%m%d_%H%M%S).log"
+LOGFILE="$HOME/printer_data/logs/sandworm_update.log"
 
 # --- Colors ---
 OK="\e[32m[OK]\e[0m"
@@ -20,11 +20,11 @@ INFO="\e[37m[INFO]\e[0m"
 SKIPPED="\e[90m[SKIPPED]\e[0m"
 ERROR="\e[31m[ERROR]\e[0m"
 
-# --- Logging ---
+# --- Logging to Mainsail-visible file ---
 mkdir -p "$(dirname "$LOGFILE")"
-exec > >(tee -a "$LOGFILE") 2>&1
+exec > >(tee "$LOGFILE") 2>&1
 
-# --- Version ---
+# --- Version from Git tag ---
 VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null)
 if [ -z "$VERSION" ]; then
     VERSION=$(git -C "$HOME/Sandworm" describe --tags --always | cut -d '-' -f 1)
@@ -33,10 +33,17 @@ fi
 # --- Optional custom name (from version.txt) ---
 VERSION_FILE="$HOME/Sandworm/version.txt"
 if [ -f "$VERSION_FILE" ]; then
-    GAME_VERSION=$(head -n 1 "$VERSION_FILE" | tr -d '\r')
+    CUSTOM_VERSION=$(head -n 1 "$VERSION_FILE" | tr -d '\r')
 else
-    GAME_VERSION="N/A"
+    CUSTOM_VERSION="N/A"
 fi
+
+# --- Start log info ---
+echo "=== Sandworm Update ==="
+echo "Started: $(date)"
+echo "Detected VERSION: $VERSION"
+echo "Custom version: $CUSTOM_VERSION"
+echo ""
 
 # --- Cold Install Detection ---
 IS_COLD_INSTALL=false
@@ -64,13 +71,12 @@ origin: https://github.com/zacharcc/Klipper.git
 path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
-install_script: install.sh " >> "$MOONRAKER_CONF"
+install_script: install.sh" >> "$MOONRAKER_CONF"
     echo -e "$OK Added update_manager config block to moonraker.conf"
 }
 
 backup_files() {
     echo "Creating backup of your current config in $BACKUP_DIR..."
-    fi
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     echo "$OK Backup complete – Saved to $BACKUP_DIR"
@@ -78,7 +84,6 @@ backup_files() {
 
 copy_files() {
     echo "Copying new files from $SANDWORM_REPO to $CONFIG_DIR"
-    fi
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
     echo "$OK Copying completed."

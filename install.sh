@@ -4,7 +4,7 @@
 set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 
-# --- Brake line after git clone messages---
+# --- Brake line after git clone messages ---
 echo ""
 
 # --- Paths ---
@@ -25,7 +25,7 @@ INFO="[INFO]"
 SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
 
-# --- Version from Git tag ---
+# --- Version from Git tag or fallback to commit hash ---
 if git -C "$HOME/Sandworm" tag | grep -q .; then
     VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null)
     if [ -z "$VERSION" ]; then
@@ -55,29 +55,29 @@ fi
 # --- Logging ---
 mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
-    echo "============ Cold Install ============" > "$LOGFILE"
-    echo "Started: $(date)" >> "$LOGFILE"
-    echo "Git version: $VERSION" >> "$LOGFILE"
-    echo "Custom version: $CUSTOM_VERSION" >> "$LOGFILE"
-    echo "" >> "$LOGFILE"
     exec > >(tee -a "$LOGFILE") 2>&1
 else
-    echo ""
-    echo "================ Update ===============" > "$TMP_UPDATE_LOG"
-    echo "Started: $(date)" >> "$TMP_UPDATE_LOG"
-    echo "Git version: $VERSION" >> "$TMP_UPDATE_LOG"
-    echo "Custom version: $CUSTOM_VERSION" >> "$TMP_UPDATE_LOG"
-    echo "" >> "$TMP_UPDATE_LOG"
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
 fi
 
-# --- Message wrapper ---
+# --- Message Header ---
 start_message() {
+    if [[ "$IS_COLD_INSTALL" = true ]]; then
+        echo "============ Cold Install ============"
+    else
+        echo ""
+        echo "============= Update ================"
+    fi
+    echo "Started: $(date)"
+    echo "Git version: $VERSION"
+    echo "Custom version: $CUSTOM_VERSION"
+    echo ""
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "Starting installation of automatic Sandworm updates..."
     else
         echo "Starting update of Sandworm macros..."
     fi
+    echo ""
 }
 
 # --- Functions ---
@@ -125,8 +125,6 @@ restart_moonraker() {
 start_message
 
 if [ "$IS_COLD_INSTALL" = true ]; then
-    echo "Cold install detected..."
-
     mkdir -p "$HOME/Sandworm/config"
     backup_files
     copy_files
@@ -136,7 +134,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     else
         echo -e "$SKIPPED update_manager already exists in moonraker.conf"
     fi
-    
+
     echo ""
     echo -e "$OK Cold install finished."
     restart_moonraker
@@ -151,7 +149,7 @@ else
 
     backup_files
     copy_files
-    
+
     echo ""
     echo -e "$OK Update complete! Your config was backed up at $BACKUP_DIR"
     echo -e "$INFO If you had custom changes, check backup manually."

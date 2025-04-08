@@ -89,18 +89,20 @@ path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
+    echo ""
     echo -e "$OK Added update_manager config block to moonraker.conf"
 }
 
 backup_files() {
-    echo "Creating backup of your current config in $BACKUP_DIR..."
+    echo "Creating backup of the config directory in: $BACKUP_DIR..."
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
-    echo "$OK Backup complete – Saved to $BACKUP_DIR"
+    echo "$OK Backup complete – Saved to: $BACKUP_DIR"
 }
 
 copy_files() {
-    echo "Copying new files from $SANDWORM_REPO to $CONFIG_DIR"
+    echo ""
+    echo "Copying new files from: $SANDWORM_REPO to $CONFIG_DIR"
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
     echo "$OK Copying completed."
@@ -149,7 +151,7 @@ else
     copy_files
 
     echo ""
-    echo -e "$OK Update complete! Your config was backed up at $BACKUP_DIR"
+    echo -e "$OK Update complete! Your config was backed up at: $BACKUP_DIR"
     echo -e "$INFO If you had custom changes, check backup manually."
 
     # Replace previous update block with new one in log

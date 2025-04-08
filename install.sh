@@ -4,6 +4,9 @@
 set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 
+# --- Brake line after git clone messages---
+echo ""
+
 # --- Paths ---
 # SANDWORM_REPO="$HOME/Sandworm/config"
 # CONFIG_DIR="$HOME/printer_data/config"
@@ -13,16 +16,14 @@ CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
 MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/backup/backup_config_$(date +%Y%m%d_%H%M%S)"
 LOGFILE="$HOME/printer_data/logs/sandworm_update.log"
+TMP_LOG_DIR="$HOME/Sandworm/tmp"
+TMP_UPDATE_LOG="$TMP_LOG_DIR/sandworm_tmp_update.log"
 
-# --- Colors ---
-OK="\e[32m[OK]\e[0m"
-INFO="\e[37m[INFO]\e[0m"
-SKIPPED="\e[90m[SKIPPED]\e[0m"
-ERROR="\e[31m[ERROR]\e[0m"
-
-# --- Logging to Mainsail-visible file ---
-mkdir -p "$(dirname "$LOGFILE")"
-exec > >(tee "$LOGFILE") 2>&1
+# --- Colors (plain text for universal compatibility) ---
+OK="[OK]"
+INFO="[INFO]"
+SKIPPED="[SKIPPED]"
+ERROR="[ERROR]"
 
 # --- Version from Git tag ---
 if git -C "$HOME/Sandworm" tag | grep -q .; then
@@ -42,13 +43,6 @@ else
     CUSTOM_VERSION="N/A"
 fi
 
-# --- Start log info ---
-echo "=== Sandworm Update ==="
-echo "Started: $(date)"
-echo "Detected VERSION: $VERSION"
-echo "Custom version: $CUSTOM_VERSION"
-echo ""
-
 # --- Cold Install Detection ---
 IS_COLD_INSTALL=false
 if [ ! -f "$MOONRAKER_CONF" ]; then
@@ -56,6 +50,25 @@ if [ ! -f "$MOONRAKER_CONF" ]; then
     IS_COLD_INSTALL=true
 elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
     IS_COLD_INSTALL=true
+fi
+
+# --- Logging ---
+mkdir -p "$TMP_LOG_DIR"
+if [ "$IS_COLD_INSTALL" = true ]; then
+    echo "============ Cold Install ============" > "$LOGFILE"
+    echo "Started: $(date)" >> "$LOGFILE"
+    echo "Git version: $VERSION" >> "$LOGFILE"
+    echo "Custom version: $CUSTOM_VERSION" >> "$LOGFILE"
+    echo "" >> "$LOGFILE"
+    exec > >(tee -a "$LOGFILE") 2>&1
+else
+    echo ""
+    echo "================ Update ===============" > "$TMP_UPDATE_LOG"
+    echo "Started: $(date)" >> "$TMP_UPDATE_LOG"
+    echo "Git version: $VERSION" >> "$TMP_UPDATE_LOG"
+    echo "Custom version: $CUSTOM_VERSION" >> "$TMP_UPDATE_LOG"
+    echo "" >> "$TMP_UPDATE_LOG"
+    exec > >(tee "$TMP_UPDATE_LOG") 2>&1
 fi
 
 # --- Message wrapper ---
@@ -123,7 +136,8 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     else
         echo -e "$SKIPPED update_manager already exists in moonraker.conf"
     fi
-
+    
+    echo ""
     echo -e "$OK Cold install finished."
     restart_moonraker
 
@@ -137,9 +151,14 @@ else
 
     backup_files
     copy_files
-
+    
+    echo ""
     echo -e "$OK Update complete! Your config was backed up at $BACKUP_DIR"
     echo -e "$INFO If you had custom changes, check backup manually."
+
+    # Append update log to main log
+    cat "$TMP_UPDATE_LOG" >> "$LOGFILE"
+    rm "$TMP_UPDATE_LOG"
 
     restart_klipper
 fi

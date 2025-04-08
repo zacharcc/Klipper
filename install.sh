@@ -90,6 +90,7 @@ primary_branch: test
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
     echo ""
+    echo "-------------------------------------"
     echo -e "$OK Added update_manager config block to moonraker.conf"
 }
 
@@ -107,7 +108,6 @@ copy_files() {
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
     echo "$OK Copying completed."
-    echo "-------------------------------------"
 }
 
 restart_klipper() {

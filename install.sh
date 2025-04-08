@@ -39,10 +39,10 @@ fi
 # --- Message wrapper ---
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
-        echo "Starting Sandworm install/update script..."
+        echo "Starting installation of automatic Sandworm updates..."
     else
-        echo "🔄 Starting Sandworm install/update script..."
-        echo "hint: 🔄 Starting Sandworm install/update script..."
+        echo "🔄 Starting update of Sandworm macros..."
+        echo "hint: 🔄 Starting update of Sandworm macros..."
     fi
 }
 
@@ -57,8 +57,7 @@ managed_services: klipper
 install_script: install.sh
 version: $VERSION" >> "$MOONRAKER_CONF"
 
-    echo -e "$OK Added update_manager block to moonraker.conf with version $VERSION"
-    echo "hint: 📝 update_manager block added with version $VERSION"
+    echo -e "$OK Added update_manager config block to moonraker.conf with version $VERSION"
 }
 
 backup_files() {
@@ -95,7 +94,7 @@ restart_klipper() {
 
 restart_moonraker() {
     echo "Restarting Moonraker to apply config changes..."
-    echo "hint: Restarting Moonraker..."
+    sleep 1
     sudo systemctl restart moonraker
 }
 
@@ -113,11 +112,9 @@ if [ "$IS_COLD_INSTALL" = true ]; then
         add_update_manager_block
     else
         echo -e "$SKIPPED update_manager already exists in moonraker.conf"
-        echo "hint: ⚠ update_manager block already exists, skipping..."
     fi
 
     echo -e "$OK Cold install finished."
-    echo "hint: ✅ Cold install complete"
     restart_moonraker
 
 else

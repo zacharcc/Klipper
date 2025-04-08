@@ -54,10 +54,10 @@ origin: https://github.com/zacharcc/Klipper.git
 path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
-install_script: install.sh
-version: $VERSION" >> "$MOONRAKER_CONF"
-
-    echo -e "$OK Added update_manager config block to moonraker.conf with version $VERSION"
+install_script: install.sh" >> "$MOONRAKER_CONF"
+version:
+    echo -e "$OK Added update_manager config block to moonraker.conf"
+    echo "hint: 📝 update_manager block added"
 }
 
 backup_files() {

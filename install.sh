@@ -25,9 +25,13 @@ mkdir -p "$(dirname "$LOGFILE")"
 exec > >(tee "$LOGFILE") 2>&1
 
 # --- Version from Git tag ---
-VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null)
-if [ -z "$VERSION" ]; then
-    VERSION=$(git -C "$HOME/Sandworm" describe --tags --always | cut -d '-' -f 1)
+if git -C "$HOME/Sandworm" tag | grep -q .; then
+    VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null)
+    if [ -z "$VERSION" ]; then
+        VERSION=$(git -C "$HOME/Sandworm" describe --tags --always | cut -d '-' -f 1)
+    fi
+else
+    VERSION=$(git -C "$HOME/Sandworm" rev-parse --short HEAD)
 fi
 
 # --- Optional custom name (from version.txt) ---

@@ -67,7 +67,7 @@ start_message() {
         echo "============ Cold Install ============"
     else
         echo ""
-        echo "============= Update ================"
+        echo "============= Update ================="
     fi
     echo "Started: $(date)"
     echo "Git version: $VERSION"
@@ -114,7 +114,7 @@ primary_branch: test
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
     echo ""
-    echo "-------------------------------------"
+    echo "--------------------------------------"
     echo -e "$OK Added [update_manager Sandworm] configuration block to moonraker.conf"
 }
 
@@ -127,7 +127,7 @@ backup_files() {
 
 copy_files() {
     echo ""
-    echo "-------------------------------------"
+    echo "--------------------------------------"
     echo "Copying new files from: $SANDWORM_REPO to: $CONFIG_DIR"
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"

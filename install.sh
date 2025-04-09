@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Debug:
+#!/bin/bash
+echo "DEBUG: install.sh was called" >> /tmp/sandworm_debug.log
+
+
 # --- Trap ---
 set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
@@ -55,9 +60,10 @@ fi
 # --- Logging ---
 mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
-    exec > >(tee "$LOGFILE") 2>&1  # full log rewrite
+    exec > >(tee "$LOGFILE") 2>&1 
+    exec 3>/dev/tty
 else
-    exec > >(tee "$TMP_UPDATE_LOG") 2>&1  # update log only
+    exec > >(tee "$TMP_UPDATE_LOG") 2>&1  # temporary update log
 fi
 
 # --- Message Header ---
@@ -80,17 +86,27 @@ start_message() {
     echo ""
 }
 
-# --- countdown progress bar (only in SSH) ---
+# --- countdown progress bar ---
 fancy_restart_bar() {
-    if [ -t 1 ]; then
-        for i in {8..0}; do
+    sleep 0.6
+
+    for i in {8..0}; do
+        if [ "$i" -eq 8 ]; then
+            empty=""
+        else
             empty=$(printf '□ %.0s' $(seq 1 $((8 - i))))
+        fi
+
+        if [ "$i" -eq 0 ]; then
+            filled=""
+        else
             filled=$(printf '■ %.0s' $(seq 1 $i))
-            echo -ne "[$filled$empty]\r"
-            sleep 0.6
-        done
-        echo ""
-    fi
+        fi
+
+        # Tiskni pouze do terminálu (ne do logu)
+        echo -ne "[$filled$empty]\r" >&3
+        sleep 0.6
+    done
 }
 
 # --- Functions ---

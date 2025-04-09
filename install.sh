@@ -55,10 +55,9 @@ fi
 # --- Logging ---
 mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
-    exec > >(tee "$LOGFILE") 2>&1 
-    exec 3>/dev/tty
+    exec > >(tee "$LOGFILE") 2>&1  # full log rewrite
 else
-    exec > >(tee "$TMP_UPDATE_LOG") 2>&1  # temporary update log
+    exec > >(tee "$TMP_UPDATE_LOG") 2>&1  # update log only
 fi
 
 # --- Message Header ---
@@ -81,27 +80,17 @@ start_message() {
     echo ""
 }
 
-# --- countdown progress bar ---
+# --- countdown progress bar (only in SSH) ---
 fancy_restart_bar() {
-    sleep 0.6
-
-    for i in {8..0}; do
-        if [ "$i" -eq 8 ]; then
-            empty=""
-        else
+    if [ -t 1 ]; then
+        for i in {8..0}; do
             empty=$(printf '□ %.0s' $(seq 1 $((8 - i))))
-        fi
-
-        if [ "$i" -eq 0 ]; then
-            filled=""
-        else
             filled=$(printf '■ %.0s' $(seq 1 $i))
-        fi
-
-        # Tiskni pouze do terminálu (ne do logu)
-        echo -ne "[$filled$empty]\r" >&3
-        sleep 0.6
-    done
+            echo -ne "[$filled$empty]\r"
+            sleep 0.6
+        done
+        echo ""
+    fi
 }
 
 # --- Functions ---

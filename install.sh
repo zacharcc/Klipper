@@ -29,13 +29,13 @@ SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
 
 # --- Git Version ---
-if git -C "$HOME/Sandworm" tag | grep -q .; then
-    VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null)
-    if [ -z "$VERSION" ]; then
-        VERSION=$(git -C "$HOME/Sandworm" describe --tags --always | cut -d '-' -f 1)
-    fi
+# --- Git Version ---
+if [ -d "$HOME/Sandworm/.git" ]; then
+    VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null || \
+              git -C "$HOME/Sandworm" describe --tags --always 2>/dev/null | cut -d '-' -f 1 || \
+              git -C "$HOME/Sandworm" rev-parse --short HEAD 2>/dev/null)
 else
-    VERSION=$(git -C "$HOME/Sandworm" rev-parse --short HEAD)
+    VERSION="unknown"
 fi
 
 # --- Custom version from version.txt ---
@@ -92,13 +92,13 @@ fancy_restart_bar() {
         if [ "$i" -eq 8 ]; then
             empty=""
         else
-            empty=$(printf '□ %.0s' $(seq 1 $((8 - i))))
+            empty=$(printf '? %.0s' $(seq 1 $((8 - i))))
         fi
 
         if [ "$i" -eq 0 ]; then
             filled=""
         else
-            filled=$(printf '■ %.0s' $(seq 1 $i))
+            filled=$(printf '¦ %.0s' $(seq 1 $i))
         fi
 
         # Tiskni pouze do terminálu (ne do logu)
@@ -111,7 +111,7 @@ fancy_restart_bar() {
 link_config_folder() {
     if [ ! -L "$CONFIG_DIR/Sandworm" ]; then
         ln -s "$HOME/Sandworm/test" "$CONFIG_DIR/Sandworm"
-        echo "$OK Symlink created: $CONFIG_DIR/Sandworm → $HOME/Sandworm/test"
+        echo "$OK Symlink created: $CONFIG_DIR/Sandworm › $HOME/Sandworm/test"
     else
         echo "$SKIPPED Symlink already exists: $CONFIG_DIR/Sandworm"
     fi

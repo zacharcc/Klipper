@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Debug:
-echo "DEBUG: install.sh was called" >> /tmp/sandworm_debug.log
+# Debug log (persistent)
+DEBUG_LOG="$HOME/Sandworm/debug/debug.log"
+mkdir -p "$(dirname "$DEBUG_LOG")"
+echo "DEBUG: install.sh was called" >> "$DEBUG_LOG"
+
 
 # --- Trap ---
 set -Ee
@@ -105,6 +108,7 @@ fancy_restart_bar() {
         echo -ne "[$filled$empty]\r" >&3
         sleep 0.6
     done
+    echo ""
 }
 
 # --- Functions ---

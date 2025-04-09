@@ -82,9 +82,7 @@ start_message() {
 
 # --- countdown progress bar ---
 fancy_restart_bar() {
-    echo ""
-    echo "Restarting Klipper in:"
-    sleep 0.5
+    sleep 0.6
 
     for i in {8..0}; do
         if [ "$i" -eq 8 ]; then
@@ -102,8 +100,6 @@ fancy_restart_bar() {
         echo -ne "[$filled$empty]\r"
         sleep 0.6
     done
-
-    echo -e "\n$OK Restart complete!"
 }
 
 # --- Functions ---

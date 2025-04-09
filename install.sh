@@ -126,7 +126,8 @@ origin: https://github.com/zacharcc/Klipper.git
 path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
-install_script: install.sh" >> "$MOONRAKER_CONF"
+install_script: install.sh
+update_script: install.sh" >> "$MOONRAKER_CONF"
     echo ""
     echo "--------------------------------------"
     echo -e "$OK Added [update_manager Sandworm] configuration block to moonraker.conf"

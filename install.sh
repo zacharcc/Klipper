@@ -55,7 +55,8 @@ fi
 # --- Logging ---
 mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
-    exec > >(tee "$LOGFILE") 2>&1  # přepíše celý log při cold instalaci
+    exec > >(tee "$LOGFILE") 2>&1 
+    exec 3>/dev/tty
 else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1  # temporary update log
 fi
@@ -97,9 +98,12 @@ fancy_restart_bar() {
             filled=$(printf '■ %.0s' $(seq 1 $i))
         fi
 
-        echo -ne "[$filled$empty]\r"
+        # Tiskni pouze do terminálu (ne do logu)
+        echo -ne "[$filled$empty]\r" >&3
         sleep 0.6
     done
+
+    echo -ne "\n[OK] Restart complete!\n" >&3
 }
 
 # --- Functions ---

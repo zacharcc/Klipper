@@ -108,6 +108,15 @@ fancy_restart_bar() {
 }
 
 # --- Functions ---
+link_config_folder() {
+    if [ ! -L "$CONFIG_DIR/Sandworm" ]; then
+        ln -s "$HOME/Sandworm/test" "$CONFIG_DIR/Sandworm"
+        echo "$OK Symlink created: $CONFIG_DIR/Sandworm → $HOME/Sandworm/test"
+    else
+        echo "$SKIPPED Symlink already exists: $CONFIG_DIR/Sandworm"
+    fi
+}
+
 add_update_manager_block() {
     echo -e "\n[update_manager Sandworm]
 type: git_repo
@@ -158,6 +167,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     mkdir -p "$HOME/Sandworm/config"
     backup_files
     copy_files
+    link_config_folder
 
     if ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF" 2>/dev/null; then
         add_update_manager_block

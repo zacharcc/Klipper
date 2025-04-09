@@ -95,20 +95,18 @@ fancy_restart_bar() {
         if [ "$i" -eq 8 ]; then
             empty=""
         else
-            empty=$(printf '? %.0s' $(seq 1 $((8 - i))))
+            empty=$(printf '□ %.0s' $(seq 1 $((8 - i))))
         fi
 
         if [ "$i" -eq 0 ]; then
             filled=""
         else
-            filled=$(printf '¦ %.0s' $(seq 1 $i))
+            filled=$(printf '■ %.0s' $(seq 1 $i))
         fi
 
-        # Tiskni pouze do terminálu (ne do logu)
         echo -ne "[$filled$empty]\r" >&3
         sleep 0.6
     done
-    echo ""
 }
 
 # --- Functions ---
@@ -212,3 +210,34 @@ else
 
     restart_klipper
 fi
+
+
+-----------------------------------------------------
+
+git clone https://github.com/zacharcc/Klipper.git ~/Sandworm && bash ~/Sandworm/install.sh
+# branch test
+git clone --branch test https://github.com/zacharcc/Klipper.git ~/Sandworm && bash ~/Sandworm/install.sh
+
+
+13:01:30	Updating Application Sandworm...
+13:01:30	Git Repo Sandworm: Updating Repo...
+13:01:31	hint: Pulling without specifying how to reconcile divergent branches is
+13:01:31	hint: discouraged. You can squelch this message by running one of the following
+13:01:31	hint: commands sometime before your next pull:
+13:01:31	hint:
+13:01:31	hint: git config pull.rebase false # merge (the default strategy)
+13:01:31	hint: git config pull.rebase true # rebase
+13:01:31	hint: git config pull.ff only # fast-forward only
+13:01:31	hint:
+13:01:31	hint: You can replace "git config" with "git config --global" to set a default
+13:01:31	hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+13:01:31	hint: or --ff-only on the command line to override the configured default per
+13:01:31	hint: invocation.
+13:01:32	Updating 9746cd5..8d80d40
+13:01:32	Fast-forward
+13:01:32	test/macro2.cfg | 2 +-
+13:01:32	1 file changed, 1 insertion(+), 1 deletion(-)
+13:01:33	Git Repo Sandworm: Restarting service klipper...
+13:01:33	Git Repo Sandworm: Update Finished...
+
+

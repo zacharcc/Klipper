@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Debug:
-#!/bin/bash
 echo "DEBUG: install.sh was called" >> /tmp/sandworm_debug.log
 
 

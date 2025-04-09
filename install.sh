@@ -80,6 +80,32 @@ start_message() {
     echo ""
 }
 
+# --- countdown progress bar ---
+fancy_restart_bar() {
+    echo ""
+    echo "Restarting Klipper in:"
+    sleep 0.5
+
+    for i in {8..0}; do
+        if [ "$i" -eq 8 ]; then
+            empty=""
+        else
+            empty=$(printf '□ %.0s' $(seq 1 $((8 - i))))
+        fi
+
+        if [ "$i" -eq 0 ]; then
+            filled=""
+        else
+            filled=$(printf '■ %.0s' $(seq 1 $i))
+        fi
+
+        echo -ne "[$filled$empty]\r"
+        sleep 0.6
+    done
+
+    echo -e "\n$OK Restart complete!"
+}
+
 # --- Functions ---
 add_update_manager_block() {
     echo -e "\n[update_manager Sandworm]
@@ -113,17 +139,14 @@ copy_files() {
 restart_klipper() {
     echo ""
     echo "Restarting Klipper to load new config..."
-    for i in {5..1}; do
-        echo "Restarting in $i seconds..."
-        sleep 1
-    done
+    sleep 5
     curl -X POST 'http://localhost:7125/printer/restart'
 }
 
 restart_moonraker() {
     echo ""
     echo "Restarting Moonraker to apply config changes..."
-    sleep 2
+    fancy_restart_bar
     sudo systemctl restart moonraker
 }
 

@@ -32,7 +32,6 @@ SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
 
 # --- Git Version ---
-# --- Git Version ---
 if [ -d "$HOME/Sandworm/.git" ]; then
     VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null || \
               git -C "$HOME/Sandworm" describe --tags --always 2>/dev/null | cut -d '-' -f 1 || \

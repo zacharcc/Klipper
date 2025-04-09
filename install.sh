@@ -106,6 +106,7 @@ fancy_restart_bar() {
         echo -ne "[$filled$empty]\r" >&3
         sleep 0.6
     done
+    echo ""
 }
 
 # --- Functions ---

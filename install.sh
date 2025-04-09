@@ -3,7 +3,6 @@
 # Debug:
 echo "DEBUG: install.sh was called" >> /tmp/sandworm_debug.log
 
-
 # --- Trap ---
 set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR

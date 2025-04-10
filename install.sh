@@ -133,7 +133,7 @@ managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
     echo ""
     echo "--------------------------------------"
-    echo -e "$OK Added [update_manager Sandworm] config block to moonraker.conf"
+    echo -e "$OK Added [update_manager Sandworm] config block to: moonraker.conf"
 }
 
 backup_files() {

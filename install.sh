@@ -1,11 +1,5 @@
 #!/bin/bash
 
-## Debug log (persistent)
-DEBUG_LOG="$HOME/Sandworm/debug/debug.log"
-mkdir -p "$(dirname "$DEBUG_LOG")"
-echo "DEBUG: install.sh was called" >> "$DEBUG_LOG"
-
-
 ## --- Trap ---
 set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
@@ -20,6 +14,7 @@ SANDWORM_REPO="$HOME/Sandworm/config"
 CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
 MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/backup/backup_config_$(date +%Y_%m_%d-%Hh%Mm)"
+HOOK_PATH="$HOME/Sandworm/.git/hooks/post-merge"
 LOGFILE="$HOME/printer_data/logs/sandworm_update.log"
 TMP_LOG_DIR="$HOME/Sandworm/tmp"
 TMP_UPDATE_LOG="$TMP_LOG_DIR/sandworm_tmp_update.log"
@@ -109,14 +104,23 @@ fancy_restart_bar() {
 }
 
 ## --- Functions ---
-# link_config_folder() {
-#    if [ ! -L "$CONFIG_DIR/Sandworm" ]; then
-#        ln -s "$HOME/Sandworm/test" "$CONFIG_DIR/Sandworm"
-#        echo "$OK Symlink created: $CONFIG_DIR/Sandworm › $HOME/Sandworm/test"
-#    else
-#        echo "$SKIPPED Symlink already exists: $CONFIG_DIR/Sandworm"
-#    fi
-# }
+
+create_post_merge_hook() {
+    local LOG_PATH="$HOME/Sandworm/debug/hook_run.log"  # DEBUG Log
+
+    if [ ! -f "$HOOK_PATH" ]; then
+        mkdir -p "$(dirname "$LOG_PATH")"
+        cat << 'EOF' > "$HOOK_PATH"
+#!/bin/bash
+/home/biqu/Sandworm/install.sh >> /home/biqu/Sandworm/debug/hook_run.log 2>&1
+EOF
+        chmod +x "$HOOK_PATH"
+        echo "$OK Git post-merge hook created at: $HOOK_PATH"
+    else
+        echo "$SKIPPED Git post-merge hook already exists."
+    fi
+}
+
 
 add_update_manager_block() {
     echo -e "\n[update_manager Sandworm]
@@ -128,7 +132,7 @@ managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
     echo ""
     echo "--------------------------------------"
-    echo -e "$OK Added [update_manager Sandworm] configuration block to moonraker.conf"
+    echo -e "$OK Added [update_manager Sandworm] config block to moonraker.conf"
 }
 
 backup_files() {
@@ -168,7 +172,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     mkdir -p "$HOME/Sandworm/config"
     backup_files
     copy_files
-    # link_config_folder
+    create_post_merge_hook   
 
     if ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF" 2>/dev/null; then
         add_update_manager_block

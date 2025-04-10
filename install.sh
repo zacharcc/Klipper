@@ -168,7 +168,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     mkdir -p "$HOME/Sandworm/config"
     backup_files
     copy_files
-    link_config_folder
+    # link_config_folder
 
     if ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF" 2>/dev/null; then
         add_update_manager_block

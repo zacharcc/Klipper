@@ -14,10 +14,9 @@ trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 echo ""
 
 # --- Paths ---
-# SANDWORM_REPO="$HOME/Sandworm/config"
 # CONFIG_DIR="$HOME/printer_data/config"
 # MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
-SANDWORM_REPO="$HOME/Sandworm/test"
+SANDWORM_REPO="$HOME/Sandworm/config"
 CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
 MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/backup/backup_config_$(date +%Y_%m_%d-%Hh%Mm)"
@@ -110,14 +109,14 @@ fancy_restart_bar() {
 }
 
 # --- Functions ---
-link_config_folder() {
-    if [ ! -L "$CONFIG_DIR/Sandworm" ]; then
-        ln -s "$HOME/Sandworm/test" "$CONFIG_DIR/Sandworm"
-        echo "$OK Symlink created: $CONFIG_DIR/Sandworm › $HOME/Sandworm/test"
-    else
-        echo "$SKIPPED Symlink already exists: $CONFIG_DIR/Sandworm"
-    fi
-}
+# link_config_folder() {
+#    if [ ! -L "$CONFIG_DIR/Sandworm" ]; then
+#        ln -s "$HOME/Sandworm/test" "$CONFIG_DIR/Sandworm"
+#        echo "$OK Symlink created: $CONFIG_DIR/Sandworm › $HOME/Sandworm/test"
+#    else
+#        echo "$SKIPPED Symlink already exists: $CONFIG_DIR/Sandworm"
+#    fi
+# }
 
 add_update_manager_block() {
     echo -e "\n[update_manager Sandworm]
@@ -126,8 +125,7 @@ origin: https://github.com/zacharcc/Klipper.git
 path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
-install_script: install.sh
-update_script: install.sh" >> "$MOONRAKER_CONF"
+install_script: install.sh" >> "$MOONRAKER_CONF"
     echo ""
     echo "--------------------------------------"
     echo -e "$OK Added [update_manager Sandworm] configuration block to moonraker.conf"

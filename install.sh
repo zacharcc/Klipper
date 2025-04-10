@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "DEBUG: install.sh was called" >> /tmp/sandworm_debug.log                             # Debug
+
 ## --- Trap ---
 set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
@@ -106,7 +108,7 @@ fancy_restart_bar() {
 ## --- Functions ---
 
 create_post_merge_hook() {
-    local LOG_PATH="$HOME/Sandworm/debug/hook_run.log"  # DEBUG Log
+    local LOG_PATH="$HOME/Sandworm/debug/hook_run.log"                            # DEBUG Log
 
     if [ ! -f "$HOOK_PATH" ]; then
         mkdir -p "$(dirname "$LOG_PATH")"

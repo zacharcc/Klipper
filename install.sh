@@ -121,7 +121,6 @@ EOF
     fi
 }
 
-
 add_update_manager_block() {
     echo -e "\n[update_manager Sandworm]
 type: git_repo

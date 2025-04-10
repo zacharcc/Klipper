@@ -170,7 +170,6 @@ restart_moonraker() {
 start_message
 
 if [ "$IS_COLD_INSTALL" = true ]; then
-    chmod +x "$HOME/Sandworm/install.sh"
     mkdir -p "$HOME/Sandworm/config"
     backup_files
     copy_files 

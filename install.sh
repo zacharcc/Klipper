@@ -171,14 +171,15 @@ start_message
 if [ "$IS_COLD_INSTALL" = true ]; then
     mkdir -p "$HOME/Sandworm/config"
     backup_files
-    copy_files
-    create_post_merge_hook   
+    copy_files 
 
     if ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF" 2>/dev/null; then
         add_update_manager_block
     else
         echo -e "$SKIPPED update_manager already exists in moonraker.conf"
     fi
+
+    create_post_merge_hook  
 
     echo -e "$OK The Sandworm installation was completed successfully!"
     restart_moonraker

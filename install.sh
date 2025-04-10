@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# Debug log (persistent)
+## Debug log (persistent)
 DEBUG_LOG="$HOME/Sandworm/debug/debug.log"
 mkdir -p "$(dirname "$DEBUG_LOG")"
 echo "DEBUG: install.sh was called" >> "$DEBUG_LOG"
 
 
-# --- Trap ---
+## --- Trap ---
 set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 
-# --- Brake line after git clone messages ---
+## --- Brake line after git clone messages ---
 echo ""
 
 # --- Paths ---
@@ -24,13 +24,13 @@ LOGFILE="$HOME/printer_data/logs/sandworm_update.log"
 TMP_LOG_DIR="$HOME/Sandworm/tmp"
 TMP_UPDATE_LOG="$TMP_LOG_DIR/sandworm_tmp_update.log"
 
-# --- Colors (for plain SSH/logs compatibility) ---
+## --- Colors (for plain SSH/logs compatibility) ---
 OK="[OK]"
 INFO="[INFO]"
 SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
 
-# --- Git Version ---
+## --- Git Version ---
 if [ -d "$HOME/Sandworm/.git" ]; then
     VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null || \
               git -C "$HOME/Sandworm" describe --tags --always 2>/dev/null | cut -d '-' -f 1 || \
@@ -39,7 +39,7 @@ else
     VERSION="unknown"
 fi
 
-# --- Custom version from version.txt ---
+## --- Custom version from version.txt ---
 VERSION_FILE="$HOME/Sandworm/version.txt"
 if [ -f "$VERSION_FILE" ]; then
     CUSTOM_VERSION=$(head -n 1 "$VERSION_FILE" | tr -d '\r')
@@ -47,7 +47,7 @@ else
     CUSTOM_VERSION="N/A"
 fi
 
-# --- Cold Install Detection ---
+## --- Cold Install Detection ---
 IS_COLD_INSTALL=false
 if [ ! -f "$MOONRAKER_CONF" ]; then
     echo -e "$ERROR moonraker.conf not found: $MOONRAKER_CONF"
@@ -56,7 +56,7 @@ elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
     IS_COLD_INSTALL=true
 fi
 
-# --- Logging ---
+## --- Logging ---
 mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
     exec > >(tee "$LOGFILE") 2>&1 
@@ -65,7 +65,7 @@ else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1  # temporary update log
 fi
 
-# --- Message Header ---
+## --- Message Header ---
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "============ Cold Install ============"
@@ -85,7 +85,7 @@ start_message() {
     echo ""
 }
 
-# --- countdown progress bar ---
+## --- countdown progress bar ---
 fancy_restart_bar() {
     sleep 0.6
 
@@ -108,7 +108,7 @@ fancy_restart_bar() {
     echo ""
 }
 
-# --- Functions ---
+## --- Functions ---
 # link_config_folder() {
 #    if [ ! -L "$CONFIG_DIR/Sandworm" ]; then
 #        ln -s "$HOME/Sandworm/test" "$CONFIG_DIR/Sandworm"
@@ -161,7 +161,7 @@ restart_moonraker() {
     sudo systemctl restart moonraker
 }
 
-# --- Execution ---
+## --- Execution ---
 start_message
 
 if [ "$IS_COLD_INSTALL" = true ]; then

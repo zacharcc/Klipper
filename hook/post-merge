@@ -1,2 +1,0 @@
-#!/bin/bash
-echo "HOOK TRIGGERED on $(date)" >> ~/Sandworm/debug/hook_test.log

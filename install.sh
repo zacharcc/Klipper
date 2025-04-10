@@ -156,7 +156,7 @@ restart_klipper() {
 
 restart_moonraker() {
     echo ""
-    echo "Restarting Moonraker to apply config changes..."
+    echo "Moonraker will be restarted to apply configuration changes in 5 seconds..."
     fancy_restart_bar
     sudo systemctl restart moonraker
 }

@@ -100,6 +100,7 @@ fancy_restart_bar() {
         sleep 0.6
     done
     echo ""
+    echo ""
 }
 
 ## --- Functions ---

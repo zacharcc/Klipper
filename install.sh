@@ -197,8 +197,9 @@ else
     echo ""
     echo "------------------------------------------"
     echo -e "$OK The Sandworm update was completed successfully!"
-    echo -e "$INFO (Your config was backed up at: $BACKUP_DIR ,"
-    echo -e "$INFO so if you had custom changes, check backup manually)."
+    echo -e "$INFO Your config was backed up at: $BACKUP_DIR"
+    echo ""
+    echo ""
 
     # Replace previous update block with new one in log
     if [ -f "$LOGFILE" ]; then

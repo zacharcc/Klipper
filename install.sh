@@ -197,7 +197,7 @@ else
     echo ""
     echo "------------------------------------------"
     echo -e "$OK The Sandworm update was completed successfully!"
-    echo -e "$INFO Your config was backed up at: $BACKUP_DIR"
+    echo -e "$INFO Your config folder was backed up at: $BACKUP_DIR"
     echo ""
     echo ""
 

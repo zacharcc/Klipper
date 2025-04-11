@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "DEBUG: install.sh was called" >> /tmp/sandworm_debug.log                             # Debug
-
 ## --- Trap ---
 set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
@@ -67,7 +65,6 @@ start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "============ Cold Install ============"
     else
-        echo ""
         echo "============= Update ================="
     fi
     echo "Started: $(date)"

@@ -186,6 +186,11 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     restart_moonraker
 
 else
+                                                                         # DEBUG
+    DEBUG_LOG="$HOME/Sandworm/debug/sandworm_debug.log"
+    mkdir -p "$(dirname "$DEBUG_LOG")"
+    echo "DEBUG: UPDATE was called" >> "$DEBUG_LOG"                      
+                                                                         # /DEBUG
     if [ ! -d "$SANDWORM_REPO" ]; then
         echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"
         exit 1

@@ -108,13 +108,10 @@ fancy_restart_bar() {
 ## --- Functions ---
 
 create_post_merge_hook() {
-    local LOG_PATH="$HOME/Sandworm/debug/hook_run.log"                            # DEBUG Log
-
     if [ ! -f "$HOOK_PATH" ]; then
-        mkdir -p "$(dirname "$LOG_PATH")"
         cat << 'EOF' > "$HOOK_PATH"
 #!/bin/bash
-/home/biqu/Sandworm/install.sh >> /home/biqu/Sandworm/debug/hook_run.log 2>&1
+/home/biqu/Sandworm/install.sh
 EOF
         chmod +x "$HOOK_PATH"
         echo "$OK Git post-merge hook created at: $HOOK_PATH"

@@ -106,13 +106,13 @@ fancy_restart_bar() {
         if [ "$i" -eq 8 ]; then
             empty=""
         else
-            empty=$(printf '? %.0s' $(seq 1 $((8 - i))))
+            empty=$(printf '□ %.0s' $(seq 1 $((8 - i))))
         fi
 
         if [ "$i" -eq 0 ]; then
             filled=""
         else
-            filled=$(printf '¦ %.0s' $(seq 1 $i))
+            filled=$(printf '■ %.0s' $(seq 1 $i))
         fi
 
         echo -ne "[$filled$empty]\r" >&3
@@ -185,10 +185,7 @@ start_message
 
 if [ "$IS_COLD_INSTALL" = true ]; then
     mkdir -p "$HOME/Sandworm/config"
-	
-    game_intro
-    draw_game_intro
-	
+
     backup_files
     copy_files 
 

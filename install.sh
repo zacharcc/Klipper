@@ -184,9 +184,18 @@ restart_klipper() {
 
 restart_moonraker() {
     echo ""
-    echo "Moonraker will be restarted to apply changes in 5 seconds..."
-    fancy_restart_bar
-    sudo systemctl restart moonraker
+    read -rp "Do you want to restart Moonraker now to apply changes (this will turn off the printer)? [y/N]: " answer
+    if [[ "$answer" =~ ^[Yy]$ ]]; then
+        echo "Restarting Moonraker service to apply changes..."
+        fancy_restart_bar
+
+        curl -X POST http://localhost:7125/server/restart
+
+    else
+        echo -e "$INFO Moonraker restart skipped. Changes have not been applied, but you can restart Moonraker manually later:"
+        echo -e "$INFO   1. Via the web interface: Power --> Service Control --> Moonraker"
+        echo -e "$INFO   2. Via command line: curl -X POST http://localhost:7125/server/restart"
+    fi
 }
 
 ## --- Execution ---

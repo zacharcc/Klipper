@@ -53,7 +53,7 @@ set_game_variables() {
         : "${level:=000}"       # fallback
     else
         game_save="0000"
-        level="000"
+        level="00"
     fi
 }
 
@@ -186,7 +186,7 @@ restart_moonraker() {
     echo ""
     read -rp "Do you want to restart Moonraker now to apply changes (this will turn off the printer)? [y/N]: " answer
     if [[ "$answer" =~ ^[Yy]$ ]]; then
-        echo "Restarting Moonraker service to apply changes..."
+        echo "Restarting Moonraker service to apply changes in 5 seconds..."
         fancy_restart_bar
 
         curl -X POST http://localhost:7125/server/restart

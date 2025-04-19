@@ -6,7 +6,7 @@ cat <<EOF
 ░                                                                                               ░
 ░   ▓ Game Save: ${game_save}                ▓ ARMOR: Chamber           ▓ STAMINA: 40% (Of max flow)     ░
 ░                                                                                               ░
-░   ▓ LEVEL: ${level} Unlocked                                       ▓ AMMO: 3xASA, 2xPLA             ░
+░   ▓ LEVEL: ${level} Unlocked                                        ▓ AMMO: 3xASA, 2xPLA            ░
 ░                                                                                               ░
 ░   ▓ POWER: 100% (500 WATT)             ▓██▓▒  ▓██▓▒          ▓ Machine gun: AMS not connected ░
 ░                                    ▓██▓█░░█▓▓▓█░░█▓██▓▒                                       ░

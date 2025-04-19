@@ -49,12 +49,15 @@ fi
 set_game_variables() {
     if [ -f "$VERSION_FILE" ]; then
         source "$VERSION_FILE"
-        : "${game_save:=0000}"  # fallback
-        : "${level:=00}"       # fallback
+        : "${game_save:=0}"
+        : "${level:=0}"
     else
-        game_save="0000"
-        level="00"
+        game_save=0
+        level=0
     fi
+
+    formatted_game_save=$(printf "%4s" "$game_save")
+    formatted_level=$(printf "%02d" "$level")
 }
 
 ## --- Cold Install Detection ---

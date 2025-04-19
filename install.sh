@@ -196,7 +196,7 @@ restart_moonraker() {
 	    echo ""
         echo -e "$INFO Moonraker restart skipped. Changes have not been applied,"
 		echo -e "     but you can restart Moonraker manually later via:"
-        echo -e "       1. The web interface: Power --> Service Control --> Moonraker"
+        echo -e "       1. The web interface: Power -→ Service Control -→ Moonraker"
         echo -e "       2. Command line: curl -X POST http://localhost:7125/server/restart"
     fi
 }

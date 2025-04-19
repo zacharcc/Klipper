@@ -46,7 +46,7 @@ else
     CUSTOM_VERSION="N/A"
 fi
 
-game_intro() {
+set_game_variables() {
     if [ -f "$VERSION_FILE" ]; then
         source "$VERSION_FILE"
         : "${game_save:=0000}"  # fallback
@@ -67,17 +67,26 @@ elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
 fi
 
 ## ---  Logging setup ---
+mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
-    game_intro
-    exec > >(tee "$LOGFILE") 2>&1 
+    set_game_variables
+
+    # ASCII do logu (přes FD 4)
+    exec 4>"$LOGFILE"
+    print_game_intro_ascii >&4
+    exec 4>&-
+
+    # stdout/stderr do logu a tee
+    exec > >(tee "$LOGFILE") 2>&1
     exec 3>/dev/tty
 
-    print_game_intro_ascii
+    # barevné intro do konzole
     draw_game_intro >&3
 else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
     echo "Update version: $CUSTOM_VERSION"
 fi
+
 
 ## --- Message Header ---
 start_message() {
@@ -100,19 +109,19 @@ start_message() {
 
 ## --- countdown progress bar ---
 fancy_restart_bar() {
-    sleep 0.6
+    sleep 0.4
 
-    for i in {8..0}; do
-        if [ "$i" -eq 8 ]; then
+    for i in {12..0}; do
+        if [ "$i" -eq 12 ]; then
             empty=""
         else
-            empty=$(printf '□ %.0s' $(seq 1 $((8 - i))))
+            empty=$(printf '□%.0s' $(seq 1 $((12 - i))))
         fi
 
         if [ "$i" -eq 0 ]; then
             filled=""
         else
-            filled=$(printf '■ %.0s' $(seq 1 $i))
+            filled=$(printf '■%.0s' $(seq 1 $i))
         fi
 
         echo -ne "[$filled$empty]\r" >&3

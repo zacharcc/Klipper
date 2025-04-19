@@ -95,7 +95,7 @@ echo -e "${F3}█${C0}${BG1}   ▓ Game Save: ${formatted_game_save}            
 sleep $SPEED_MEDIUM
 echo -e "${F3}█${C0}${BG1}                                                                                               ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
-echo -e "${F3}█${C0}${BG1}   ▓ LEVEL: ${formatted_level} Unlocked                                       ▓ AMMO: 3xASA, 2xPLA            ${C0}${F3}█${C0}"
+echo -e "${F3}█${C0}${BG1}   ▓ LEVEL: ${formatted_level} Unlocked                                       ▓ AMMO: 3xASA, 2xPLA             ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
 echo -e "${F3}█${C0}${BG1}                                                                                               ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM

@@ -50,7 +50,7 @@ set_game_variables() {
     if [ -f "$VERSION_FILE" ]; then
         source "$VERSION_FILE"
         : "${game_save:=0000}"  # fallback
-        : "${level:=000}"       # fallback
+        : "${level:=00}"       # fallback
     else
         game_save="0000"
         level="00"

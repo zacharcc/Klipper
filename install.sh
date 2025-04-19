@@ -186,15 +186,18 @@ restart_moonraker() {
     echo ""
     read -rp "Do you want to restart Moonraker now to apply changes (this will turn off the printer)? [y/N]: " answer
     if [[ "$answer" =~ ^[Yy]$ ]]; then
+	
         echo "Restarting Moonraker service to apply changes in 5 seconds..."
         fancy_restart_bar
 
         curl -X POST http://localhost:7125/server/restart
 
     else
-        echo -e "$INFO Moonraker restart skipped. Changes have not been applied, but you can restart Moonraker manually later:"
-        echo -e "$INFO   1. Via the web interface: Power --> Service Control --> Moonraker"
-        echo -e "$INFO   2. Via command line: curl -X POST http://localhost:7125/server/restart"
+	    echo ""
+        echo -e "$INFO Moonraker restart skipped. Changes have not been applied,"
+		echo -e "     but you can restart Moonraker manually later via:"
+        echo -e "       1. The web interface: Power --> Service Control --> Moonraker"
+        echo -e "       2. Command line: curl -X POST http://localhost:7125/server/restart"
     fi
 }
 

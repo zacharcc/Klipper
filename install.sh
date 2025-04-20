@@ -92,14 +92,14 @@ fi
 ## --- Message Header ---
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
-        echo "============== Cold Install =============="
+        echo "================ Cold Install ================"
         echo "Started: $(date)"
         echo "Git version: $VERSION"
         echo "Install version: $CUSTOM_VERSION"
         echo ""
     else
         echo ""
-        echo "================= Update ================="
+        echo "=================== Update ==================="
         echo "Started: $(date)"
         echo "Git version: $VERSION"
         echo "Update version: $CUSTOM_VERSION"
@@ -160,13 +160,13 @@ primary_branch: test
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
     echo ""
-    echo "------------------------------------------"
+    echo "----------------------------------------------"
     echo -e "$OK Added [update_manager Sandworm] config block to: moonraker.conf"
 }
 
 backup_files() {
     echo ""
-    echo "------------------------------------------"
+    echo "----------------------------------------------"
     echo "Creating backup of the printer config directory:"
 	echo "  ● from: $CONFIG_DIR"
 	echo "  ●   to: $BACKUP_DIR"
@@ -179,7 +179,7 @@ backup_files() {
 
 copy_files() {
     echo ""
-    echo "------------------------------------------"
+    echo "----------------------------------------------"
     echo "Copying new files:"
     echo "  ● from: $SANDWORM_REPO"
 	echo "  ●   to: $CONFIG_DIR"
@@ -249,7 +249,7 @@ else
     copy_files
 
     echo ""
-    echo "------------------------------------------"
+    echo "----------------------------------------------"
     echo -e "$OK The Sandworm update was completed successfully!"
     echo -e "$INFO Your config folder was backed up at: $BACKUP_DIR"
     echo ""

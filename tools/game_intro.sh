@@ -41,10 +41,10 @@ SPEED_SLOW=0.45
 shai_hulud() {
     tput sc
     echo -ne "\033[6A"
-    echo -e "${F3}█${C0}${BG1}                                   ${C0}${Y3}█░${C0} ${Y3}░████${Y2}█████${Y3}████░${C0} ${Y3}░█${C0}${BG1}      ▓ Difficulty: Slicer to Expert   ${C0}${F3}█${C0}"
+    echo -e "${F3}█${C0}${BG1}                                   ${C0}${Y3}█░${C0} ${Y3}░████${Y2}█████${Y3}████░${C0} ${Y3}░█${G2}${BG1}      ▓ Difficulty: Slicer to Expert   ${C0}${F3}█${C0}"
     sleep 0.3
     echo -ne "\033[1A"
-    echo -e "${F3}█${C0}${BG1}                                   ${C0}${Y3}█░${G4}█${Y3}░████${Y2}█████${Y3}████░${B3}█${Y3}░█${C0}${BG1}      ▓ Difficulty: Slicer to Expert   ${C0}${F3}█${C0}"
+    echo -e "${F3}█${C0}${BG1}                                   ${C0}${Y3}█░${G4}█${Y3}░████${Y2}█████${Y3}████░${B3}█${Y3}░█${G2}${BG1}      ▓ Difficulty: Slicer to Expert   ${C0}${F3}█${C0}"
     echo -ne "\033[5B"
     tput rc
 }

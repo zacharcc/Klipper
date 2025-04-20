@@ -163,12 +163,13 @@ install_script: install.sh" >> "$MOONRAKER_CONF"
 }
 
 backup_files() {
-    echo "Creating backup of the config directory in:"
-	echo "     $BACKUP_DIR"
+    echo "Creating backup of the printer config directory:"
+	echo "Backing up files from: $CONFIG_DIR"
+	echo "                   to: $BACKUP_DIR"
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
-    echo "$OK Backup complete – Saved to:"
-	echo "    $BACKUP_DIR         "
+    echo ""
+    echo "$OK Backup complete"
 }
 
 copy_files() {
@@ -194,10 +195,10 @@ restart_klipper() {
 
 restart_moonraker() {
     echo ""
-    read -rp "Do you want to restart Moonraker now to apply changes (this will turn off the printer)? [y/N]: " answer
+    read -rp "Do you want to restart Moonraker now to apply changes? [y/N]: " answer
     if [[ "$answer" =~ ^[Yy]$ ]]; then
 	
-        echo "Restarting Moonraker service to apply changes in 5 seconds..."
+        echo "Restarting Moonraker service in 5 seconds..."
         fancy_restart_bar
 
         curl -X POST http://localhost:7125/server/restart

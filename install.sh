@@ -163,19 +163,26 @@ install_script: install.sh" >> "$MOONRAKER_CONF"
 }
 
 backup_files() {
-    echo "Creating backup of the config directory in: $BACKUP_DIR"
+    echo "Creating backup of the config directory in:"
+	echo "     $BACKUP_DIR"
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
-    echo "$OK Backup complete – Saved to: $BACKUP_DIR"
+    echo "$OK Backup complete – Saved to:"
+	echo "    $BACKUP_DIR         "
 }
 
 copy_files() {
     echo ""
     echo "------------------------------------------"
-    echo "Copying new files from: $SANDWORM_REPO to: $CONFIG_DIR"
+    echo "Copying new files from: $SANDWORM_REPO"
+	echo "                    to: $CONFIG_DIR"
+	
+    echo ""
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
-    echo "$OK Copying completed."
+    echo ""
+    
+	echo "$OK Copying completed."
 }
 
 restart_klipper() {
@@ -198,9 +205,9 @@ restart_moonraker() {
     else
 	    echo ""
         echo -e "$INFO Moonraker restart skipped. Changes have not been applied,"
-		echo -e "but you can restart Moonraker manually later via:"
-        echo -e "  1. The web interface: Power -→ Service Control -→ Moonraker"
-        echo -e "  2. Command line: curl -X POST http://localhost:7125/server/restart"
+		echo -e "      but you can restart Moonraker manually later via:"
+        echo -e "        1. The web interface: Power -→ Service Control -→ Moonraker"
+        echo -e "        2. Command line: curl -X POST http://localhost:7125/server/restart"
         echo ""
     fi
 }

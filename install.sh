@@ -98,7 +98,6 @@ start_message() {
         echo "Install version: $CUSTOM_VERSION"
         echo ""
     else
-        echo ""
         echo "=================== Update ==================="
         echo "Started: $(date)"
         echo "Git version: $VERSION"
@@ -207,7 +206,7 @@ restart_moonraker() {
         echo "Restarting Moonraker service in 5 seconds..."
         fancy_restart_bar
 
-        curl --no-progress-meter -X POST http://localhost:7125/server/restart
+        curl --no-progress-meter -X POST http://localhost:7125/server/restart > /dev/null 2>&1
 
     else
 	    echo ""

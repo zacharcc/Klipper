@@ -74,14 +74,14 @@ mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
     set_game_variables
 
-    # ASCII do logu (přes FD 4)
+    # ASCII intro do logu
     exec 4>"$LOGFILE"
     print_game_intro_ascii >&4
-
-    # stdout/stderr do logu a tee
-    exec > >(tee "$LOGFILE") 2>&1
-    exec 3>/dev/tty
     exec 4>&-
+
+    # stdout/stderr do logu a tee (append místo přepisu)
+    exec > >(tee -a "$LOGFILE") 2>&1
+    exec 3>/dev/tty
 
     # barevné intro do konzole
     draw_game_intro >&3
@@ -89,7 +89,6 @@ else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
     echo "Update version: $CUSTOM_VERSION"
 fi
-
 
 ## --- Message Header ---
 start_message() {

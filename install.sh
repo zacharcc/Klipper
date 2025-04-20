@@ -77,11 +77,11 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     # ASCII do logu (přes FD 4)
     exec 4>"$LOGFILE"
     print_game_intro_ascii >&4
-    exec 4>&-
 
     # stdout/stderr do logu a tee
     exec > >(tee "$LOGFILE") 2>&1
     exec 3>/dev/tty
+    exec 4>&-
 
     # barevné intro do konzole
     draw_game_intro >&3
@@ -271,5 +271,3 @@ else
 
     restart_klipper
 fi
-
-# Dummy change to trigger Git push

@@ -107,7 +107,6 @@ start_message() {
     else
         echo "Starting update of Sandworm macros..."
     fi
-    echo ""
 }
 
 ## --- countdown progress bar ---
@@ -163,9 +162,12 @@ install_script: install.sh" >> "$MOONRAKER_CONF"
 }
 
 backup_files() {
+    echo ""
+    echo "------------------------------------------"
     echo "Creating backup of the printer config directory:"
-	echo "Backing up files from: $CONFIG_DIR"
-	echo "                   to: $BACKUP_DIR"
+	echo "  ● from: $CONFIG_DIR"
+	echo "  ●   to: $BACKUP_DIR"
+	
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     echo ""
@@ -175,8 +177,9 @@ backup_files() {
 copy_files() {
     echo ""
     echo "------------------------------------------"
-    echo "Copying new files from: $SANDWORM_REPO"
-	echo "                    to: $CONFIG_DIR"
+    echo "Copying new files:"
+    echo "  ● from: $SANDWORM_REPO"
+	echo "  ●   to: $CONFIG_DIR"
 	
     echo ""
     mkdir -p "$CONFIG_DIR"
@@ -206,11 +209,11 @@ restart_moonraker() {
     else
 	    echo ""
         echo -e "$INFO Moonraker restart skipped. Changes have not been applied,"
-		echo -e "      but you can restart Moonraker manually later via:"
-        echo -e "        1. The web interface: Power -→ Service Control -→ Moonraker"
-        echo -e "        2. Command line: curl -X POST http://localhost:7125/server/restart"
-        echo ""
+		echo -e "but you can restart Moonraker manually later via:"
+        echo -e "  1. The web interface: Power -→ Service Control -→ Moonraker"
+        echo -e "  2. Command line: curl -X POST http://localhost:7125/server/restart"
     fi
+	echo ""
 }
 
 ## --- Execution ---

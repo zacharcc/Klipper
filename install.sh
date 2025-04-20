@@ -130,7 +130,7 @@ fancy_restart_bar() {
         fi
 
         echo -ne "[$filled$empty]\r" >&3
-        sleep 0.6
+        sleep 0.4
     done
     echo ""
     echo ""

@@ -44,7 +44,7 @@ shai_hulud() {
     echo -e "${F3}█${C0}${BG1}                                   ${C0}${Y3}█░${C0} ${Y3}░████${Y2}█████${Y3}████░${C0} ${Y3}░█${C0}${BG1}      ▓ Difficulty: Slicer to Expert   ${C0}${F3}█${C0}"
     sleep 0.3
     echo -ne "\033[1A"
-    echo -e "${F3}█${C0}${BG1}                                   ${C0}${Y3}█░${G4}█${Y3}░████${Y2}█████${Y3}████░${B3}█${Y3}░█${C0}${BG1}      ▓ Difficulty: Slicer to Expert   ${C0}${F3}█${C0}""
+    echo -e "${F3}█${C0}${BG1}                                   ${C0}${Y3}█░${G4}█${Y3}░████${Y2}█████${Y3}████░${B3}█${Y3}░█${C0}${BG1}      ▓ Difficulty: Slicer to Expert   ${C0}${F3}█${C0}"
     echo -ne "\033[5B"
     tput rc
 }
@@ -91,19 +91,19 @@ echo -e "${F3}██████████████████████
 sleep $SPEED_MEDIUM
 echo -e "${F3}█${C0}${BG1}                                                                                               ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
-echo -e "${F3}█${C0}${BG1}   ▓ Game Save: ${formatted_game_save}                ▓ ARMOR: Chamber          ▓ STAMINA: 40% (Of max flow)     ${C0}${F3}█${C0}"
+echo -e "${F3}█${G2}${BG1}   ▓ Game Save: ${formatted_game_save}                ▓ ARMOR: Chamber          ▓ STAMINA: 40% (Of max flow)     ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
 echo -e "${F3}█${C0}${BG1}                                                                                               ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
-echo -e "${F3}█${C0}${BG1}   ▓ LEVEL: ${formatted_level} Unlocked                                       ▓ AMMO: 3xASA, 2xPLA             ${C0}${F3}█${C0}"
+echo -e "${F3}█${G2}${BG1}   ▓ LEVEL: ${formatted_level} Unlocked                                       ▓ AMMO: 3xASA, 2xPLA             ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
 echo -e "${F3}█${C0}${BG1}                                                                                               ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
-echo -e "${F3}█${C0}${BG1}   ▓ POWER: 100% (500 WATT)             ${C0}${Y4}████▒${BG1}  ${C0}${Y4}████▒${C0}${BG1}          ▓ Machine gun: AMS not connected ${C0}${F3}█${C0}"
+echo -e "${F3}█${G2}${BG1}   ▓ POWER: 100% (500 WATT)             ${C0}${Y4}████▒${BG1}  ${C0}${Y4}████▒${G2}${BG1}          ▓ Machine gun: AMS not connected ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
 echo -e "${F3}█${C0}${BG1}                                    ${C0}${Y3}████${Y4}█░░█${Y3}███${Y4}█░░█${Y3}████▒${BG1}                                       ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
-echo -e "${F3}█${C0}${BG1}                                   ${C0}${Y3}█░${B3}█${Y3}░████${Y2}█████${Y3}████░${G4}█${Y3}░█${C0}${BG1}      ▓ Difficulty: Slicer to Expert   ${C0}${F3}█${C0}"
+echo -e "${F3}█${C0}${BG1}                                   ${C0}${Y3}█░${B3}█${Y3}░████${Y2}█████${Y3}████░${G4}█${Y3}░█${G2}${BG1}      ▓ Difficulty: Slicer to Expert   ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
 echo -e "${F3}█${C0}${BG1}                                   ${C0}${Y3}█░░█░░░░░░░░░░░░░█░░█▒${BG1}                                      ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM

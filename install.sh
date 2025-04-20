@@ -87,20 +87,24 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     draw_game_intro >&3
 else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
-    echo "Update version: $CUSTOM_VERSION"
 fi
 
 ## --- Message Header ---
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "============== Cold Install =============="
+        echo "Started: $(date)"
+        echo "Git version: $VERSION"
+        echo "Install version: $CUSTOM_VERSION"
+        echo ""
     else
+        echo ""
         echo "================= Update ================="
-    fi
-    echo "Started: $(date)"
-    echo "Git version: $VERSION"
-    echo "Custom version: $CUSTOM_VERSION"
-    echo ""
+        echo "Started: $(date)"
+        echo "Git version: $VERSION"
+        echo "Update version: $CUSTOM_VERSION"
+        echo ""
+	fi
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "Starting installation of automatic Sandworm updates..."
     else
@@ -203,7 +207,7 @@ restart_moonraker() {
         echo "Restarting Moonraker service in 5 seconds..."
         fancy_restart_bar
 
-        curl -X POST http://localhost:7125/server/restart
+        curl --no-progress-meter -X POST http://localhost:7125/server/restart
 
     else
 	    echo ""
@@ -240,8 +244,6 @@ else
         echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"
         exit 1
     fi
-
-    echo "Update version: $CUSTOM_VERSION"
 
     backup_files
     copy_files

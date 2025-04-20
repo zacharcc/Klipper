@@ -171,7 +171,7 @@ backup_files() {
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     echo ""
-    echo "$OK Backup complete"
+    echo "$OK Backup complete."
 }
 
 copy_files() {

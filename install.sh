@@ -215,7 +215,6 @@ restart_moonraker() {
         echo -e "  1. The web interface: Power -→ Service Control -→ Moonraker"
         echo -e "  2. Command line: curl -X POST http://localhost:7125/server/restart"
     fi
-	echo ""
 }
 
 ## --- Execution ---

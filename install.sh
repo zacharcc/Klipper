@@ -92,13 +92,17 @@ fi
 ## --- Message Header ---
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
-        echo "================ Cold Install ================"
+        echo "╔════════════════════════════════════════════╗"
+        echo "║              * Cold Install *              ║"
+		echo "╚════════════════════════════════════════════╝"
         echo "Started: $(date)"
         echo "Git version: $VERSION"
         echo "Install version: $CUSTOM_VERSION"
         echo ""
     else
-        echo "=================== Update ==================="
+        echo "╔════════════════════════════════════════════╗"
+        echo "║                 * Update *                 ║"
+        echo "╚════════════════════════════════════════════╝"
         echo "Started: $(date)"
         echo "Git version: $VERSION"
         echo "Update version: $CUSTOM_VERSION"

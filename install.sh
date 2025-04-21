@@ -28,7 +28,7 @@ OK="[OK]"
 INFO="[INFO]"
 SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
-MESS_DELAY=0.8
+MESS_DELAY=0.6
 MESS_sDELAY=0.2
 
 ## --- Git Version ---
@@ -181,9 +181,9 @@ backup_files() {
     echo "----------------------------------------------"
     echo "Creating backup of the printer config directory:"
     sleep $MESS_sDELAY
-    echo "  ● from: $CONFIG_DIR"
+    echo "  ● from: [$CONFIG_DIR]"
     sleep $MESS_sDELAY
-    echo "  ●   to: $BACKUP_DIR"
+    echo "  ●   to: [$BACKUP_DIR]"
     sleep $MESS_sDELAY
 
     mkdir -p "$BACKUP_DIR"
@@ -195,12 +195,12 @@ backup_files() {
 
 copy_files() {
     echo ""
-    echo "----------------------------------------------"
+    echo "----------------------------------------------" []
     echo "Copying new files:"
     sleep $MESS_sDELAY
-    echo "  ● from: $SANDWORM_REPO"
+    echo "  ● from: [$SANDWORM_REPO]"
     sleep $MESS_sDELAY
-    echo "  ●   to: $CONFIG_DIR"
+    echo "  ●   to: [$CONFIG_DIR]"
     sleep $MESS_sDELAY
 
     echo ""
@@ -256,7 +256,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     create_post_merge_hook  
 
     echo -e "$OK The Sandworm installation was completed successfully!"
-    sleep $MESS_DELAY
+    sleep 0.8
     restart_moonraker
 
 else

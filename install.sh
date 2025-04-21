@@ -23,11 +23,12 @@ TMP_UPDATE_LOG="$TMP_LOG_DIR/sandworm_tmp_update.log"
 source "$HOME/Sandworm/tools/game_intro.sh"
 source "$HOME/Sandworm/tools/game_intro_ascii.sh"
 
-## --- Colors (for plain SSH/logs compatibility) ---
+## --- Message status ---
 OK="[OK]"
 INFO="[INFO]"
 SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
+MESS_DELAY=0.7
 
 ## --- Git Version ---
 if [ -d "$HOME/Sandworm/.git" ]; then
@@ -110,10 +111,10 @@ start_message() {
     fi
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "Starting installation of automatic Sandworm updates..."
-		sleep 0.6
+		sleep $MESS_DELAY
     else
         echo "Starting update of Sandworm macros..."
-		sleep 0.6
+		sleep $MESS_DELAY
     fi
 }
 
@@ -180,7 +181,7 @@ backup_files() {
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     echo ""
     echo "$OK Backup complete."
-	sleep 0.6
+	sleep $MESS_DELAY
 }
 
 copy_files() {
@@ -196,7 +197,7 @@ copy_files() {
     echo ""
     
     echo "$OK Copying completed."
-	sleep 0.6
+	sleep $MESS_DELAY
 }
 
 restart_klipper() {
@@ -243,7 +244,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     create_post_merge_hook  
 
     echo -e "$OK The Sandworm installation was completed successfully!"
-	sleep 0.6
+	sleep $MESS_DELAY
     restart_moonraker
 
 else

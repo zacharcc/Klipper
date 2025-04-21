@@ -28,8 +28,6 @@ OK="[OK]"
 INFO="[INFO]"
 SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
-CODE1="\033[48;5;235m"
-CODE0="\033[0m"
 MESS_DELAY=0.6
 MESS_sDELAY=0.2
 
@@ -179,23 +177,14 @@ install_script: install.sh" >> "$MOONRAKER_CONF"
 }
 
 backup_files() {
-    echo "" >&3
-    echo "----------------------------------------------" >&3
-    echo "Creating backup of the printer config directory:" >&3
+    echo ""
+    echo "----------------------------------------------"
+    echo "Creating backup of the printer config directory:"
     sleep $MESS_sDELAY
-    echo -e "  ● from: ${CODE1}$CONFIG_DIR${CODE0}" >&3
+    echo "  ● from: $CONFIG_DIR"
     sleep $MESS_sDELAY
-    echo -e "  ●   to: ${CODE1}$BACKUP_DIR${CODE0}" >&3
+    echo "  ●   to: $BACKUP_DIR"
     sleep $MESS_sDELAY
-
-    # čistý výstup do logu
-    exec 5>"$LOGFILE"
-    echo "" >&5
-    echo "Creating backup of the printer config directory:" >&5
-    echo "  ● from: $CONFIG_DIR" >&5
-    echo "  ●   to: $BACKUP_DIR" >&5
-    exec 5>&-
-
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"

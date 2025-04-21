@@ -63,20 +63,20 @@ simulate_loading_bar_with_ascii() {
         if (( done_count == 0 )); then
             done_section=""
         else
-            done_section=$(printf "${G2}■${C0}%.0s" $(seq 1 $done_count))
+            done_section=$(printf '■%.0s' $(seq 1 $done_count))
         fi
 
         if (( done_count == bar_width )); then
             left_section=""
         else
-            left_section=$(printf "${G2}□${C0}%.0s" $(seq 1 $left_count))
+            left_section=$(printf '□%.0s' $(seq 1 $left_count))
         fi
 
         echo -ne "\033[3A"
         formatted_percent=$(printf "%3d%%" "$percent")
 
         echo -e "                                                                 ${F3}█${C0}${BG1} ${formatted_percent}                100% ${C0}${F3}█${C0}"
-        echo -e "                                                                 ${F3}█${C0}${BG1} ${done_section}${left_section} ${C0}${F3}█${C0}"
+        echo -e "                                                                 ${F3}█${G2}${BG1} ${done_section}${left_section} ${C0}${F3}█${C0}"
         echo -e "                                                                 ${F3}${F1}█${F3}██████████████████████████${F1}█${C0}"
 
         sleep $delay
@@ -165,7 +165,7 @@ echo -e " ${F3}█████████████████████�
 sleep $SPEED_MEDIUM
 echo -e "                                                                 ${F3}█${C0}${BG1} 0%                  100% ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
-echo -e "                                                                 ${F3}█${C0}${BG1} □□□□□□□□□□□□□□□□□□□□□□□□ ${C0}${F3}█${C0}"
+echo -e "                                                                 ${F3}█${G2}${BG1} □□□□□□□□□□□□□□□□□□□□□□□□ ${C0}${F3}█${C0}"
 sleep $SPEED_MEDIUM
 echo -e "                                                                 ${F3}${F1}█${F3}██████████████████████████${F1}█${C0}"
 sleep $SPEED_SLOW

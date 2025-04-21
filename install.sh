@@ -189,12 +189,12 @@ backup_files() {
     sleep $MESS_sDELAY
 
     # čistý výstup do logu
-    exec 4>"$LOGFILE"
-    echo "" >&4
-    echo "Creating backup of the printer config directory:" >&4
-    echo "  ● from: $CONFIG_DIR" >&4
-    echo "  ●   to: $BACKUP_DIR" >&4
-    exec 4>&-
+    exec 5>"$LOGFILE"
+    echo "" >&5
+    echo "Creating backup of the printer config directory:" >&5
+    echo "  ● from: $CONFIG_DIR" >&5
+    echo "  ●   to: $BACKUP_DIR" >&5
+    exec 5>&-
 
 
     mkdir -p "$BACKUP_DIR"

@@ -29,6 +29,7 @@ INFO="[INFO]"
 SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
 MESS_DELAY=0.8
+MESS_sDELAY=0.2
 
 ## --- Git Version ---
 if [ -d "$HOME/Sandworm/.git" ]; then
@@ -96,9 +97,13 @@ start_message() {
         echo "╔════════════════════════════════════════════╗"
         echo "║             ** Cold Install **             ║"
         echo "╚════════════════════════════════════════════╝"
+		$MESS_sDELAY
         echo "Started: $(date)"
+		$MESS_sDELAY
         echo "Git version: $VERSION"
+		$MESS_sDELAY
         echo "Install version: $CUSTOM_VERSION"
+		$MESS_sDELAY
         echo ""
     else
         echo "╔════════════════════════════════════════════╗"
@@ -114,7 +119,6 @@ start_message() {
 		sleep $MESS_DELAY
     else
         echo "Starting update of Sandworm macros..."
-		sleep $MESS_DELAY
     fi
 }
 
@@ -152,6 +156,7 @@ create_post_merge_hook() {
 EOF
         chmod +x "$HOOK_PATH"
         echo "$OK Git post-merge hook created at: $HOOK_PATH"
+		$MESS_sDELAY
     else
         echo "$SKIPPED Git post-merge hook already exists."
     fi
@@ -168,14 +173,18 @@ install_script: install.sh" >> "$MOONRAKER_CONF"
     echo ""
     echo "----------------------------------------------"
     echo -e "$OK Added [update_manager Sandworm] config block to: moonraker.conf"
+	$MESS_sDELAY
 }
 
 backup_files() {
     echo ""
     echo "----------------------------------------------"
     echo "Creating backup of the printer config directory:"
+	$MESS_sDELAY
     echo "  ● from: $CONFIG_DIR"
+	$MESS_sDELAY
     echo "  ●   to: $BACKUP_DIR"
+	$MESS_sDELAY
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
@@ -188,8 +197,11 @@ copy_files() {
     echo ""
     echo "----------------------------------------------"
     echo "Copying new files:"
+	$MESS_sDELAY
     echo "  ● from: $SANDWORM_REPO"
+	$MESS_sDELAY
     echo "  ●   to: $CONFIG_DIR"
+	$MESS_sDELAY
 
     echo ""
     mkdir -p "$CONFIG_DIR"

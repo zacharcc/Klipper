@@ -93,7 +93,7 @@ fi
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "╔════════════════════════════════════════════╗"
-        echo "║              * Cold Install *              ║"
+        echo "║             ** Cold Install **             ║"
         echo "╚════════════════════════════════════════════╝"
         echo "Started: $(date)"
         echo "Git version: $VERSION"
@@ -101,13 +101,13 @@ start_message() {
         echo ""
     else
         echo "╔════════════════════════════════════════════╗"
-        echo "║                 * Update *                 ║"
+        echo "║                ** Update **                ║"
         echo "╚════════════════════════════════════════════╝"
         echo "Started: $(date)"
         echo "Git version: $VERSION"
         echo "Update version: $CUSTOM_VERSION"
         echo ""
-	fi
+    fi
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "Starting installation of automatic Sandworm updates..."
     else

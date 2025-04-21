@@ -28,6 +28,8 @@ OK="[OK]"
 INFO="[INFO]"
 SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
+CODE1="\033[48;5;235m"
+CODE0="\033[0m"
 MESS_DELAY=0.6
 MESS_sDELAY=0.2
 
@@ -177,14 +179,19 @@ install_script: install.sh" >> "$MOONRAKER_CONF"
 }
 
 backup_files() {
-    echo ""
-    echo "----------------------------------------------"
+    echo "" >&3
+    echo "----------------------------------------------" >&3
+    echo "Creating backup of the printer config directory:" >&3
+	sleep $MESS_sDELAY
+    echo -e "  ● from: ${CODE1}$CONFIG_DIR${CODE0}" >&3
+	sleep $MESS_sDELAY
+    echo -e "  ●   to: ${CODE1}$BACKUP_DIR${CODE0}" >&3
+	sleep $MESS_sDELAY
+
+    echo ""    # čistý výstup do logu
     echo "Creating backup of the printer config directory:"
-    sleep $MESS_sDELAY
-    echo "  ● from: [$CONFIG_DIR]"
-    sleep $MESS_sDELAY
-    echo "  ●   to: [$BACKUP_DIR]"
-    sleep $MESS_sDELAY
+    echo "  ● from: $CONFIG_DIR"
+    echo "  ●   to: $BACKUP_DIR"
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
@@ -195,12 +202,12 @@ backup_files() {
 
 copy_files() {
     echo ""
-    echo "----------------------------------------------" []
+    echo "----------------------------------------------"
     echo "Copying new files:"
     sleep $MESS_sDELAY
-    echo "  ● from: [$SANDWORM_REPO]"
+    echo "  ● from: $SANDWORM_REPO"
     sleep $MESS_sDELAY
-    echo "  ●   to: [$CONFIG_DIR]"
+    echo "  ●   to: $CONFIG_DIR"
     sleep $MESS_sDELAY
 
     echo ""

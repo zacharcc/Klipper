@@ -113,13 +113,13 @@ start_message() {
 
 ## --- countdown progress bar ---
 fancy_restart_bar() {
-    sleep 0.4
+    sleep 0.4  # initial delay
 
-    for i in {12..0}; do
-        if [ "$i" -eq 12 ]; then
+    for i in {24..0}; do
+        if [ "$i" -eq 24 ]; then
             empty=""
         else
-            empty=$(printf '□%.0s' $(seq 1 $((12 - i))))
+            empty=$(printf '□%.0s' $(seq 1 $((24 - i))))
         fi
 
         if [ "$i" -eq 0 ]; then
@@ -129,7 +129,7 @@ fancy_restart_bar() {
         fi
 
         echo -ne "[$filled$empty]\r" >&3
-        sleep 0.4
+        sleep 0.2
     done
     echo ""
     echo ""

@@ -94,7 +94,7 @@ start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "╔════════════════════════════════════════════╗"
         echo "║              * Cold Install *              ║"
-		echo "╚════════════════════════════════════════════╝"
+        echo "╚════════════════════════════════════════════╝"
         echo "Started: $(date)"
         echo "Git version: $VERSION"
         echo "Install version: $CUSTOM_VERSION"
@@ -171,9 +171,9 @@ backup_files() {
     echo ""
     echo "----------------------------------------------"
     echo "Creating backup of the printer config directory:"
-	echo "  ● from: $CONFIG_DIR"
-	echo "  ●   to: $BACKUP_DIR"
-	
+    echo "  ● from: $CONFIG_DIR"
+    echo "  ●   to: $BACKUP_DIR"
+
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     echo ""
@@ -185,14 +185,14 @@ copy_files() {
     echo "----------------------------------------------"
     echo "Copying new files:"
     echo "  ● from: $SANDWORM_REPO"
-	echo "  ●   to: $CONFIG_DIR"
-	
+    echo "  ●   to: $CONFIG_DIR"
+
     echo ""
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
     echo ""
     
-	echo "$OK Copying completed."
+    echo "$OK Copying completed."
 }
 
 restart_klipper() {
@@ -206,16 +206,16 @@ restart_moonraker() {
     echo ""
     read -rp "Do you want to restart Moonraker now to apply changes? [y/N]: " answer
     if [[ "$answer" =~ ^[Yy]$ ]]; then
-	
+
         echo "Restarting Moonraker service in 5 seconds..."
         fancy_restart_bar
 
         curl --no-progress-meter -X POST http://localhost:7125/server/restart > /dev/null 2>&1
 
     else
-	    echo ""
+        echo ""
         echo -e "$INFO Moonraker restart skipped. Changes have not been applied!"
-		echo -e "But you can restart Moonraker manually later via:"
+        echo -e "But you can restart Moonraker manually later via:"
         echo -e "  1. The web interface: Power -→ Service Control -→ Moonraker"
         echo -e "  2. Command line: curl -X POST http://localhost:7125/server/restart"
     fi

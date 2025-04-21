@@ -110,8 +110,10 @@ start_message() {
     fi
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "Starting installation of automatic Sandworm updates..."
+		sleep 0.4
     else
         echo "Starting update of Sandworm macros..."
+		sleep 0.4
     fi
 }
 
@@ -199,7 +201,7 @@ restart_klipper() {
     echo ""
     echo "Restarting Klipper to load new config..."
     sleep 5
-    curl -X POST 'http://localhost:7125/printer/restart'
+    curl --no-progress-meter -X POST 'http://localhost:7125/printer/restart' > /dev/null 2>&1
 }
 
 restart_moonraker() {

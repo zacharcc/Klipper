@@ -258,8 +258,8 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     echo -e "$OK The Sandworm installation was completed successfully!"
     sleep $MESS_DELAY
     echo ""
-    echo -e "$INFO ⚠️ After restarting Klipper,"
-    echo -e "please refresh your web browser UI (press F5) to avoid cache issues (duplicate folders, etc...)."
+    echo -e "$INFO ⚠️ After restarting, please refresh the Klipper web interface"
+    echo -e "(press F5) to avoid UI cache issues (duplicate folders, etc...)."
 
     sleep 0.8
     restart_moonraker

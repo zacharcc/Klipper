@@ -28,7 +28,7 @@ OK="[OK]"
 INFO="[INFO]"
 SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
-MESS_DELAY=0.7
+MESS_DELAY=0.8
 
 ## --- Git Version ---
 if [ -d "$HOME/Sandworm/.git" ]; then

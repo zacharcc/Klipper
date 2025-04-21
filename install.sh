@@ -256,10 +256,11 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     create_post_merge_hook  
 
     echo -e "$OK The Sandworm installation was completed successfully!"
-	sleep $MESS_DELAY
-	echo ""
-	echo -e "$INFO ⚠️ After restarting, please refresh your web browser UI (press F5)\n to avoid cache issues (duplicate folders, etc...).\n"
-	
+    sleep $MESS_DELAY
+    echo ""
+    echo -e "$INFO ⚠️ After restarting Klipper,"
+    echo -e "please refresh your web browser UI (press F5) to avoid cache issues (duplicate folders, etc...)."
+
     sleep 0.8
     restart_moonraker
 

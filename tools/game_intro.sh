@@ -73,7 +73,7 @@ simulate_loading_bar_with_ascii() {
         fi
 
         echo -ne "\033[3A"
-		formatted_percent=$(printf "%3d%%" "$percent")
+        formatted_percent=$(printf "%3d%%" "$percent")
 
         echo -e "                                                                 ${F3}█${C0}${BG1} ${formatted_percent}                100% ${C0}${F3}█${C0}"
         echo -e "                                                                 ${F3}█${C0}${BG1} ${done_section}${left_section} ${C0}${F3}█${C0}"

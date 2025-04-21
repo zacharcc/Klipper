@@ -182,17 +182,20 @@ backup_files() {
     echo "" >&3
     echo "----------------------------------------------" >&3
     echo "Creating backup of the printer config directory:" >&3
-	sleep $MESS_sDELAY
+    sleep $MESS_sDELAY
     echo -e "  ● from: ${CODE1}$CONFIG_DIR${CODE0}" >&3
-	sleep $MESS_sDELAY
+    sleep $MESS_sDELAY
     echo -e "  ●   to: ${CODE1}$BACKUP_DIR${CODE0}" >&3
-	sleep $MESS_sDELAY
+    sleep $MESS_sDELAY
 
-   # čistý výstup do logu
-    echo "" 2>&1
-    echo "Creating backup of the printer config directory:" 2>&1
-    echo "  ● from: $CONFIG_DIR" 2>&1
-    echo "  ●   to: $BACKUP_DIR" 2>&1
+    # čistý výstup do logu
+    exec 4>"$LOGFILE"
+    echo "" >&4
+    echo "Creating backup of the printer config directory:" >&4
+    echo "  ● from: $CONFIG_DIR" >&4
+    echo "  ●   to: $BACKUP_DIR" >&4
+    exec 4>&-
+
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"

@@ -110,10 +110,10 @@ start_message() {
     fi
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "Starting installation of automatic Sandworm updates..."
-		sleep 0.35
+		sleep 0.6
     else
         echo "Starting update of Sandworm macros..."
-		sleep 0.35
+		sleep 0.6
     fi
 }
 
@@ -180,7 +180,7 @@ backup_files() {
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     echo ""
     echo "$OK Backup complete."
-	sleep 0.35
+	sleep 0.6
 }
 
 copy_files() {
@@ -196,7 +196,7 @@ copy_files() {
     echo ""
     
     echo "$OK Copying completed."
-	sleep 0.35
+	sleep 0.6
 }
 
 restart_klipper() {
@@ -243,7 +243,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     create_post_merge_hook  
 
     echo -e "$OK The Sandworm installation was completed successfully!"
-	sleep 0.4
+	sleep 0.6
     restart_moonraker
 
 else

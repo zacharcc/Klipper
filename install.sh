@@ -171,14 +171,14 @@ primary_branch: test
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
     echo ""
-    echo "----------------------------------------------"
+    echo "──────────────────────────────────────────────"
     echo -e "$OK Added [update_manager Sandworm] config block to: moonraker.conf"
     sleep $MESS_sDELAY
 }
 
 backup_files() {
     echo ""
-    echo "----------------------------------------------"
+    echo "──────────────────────────────────────────────"
     echo "Creating backup of the printer config directory:"
     sleep $MESS_sDELAY
     echo "  ● from: $CONFIG_DIR"
@@ -195,7 +195,7 @@ backup_files() {
 
 copy_files() {
     echo ""
-    echo "----------------------------------------------"
+    echo "──────────────────────────────────────────────"
     echo "Copying new files:"
     sleep $MESS_sDELAY
     echo "  ● from: $SANDWORM_REPO"
@@ -269,7 +269,7 @@ else
     copy_files
 
     echo ""
-    echo "----------------------------------------------"
+    echo "──────────────────────────────────────────────"
     echo -e "$OK The Sandworm update was completed successfully!"
     echo -e "$INFO Your config folder was backed up at: $BACKUP_DIR"
     echo ""

@@ -188,10 +188,11 @@ backup_files() {
     echo -e "  ●   to: ${CODE1}$BACKUP_DIR${CODE0}" >&3
 	sleep $MESS_sDELAY
 
-    echo ""    # čistý výstup do logu
-    echo "Creating backup of the printer config directory:"
-    echo "  ● from: $CONFIG_DIR"
-    echo "  ●   to: $BACKUP_DIR"
+   # čistý výstup do logu
+    echo "" 2>&1
+    echo "Creating backup of the printer config directory:" 2>&1
+    echo "  ● from: $CONFIG_DIR" 2>&1
+    echo "  ●   to: $BACKUP_DIR" 2>&1
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"

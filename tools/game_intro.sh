@@ -63,13 +63,13 @@ simulate_loading_bar_with_ascii() {
         if (( done_count == 0 )); then
             done_section=""
         else
-            done_section=$(printf '■%.0s' $(seq 1 $done_count))
+            done_section=$(printf "${G2}■${C0}%.0s" $(seq 1 $done_count))
         fi
 
         if (( done_count == bar_width )); then
             left_section=""
         else
-            left_section=$(printf '□%.0s' $(seq 1 $left_count))
+            left_section=$(printf "${G2}□${C0}%.0s" $(seq 1 $left_count))
         fi
 
         echo -ne "\033[3A"

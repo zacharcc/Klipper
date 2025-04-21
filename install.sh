@@ -97,13 +97,13 @@ start_message() {
         echo "╔════════════════════════════════════════════╗"
         echo "║             ** Cold Install **             ║"
         echo "╚════════════════════════════════════════════╝"
-		$MESS_sDELAY
+        sleep $MESS_sDELAY
         echo "Started: $(date)"
-		$MESS_sDELAY
+        sleep $MESS_sDELAY
         echo "Git version: $VERSION"
-		$MESS_sDELAY
+        sleep $MESS_sDELAY
         echo "Install version: $CUSTOM_VERSION"
-		$MESS_sDELAY
+        sleep $MESS_sDELAY
         echo ""
     else
         echo "╔════════════════════════════════════════════╗"
@@ -116,7 +116,7 @@ start_message() {
     fi
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo "Starting installation of automatic Sandworm updates..."
-		sleep $MESS_DELAY
+        sleep $MESS_DELAY
     else
         echo "Starting update of Sandworm macros..."
     fi
@@ -156,7 +156,7 @@ create_post_merge_hook() {
 EOF
         chmod +x "$HOOK_PATH"
         echo "$OK Git post-merge hook created at: $HOOK_PATH"
-		$MESS_sDELAY
+        sleep $MESS_sDELAY
     else
         echo "$SKIPPED Git post-merge hook already exists."
     fi
@@ -173,35 +173,35 @@ install_script: install.sh" >> "$MOONRAKER_CONF"
     echo ""
     echo "----------------------------------------------"
     echo -e "$OK Added [update_manager Sandworm] config block to: moonraker.conf"
-	$MESS_sDELAY
+    sleep $MESS_sDELAY
 }
 
 backup_files() {
     echo ""
     echo "----------------------------------------------"
     echo "Creating backup of the printer config directory:"
-	$MESS_sDELAY
+    sleep $MESS_sDELAY
     echo "  ● from: $CONFIG_DIR"
-	$MESS_sDELAY
+    sleep $MESS_sDELAY
     echo "  ●   to: $BACKUP_DIR"
-	$MESS_sDELAY
+    sleep $MESS_sDELAY
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     echo ""
     echo "$OK Backup complete."
-	sleep $MESS_DELAY
+    sleep $MESS_DELAY
 }
 
 copy_files() {
     echo ""
     echo "----------------------------------------------"
     echo "Copying new files:"
-	$MESS_sDELAY
+    sleep $MESS_sDELAY
     echo "  ● from: $SANDWORM_REPO"
-	$MESS_sDELAY
+    sleep $MESS_sDELAY
     echo "  ●   to: $CONFIG_DIR"
-	$MESS_sDELAY
+    sleep $MESS_sDELAY
 
     echo ""
     mkdir -p "$CONFIG_DIR"
@@ -209,7 +209,7 @@ copy_files() {
     echo ""
     
     echo "$OK Copying completed."
-	sleep $MESS_DELAY
+    sleep $MESS_DELAY
 }
 
 restart_klipper() {
@@ -256,7 +256,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     create_post_merge_hook  
 
     echo -e "$OK The Sandworm installation was completed successfully!"
-	sleep $MESS_DELAY
+    sleep $MESS_DELAY
     restart_moonraker
 
 else

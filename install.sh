@@ -334,17 +334,14 @@ else
     copy_files_update
 
     echo -e ""
-    echo -e "***************************************************************************"
-    echo -e "* NOTES:"
-    echo -e "*"
-    echo -e "* ✅ The Sandworm update was completed successfully!"
-    echo -e "* 💾 Your config folder was backed up at: $BACKUP_DIR"
-    echo -e "* 📜 For full update details, see the log: $LOGFILE"
-    echo -e "*"
-    echo -e "* ⚠️ After restarting, please refresh the Klipper web interface (press F5)"
-    echo -e "* to clear the memory and avoid UI cache issues (duplicate folders, etc)."
-    echo -e "*"
-    echo -e "***************************************************************************"
+    echo -e "┌─────────────────────────────────────────────────────────────────────────"
+    echo -e "│ NOTES:"
+    echo -e "│ ✅ The Sandworm update was completed successfully!"
+    echo -e "│ 💾 Your config folder was backed up at: $BACKUP_DIR"
+    echo -e "│ 📜 For full update details, see the log: $LOGFILE"
+    echo -e "│ ⚠️ After restarting, please refresh the Klipper web interface (press F5)"
+    echo -e "│ to clear the memory and avoid UI cache issues (duplicate folders, etc)."
+    echo -e "└─────────────────────────────────────────────────────────────────────────"
     echo -e ""
 
     # Replace previous update block with new one in log

@@ -139,7 +139,7 @@ fancy_restart_bar() {
             filled=$(printf '■%.0s' $(seq 1 $i))
         fi
 
-        echo -ne "[$filled$empty]\r" >&3
+        echo -ne "${G2}[$filled$empty]\r${C0}" >&3
         sleep 0.2
     done
     echo ""

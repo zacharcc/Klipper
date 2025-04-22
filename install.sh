@@ -202,6 +202,23 @@ backup_files() {
     sleep $MESS_sDELAY
 }
 
+backup_files_update() {
+    echo ""
+    echo "──────────────────────────────────────────────"
+    echo "Creating backup of the printer config directory:"
+    sleep $MESS_sDELAY
+    echo "  ● from: $CONFIG_DIR"
+    sleep $MESS_sDELAY
+    echo "  ●   to: $BACKUP_DIR"
+    sleep $MESS_sDELAY
+
+    mkdir -p "$BACKUP_DIR"
+    cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
+    echo ""
+    echo "$OK Backup complete."
+    sleep $MESS_DELAY
+}
+
 copy_files() {
     echo "║                                                                                 ║"
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
@@ -235,6 +252,25 @@ copy_files() {
     sleep $MESS_sDELAY
 }
 
+copy_files_update() {
+    echo ""
+    echo "──────────────────────────────────────────────"
+    echo "Copying new files:"
+    sleep $MESS_sDELAY
+    echo "  ● from: $SANDWORM_REPO"
+    sleep $MESS_sDELAY
+    echo "  ●   to: $CONFIG_DIR"
+    sleep $MESS_sDELAY
+
+    echo ""
+    mkdir -p "$CONFIG_DIR"
+    rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
+    sleep 0.5
+    echo ""
+    
+    echo "$OK Copying completed."
+    sleep $MESS_DELAY
+}
 
 restart_klipper() {
     echo ""
@@ -294,8 +330,8 @@ else
         exit 1
     fi
 
-    backup_files
-    copy_files
+    backup_files_update
+    copy_files_update
 
     echo -e ""
     echo -e "──────────────────────────────────────────────"

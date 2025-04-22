@@ -39,7 +39,7 @@ print_row() {
 print_path_row() {
     local label="$1"
     local path="$2"
-    printf "║   ● %-7s %-65s ║\n" "$label" "$path"
+    printf "║   ● %-7s %-67s ║\n" "$label" "$path"
 }
 
 

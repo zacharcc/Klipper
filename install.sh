@@ -335,7 +335,7 @@ else
 
     echo -e ""
     echo -e "┌─────────────────────────────────────────────────────────────────────────"
-    echo -e "│ NOTES:"
+    echo -e "│ ** NOTES: **"
     echo -e "│ ✅ The Sandworm update was completed successfully!"
     echo -e "│ 💾 Your config folder was backed up at: $BACKUP_DIR"
     echo -e "│ 📜 For full update details, see the log: $LOGFILE"

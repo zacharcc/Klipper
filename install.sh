@@ -204,7 +204,7 @@ backup_files() {
 
 backup_files_update() {
     echo ""
-    echo "──────────────────────────────────────────────"
+    echo "──────────────────────────────────────────────────────────────────────────"
     echo "Creating backup of the printer config directory:"
     sleep $MESS_sDELAY
     echo "  ● from: $CONFIG_DIR"
@@ -254,7 +254,7 @@ copy_files() {
 
 copy_files_update() {
     echo ""
-    echo "──────────────────────────────────────────────"
+    echo "──────────────────────────────────────────────────────────────────────────"
     echo "Copying new files:"
     sleep $MESS_sDELAY
     echo "  ● from: $SANDWORM_REPO"
@@ -334,19 +334,19 @@ else
     copy_files_update
 
     echo -e ""
-    echo -e "──────────────────────────────────────────────"
-    echo -e "** NOTES: **"
-    echo -e "✅ The Sandworm update was completed successfully!"
-    echo -e ""
-    echo -e "💾 Your config folder was backed up at: $BACKUP_DIR"
-    echo -e ""
-    echo -e "📜 For full update details, see the log:"
-    echo -e "-→ $LOGFILE"
-    echo -e ""
-    echo -e "⚠️ After restarting, please refresh the Klipper web interface (press F5)"
-    echo -e "to clear the memory and avoid UI cache issues (duplicate folders, etc)."
-    echo -e ""
-    echo -e "──────────────────────────────────────────────"
+    echo -e "┌──────────────┬───────────────────────────────────────────────────────────"
+    echo -e "│ ** NOTES: ** │"
+    echo -e "├──────────────┘"
+    echo -e "│ ✅ The Sandworm update was completed successfully!"
+    echo -e "│ "
+    echo -e "│ 💾 Your config folder was backed up at: $BACKUP_DIR"
+    echo -e "│"
+    echo -e "│ 📜 For full update details, see the log: $LOGFILE"
+    echo -e "│"
+    echo -e "│ ⚠️ After restarting, please refresh the Klipper web interface (press F5)"
+    echo -e "│ to clear the memory and avoid UI cache issues (duplicate folders, etc)."
+    echo -e "│"
+    echo -e "└──────────────────────────────────────────────────────────────────────────"
     echo -e ""
 
     # Replace previous update block with new one in log

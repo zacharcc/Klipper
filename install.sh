@@ -142,6 +142,7 @@ fancy_restart_bar() {
         echo -ne "${G2}[$filled$empty]\r${C0}" >&3
         sleep 0.2
     done
+    echo ""
 }
 
 ## --- Functions ---
@@ -261,7 +262,6 @@ if [ "$IS_COLD_INSTALL" = true ]; then
 
     sleep 0.8
     restart_moonraker
-    echo ""
     echo ""
 else
     if [ ! -d "$SANDWORM_REPO" ]; then

@@ -206,8 +206,8 @@ copy_files() {
     from_path="  ● from: $SANDWORM_REPO"
     to_path="  ●   to: $CONFIG_DIR"
     
-    formatted_from=$(printf "%-81s" "$from_path")
-    formatted_to=$(printf "%-83s" "$to_path")
+    formatted_from=$(printf "%-82s" "$from_path")
+    formatted_to=$(printf "%-82s" "$to_path")
 
     echo -e "║ $formatted_from║"
     sleep $MESS_sDELAY

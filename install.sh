@@ -144,7 +144,7 @@ fancy_restart_bar() {
         echo -ne "${G2}[$filled$empty]\r${C0}" >&3
         sleep 0.2
     done
-    echo -e "║                                                                                 ║"
+    echo "║                                                                                 ║"
 }
 
 ## --- Functions ---
@@ -172,7 +172,7 @@ path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
-    echo -e "║                                                                                 ║"
+    echo "║                                                                                 ║"
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ $OK Added [update_manager Sandworm] config block to: moonraker.conf            ║"
     sleep $MESS_sDELAY
@@ -197,13 +197,13 @@ backup_files() {
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     
-    echo -e "║                                                                                 ║"
+    echo "║                                                                                 ║"
     echo -e "║ $OK Backup complete.                                                           ║"
     sleep $MESS_sDELAY
 }
 
 copy_files() {
-    echo -e "║                                                                                 ║"
+    echo "║                                                                                 ║"
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Copying new files:                                                              ║"
     sleep $MESS_sDELAY
@@ -219,7 +219,7 @@ copy_files() {
     echo -e "║ $formatted_to║"
     sleep $MESS_sDELAY
 
-    echo -e "║                                                                                 ║"
+    echo "║                                                                                 ║"
 
     mkdir -p "$CONFIG_DIR"
     RSYNC_OUTPUT=$(rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/")
@@ -230,14 +230,14 @@ copy_files() {
         echo -e "║ $formatted_line  ║"
     done <<< "$RSYNC_OUTPUT"
 
-    echo -e "║                                                                                 ║"
+    echo "║                                                                                 ║"
     echo -e "║ $OK Copying completed.                                                         ║"
     sleep $MESS_sDELAY
 }
 
 
 restart_klipper() {
-    echo -e ""
+    echo ""
     echo -e "Restarting Klipper to load new config..."
     sleep 5
     curl --no-progress-meter -X POST 'http://localhost:7125/printer/restart' > /dev/null 2>&1
@@ -253,7 +253,7 @@ restart_moonraker() {
         curl --no-progress-meter -X POST http://localhost:7125/server/restart > /dev/null 2>&1
 
     else
-        echo -e ""
+        echo ""
         echo -e "$INFO Moonraker restart skipped. Changes have not been applied!"
         echo -e "But you can restart Moonraker manually later via:"
         echo -e "  1. The web interface: Power -→ Service Control -→ Moonraker"
@@ -280,12 +280,12 @@ if [ "$IS_COLD_INSTALL" = true ]; then
 
     echo -e "║ $OK The Sandworm installation was completed successfully!                      ║"
     sleep $MESS_sDELAY
-    echo -e "║                                                                                 ║"
+    echo "║                                                                                 ║"
     echo -e "║ $INFO ⚠️ After restarting, please refresh the Klipper web interface (press F5) ║"
     echo -e "║ to clear the memory and avoid UI cache issues (duplicate folders, etc).         ║"
     echo -e "╚═════════════════════════════════════════════════════════════════════════════════╝"
     sleep $MESS_DELAY
-    echo -e ""
+    echo ""
     restart_moonraker
     echo -e ""
 else

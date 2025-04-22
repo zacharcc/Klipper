@@ -201,9 +201,9 @@ backup_files() {
     formatted_from=$(printf "%-82s" "$from_path")
     formatted_to=$(printf "%-82s" "$to_path")
     
-    echo -e "║ $formatted_from ║"
+    echo -e "║ $formatted_from║"
     sleep $MESS_sDELAY
-    echo -e "║ $formatted_to ║"
+    echo -e "║ $formatted_to║"
     sleep $MESS_sDELAY
 
     mkdir -p "$BACKUP_DIR"

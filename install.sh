@@ -209,9 +209,9 @@ copy_files() {
     formatted_from=$(printf "%-81s" "$from_path")
     formatted_to=$(printf "%-83s" "$to_path")
 
-    echo -e "║ $formatted_from  ║"
+    echo -e "║ $formatted_from║"
     sleep $MESS_sDELAY
-    echo -e "║ $formatted_to  ║"
+    echo -e "║ $formatted_to║"
     sleep $MESS_sDELAY
 
     echo -e "║                                                                                 ║"
@@ -222,7 +222,7 @@ copy_files() {
     # výpis zarovnaného rsync výstupu
     while IFS= read -r line; do
         formatted_line=$(printf "%-78s" "$line")
-        echo -e "║ $formatted_line║"
+        echo -e "║ $formatted_line  ║"
     done <<< "$RSYNC_OUTPUT"
 
     echo -e "║                                                                                 ║"

@@ -39,7 +39,7 @@ print_row() {
 print_path_row() {
     local label="$1"
     local path="$2"
-    printf "║   ● %-7s %-67s ║\n" "$label" "$path"
+    printf "║   ● %-7s %-65s ║\n" "$label" "$path"
 }
 
 
@@ -190,23 +190,29 @@ install_script: install.sh" >> "$MOONRAKER_CONF"
 }
 
 backup_files() {
-    print_row ""
+    echo -e "║                                                                                 ║"
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
-    print_row "Creating backup of the printer config directory:"
+    echo -e "║ Creating backup of the printer config directory:                                ║"
     sleep $MESS_sDELAY
-    print_path_row "from:" "$CONFIG_DIR"
+
+    from_path="  ● from: $CONFIG_DIR"
+    to_path="  ●   to: $BACKUP_DIR"
+    
+    formatted_from=$(printf "%-82s" "$from_path")
+    formatted_to=$(printf "%-82s" "$to_path")
+    
+    echo -e "║ $formatted_from ║"
     sleep $MESS_sDELAY
-    print_path_row "  to:" "$BACKUP_DIR"
+    echo -e "║ $formatted_to ║"
     sleep $MESS_sDELAY
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
-
-    print_row ""
-    print_row "$OK Backup complete."
+    
+    echo -e "║                                                                                 ║"
+    echo -e "║ $OK Backup complete.                                                           ║"
     sleep $MESS_DELAY
 }
-
 
 copy_files() {
     echo -e "║                                                                                 ║"

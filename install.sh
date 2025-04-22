@@ -102,9 +102,9 @@ start_message() {
         echo -e "║             ** Cold Install **             ║"
         echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"
         sleep $MESS_sDELAY
-        echo -e "║ Started: $(date)                                                                ║"
+        echo -e "║ Started: $(date)                                       ║"
         sleep $MESS_sDELAY
-        echo -e "║ Git version: $VERSION                                                           ║"
+        echo -e "║ Git version: $VERSION                                                  ║"
         sleep $MESS_sDELAY
         echo -e "║ Install version: $CUSTOM_VERSION                                                ║"
         sleep $MESS_sDELAY
@@ -184,9 +184,9 @@ backup_files() {
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Creating backup of the printer config directory:                                ║"
     sleep $MESS_sDELAY
-    echo -e "║   ● from: $CONFIG_DIR                                             ║"
+    echo -e "║   ● from: $CONFIG_DIR                          ║"
     sleep $MESS_sDELAY
-    echo -e "║   ●   to: $BACKUP_DIR                         ║"
+    echo -e "║   ●   to: $BACKUP_DIR               ║"
     sleep $MESS_sDELAY
 
     mkdir -p "$BACKUP_DIR"

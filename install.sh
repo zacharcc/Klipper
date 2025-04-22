@@ -100,15 +100,15 @@ start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo -e "╔════════════════════════════════════════════╗"
         echo -e "║             ** Cold Install **             ║"
-        echo -e "╠════════════════════════════════════════════╩═══════════════════════════════════╗"
+        echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"
         sleep $MESS_sDELAY
-        echo -e "║ Started: $(date)                                                               ║"
+        echo -e "║ Started: $(date)                                                                ║"
         sleep $MESS_sDELAY
-        echo -e "║ Git version: $VERSION                                                          ║"
+        echo -e "║ Git version: $VERSION                                                           ║"
         sleep $MESS_sDELAY
-        echo -e "║ Install version: $CUSTOM_VERSION                                               ║"
+        echo -e "║ Install version: $CUSTOM_VERSION                                                ║"
         sleep $MESS_sDELAY
-        echo -e "║                                                                                ║"
+        echo -e "║                                                                                 ║"
     else
         echo -e "╔════════════════════════════════════════════╗"
         echo -e "║                ** Update **                ║"
@@ -119,7 +119,7 @@ start_message() {
         echo -e ""
     fi
     if [[ "$IS_COLD_INSTALL" = true ]]; then
-        echo -e "║ Starting installation of automatic Sandworm updates...                         ║"
+        echo -e "║ Starting installation of automatic Sandworm updates...                          ║"
         sleep $MESS_DELAY
     else
         echo -e "Starting update of Sandworm macros..."
@@ -146,7 +146,7 @@ fancy_restart_bar() {
         echo -ne "${G2}[$filled$empty]\r${C0}" >&3
         sleep 0.2
     done
-    echo -e "║                                                                                ║"
+    echo -e "║                                                                                 ║"
 }
 
 ## --- Functions ---
@@ -158,7 +158,7 @@ create_post_merge_hook() {
 /home/biqu/Sandworm/install.sh
 EOF
         chmod +x "$HOOK_PATH"
-        echo -e "║ $OK Git post-merge hook created at: $HOOK_PATH                                 ║"
+        echo -e "║ $OK Git post-merge hook created at: $HOOK_PATH  ║"
         sleep $MESS_sDELAY
     else
         echo -e "║ $SKIPPED Git post-merge hook already exists.                                   ║"
@@ -173,45 +173,45 @@ path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
-    echo -e "║                                                                                ║"
-    echo -e "╟────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "║                                                                                 ║"
+    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ $OK Added [update_manager Sandworm] config block to: moonraker.conf            ║"
     sleep $MESS_sDELAY
 }
 
 backup_files() {
-    echo -e "║                                                                                ║"
-    echo -e "╟────────────────────────────────────────────────────────────────────────────────╢"
-    echo -e "║ Creating backup of the printer config directory:                               ║"
+    echo -e "║                                                                                 ║"
+    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "║ Creating backup of the printer config directory:                                ║"
     sleep $MESS_sDELAY
-    echo -e "║   ● from: $CONFIG_DIR                                                          ║"
+    echo -e "║   ● from: $CONFIG_DIR                                             ║"
     sleep $MESS_sDELAY
-    echo -e "║   ●   to: $BACKUP_DIR                                                          ║"
+    echo -e "║   ●   to: $BACKUP_DIR                         ║"
     sleep $MESS_sDELAY
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     
-	echo -e "║                                                                                ║"
+	echo -e "║                                                                                 ║"
     echo -e "║ $OK Backup complete.                                                           ║"
     sleep $MESS_DELAY
 }
 
 copy_files() {
-    echo -e "║                                                                                ║"
-    echo -e "╟────────────────────────────────────────────────────────────────────────────────╢"
-    echo -e "║ Copying new files:                                                             ║"
+    echo -e "║                                                                                 ║"
+    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "║ Copying new files:                                                              ║"
     sleep $MESS_sDELAY
-    echo -e "║   ● from: $SANDWORM_REPO                                                       ║"
+    echo -e "║   ● from: $SANDWORM_REPO                                            ║"
     sleep $MESS_sDELAY
-    echo -e "║   ●   to: $CONFIG_DIR                                                          ║"
+    echo -e "║   ●   to: $CONFIG_DIR                       ║"                   
     sleep $MESS_sDELAY
 
-    echo -e "║                                                                                ║"
+    echo -e "║                                                                                 ║"
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
     sleep 0.5
-    echo -e "║                                                                                ║"
+    echo -e "║                                                                                 ║"
     
     echo -e "║ $OK Copying completed.                                                         ║"
     sleep $MESS_DELAY
@@ -225,21 +225,21 @@ restart_klipper() {
 }
 
 restart_moonraker() {
-    echo -e "║                                                                                ║"
-    read -rp "║ Do you want to restart Moonraker now to apply changes? [y/N]:                  ║" answer
+    echo -e ""
+    read -rp " Do you want to restart Moonraker now to apply changes? [y/N]: " answer
     if [[ "$answer" =~ ^[Yy]$ ]]; then
 
-        echo -e "║ Restarting Moonraker service in 5 seconds...                                   ║"
+        echo -e " Restarting Moonraker service in 5 seconds..."
         fancy_restart_bar
 
         curl --no-progress-meter -X POST http://localhost:7125/server/restart > /dev/null 2>&1
 
     else
-        echo -e "║                                                                                ║"
-        echo -e "║ $INFO Moonraker restart skipped. Changes have not been applied!                ║"
-        echo -e "║ But you can restart Moonraker manually later via:                              ║"
-        echo -e "║   1. The web interface: Power -→ Service Control -→ Moonraker                  ║"
-        echo -e "║   2. Command line: curl -X POST http://localhost:7125/server/restart           ║"
+        echo -e ""
+        echo -e " $INFO Moonraker restart skipped. Changes have not been applied!"
+        echo -e " But you can restart Moonraker manually later via:"
+        echo -e "   1. The web interface: Power -→ Service Control -→ Moonraker"
+        echo -e "   2. Command line: curl -X POST http://localhost:7125/server/restart"
     fi
 }
 
@@ -255,21 +255,21 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     if ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF" 2>/dev/null; then
         add_update_manager_block
     else
-        echo -e "$SKIPPED update_manager already exists in moonraker.conf"
+        echo -e "║ $SKIPPED update_manager already exists in moonraker.conf"                      ║
     fi
 
     create_post_merge_hook  
 
     echo -e "║ $OK The Sandworm installation was completed successfully!                      ║"
     sleep $MESS_sDELAY
-    echo -e "║                                                                                ║"
+    echo -e "║                                                                                 ║"
     echo -e "║ $INFO ⚠️ After restarting, please refresh the Klipper web interface (press F5) ║"
-    echo -e "║ to clear the memory and avoid UI cache issues (duplicate folders, etc).        ║"
-
+    echo -e "║ to clear the memory and avoid UI cache issues (duplicate folders, etc).         ║"
+    echo -e "╚═════════════════════════════════════════════════════════════════════════════════╝"
     sleep 0.8
+    echo -e ""
     restart_moonraker
-    echo -e "║                                                                                ║"
-    echo -e "╚════════════════════════════════════════════════════════════════════════════════╝"
+    echo -e ""
 else
     if [ ! -d "$SANDWORM_REPO" ]; then
         echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"

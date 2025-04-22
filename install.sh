@@ -142,8 +142,6 @@ fancy_restart_bar() {
         echo -ne "${G2}[$filled$empty]\r${C0}" >&3
         sleep 0.2
     done
-    echo ""
-    echo ""
 }
 
 ## --- Functions ---

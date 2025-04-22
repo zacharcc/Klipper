@@ -120,13 +120,7 @@ start_message() {
         echo -e "Git version: $VERSION"
         echo -e "Game version: $CUSTOM_VERSION"
         echo -e ""
-    fi
-    if [[ "$IS_COLD_INSTALL" = true ]]; then
-        echo -e "║ Starting installation of automatic Sandworm updates...                          ║"
-        sleep $MESS_sDELAY
-    else
         echo -e "Starting update of Sandworm macros..."
-    fi
 }
 
 ## --- countdown progress bar ---

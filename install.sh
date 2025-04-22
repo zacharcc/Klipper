@@ -1,7 +1,5 @@
 #!/bin/bash
 
-## Urobotos/Sandworm Version
-
 ## --- Trap ---
 set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
@@ -10,9 +8,11 @@ trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 echo ""
 
 # --- Paths ---
+# CONFIG_DIR="$HOME/printer_data/config"
+# MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 SANDWORM_REPO="$HOME/Sandworm/config"
-CONFIG_DIR="$HOME/printer_data/config"
-MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
+CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
+MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/backup/backup_config_$(date +%Y_%m_%d-%Hh%Mm)"
 HOOK_PATH="$HOME/Sandworm/.git/hooks/post-merge"
 LOGFILE="$HOME/printer_data/logs/sandworm_update.log"
@@ -102,7 +102,7 @@ start_message() {
         sleep $MESS_sDELAY
         echo "Git version: $VERSION"
         sleep $MESS_sDELAY
-        echo "Game version: $CUSTOM_VERSION"
+        echo "Install version: $CUSTOM_VERSION"
         sleep $MESS_sDELAY
         echo ""
     else
@@ -111,7 +111,7 @@ start_message() {
         echo "╚════════════════════════════════════════════╝"
         echo "Started: $(date)"
         echo "Git version: $VERSION"
-        echo "Game version: $CUSTOM_VERSION"
+        echo "Update version: $CUSTOM_VERSION"
         echo ""
     fi
     if [[ "$IS_COLD_INSTALL" = true ]]; then
@@ -256,7 +256,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     create_post_merge_hook  
 
     echo -e "$OK The Sandworm installation was completed successfully!"
-    sleep $MESS_syDELAY
+    sleep $MESS_sDELAY
     echo ""
     echo -e "$INFO ⚠️ After restarting, please refresh the Klipper web interface (press F5)"
     echo -e "to clear the memory and avoid UI cache issues (duplicate folders, etc)."
@@ -264,7 +264,6 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     sleep 0.8
     restart_moonraker
     echo ""
-
 else
     if [ ! -d "$SANDWORM_REPO" ]; then
         echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"

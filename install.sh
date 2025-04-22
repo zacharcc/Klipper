@@ -172,13 +172,13 @@ path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
+    echo -e "║                                                                                 ║"
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ $OK Added [update_manager Sandworm] config block to: moonraker.conf            ║"
     sleep $MESS_sDELAY
 }
 
 backup_files() {
-    echo -e "║                                                                                 ║"
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Creating backup of the printer config directory:                                ║"
     sleep $MESS_sDELAY
@@ -244,7 +244,6 @@ restart_klipper() {
 }
 
 restart_moonraker() {
-    echo -e ""
     read -rp "Do you want to restart Moonraker now to apply changes? [y/N]: " answer
     if [[ "$answer" =~ ^[Yy]$ ]]; then
 

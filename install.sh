@@ -104,9 +104,9 @@ start_message() {
         sleep $MESS_sDELAY
         echo -e "║ Started: $(date)                                       ║"
         sleep $MESS_sDELAY
-        echo -e "║ Git version: $VERSION                                                  ║"
+        echo -e "║ Git version: $VERSION                                                          ║"
         sleep $MESS_sDELAY
-        echo -e "║ Install version: $CUSTOM_VERSION                                                ║"
+        echo -e "║ Install version: $CUSTOM_VERSION                                         ║"
         sleep $MESS_sDELAY
         echo -e "║                                                                                 ║"
     else
@@ -184,9 +184,9 @@ backup_files() {
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Creating backup of the printer config directory:                                ║"
     sleep $MESS_sDELAY
-    echo -e "║   ● from: $CONFIG_DIR                          ║"
+    echo -e "║   ● from: $CONFIG_DIR                       ║"
     sleep $MESS_sDELAY
-    echo -e "║   ●   to: $BACKUP_DIR               ║"
+    echo -e "║   ●   to: $BACKUP_DIR            ║"
     sleep $MESS_sDELAY
 
     mkdir -p "$BACKUP_DIR"
@@ -226,20 +226,20 @@ restart_klipper() {
 
 restart_moonraker() {
     echo -e ""
-    read -rp " Do you want to restart Moonraker now to apply changes? [y/N]: " answer
+    read -rp "Do you want to restart Moonraker now to apply changes? [y/N]: " answer
     if [[ "$answer" =~ ^[Yy]$ ]]; then
 
-        echo -e " Restarting Moonraker service in 5 seconds..."
+        echo -e "Restarting Moonraker service in 5 seconds..."
         fancy_restart_bar
 
         curl --no-progress-meter -X POST http://localhost:7125/server/restart > /dev/null 2>&1
 
     else
         echo -e ""
-        echo -e " $INFO Moonraker restart skipped. Changes have not been applied!"
-        echo -e " But you can restart Moonraker manually later via:"
-        echo -e "   1. The web interface: Power -→ Service Control -→ Moonraker"
-        echo -e "   2. Command line: curl -X POST http://localhost:7125/server/restart"
+        echo -e "$INFO Moonraker restart skipped. Changes have not been applied!"
+        echo -e "But you can restart Moonraker manually later via:"
+        echo -e "  1. The web interface: Power -→ Service Control -→ Moonraker"
+        echo -e "  2. Command line: curl -X POST http://localhost:7125/server/restart"
     fi
 }
 

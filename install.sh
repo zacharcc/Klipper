@@ -5,7 +5,7 @@ set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 
 ## --- Brake line after git clone messages ---
-echo ""
+echo -e ""
 
 # --- Paths ---
 # CONFIG_DIR="$HOME/printer_data/config"
@@ -91,34 +91,38 @@ else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
 fi
 
+#   ●   to: /home/biqu/Sandworm/backup/backup_config_2025_04_22-16h38m
+#╠════════════════════════════════════════════╝
+
+
 ## --- Message Header ---
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
-        echo "╔════════════════════════════════════════════╗"
-        echo "║             ** Cold Install **             ║"
-        echo "╚════════════════════════════════════════════╝"
+        echo -e "╔════════════════════════════════════════════╗"
+        echo -e "║             ** Cold Install **             ║"
+        echo -e "╠════════════════════════════════════════════╩═══════════════════════════════════╗"
         sleep $MESS_sDELAY
-        echo "Started: $(date)"
+        echo -e "║ Started: $(date)                                                               ║"
         sleep $MESS_sDELAY
-        echo "Git version: $VERSION"
+        echo -e "║ Git version: $VERSION                                                          ║"
         sleep $MESS_sDELAY
-        echo "Install version: $CUSTOM_VERSION"
+        echo -e "║ Install version: $CUSTOM_VERSION                                               ║"
         sleep $MESS_sDELAY
-        echo ""
+        echo -e "║                                                                                ║"
     else
-        echo "╔════════════════════════════════════════════╗"
-        echo "║                ** Update **                ║"
-        echo "╚════════════════════════════════════════════╝"
-        echo "Started: $(date)"
-        echo "Git version: $VERSION"
-        echo "Update version: $CUSTOM_VERSION"
-        echo ""
+        echo -e "╔════════════════════════════════════════════╗"
+        echo -e "║                ** Update **                ║"
+        echo -e "╚════════════════════════════════════════════╝"
+        echo -e "Started: $(date)"
+        echo -e "Git version: $VERSION"
+        echo -e "Update version: $CUSTOM_VERSION"
+        echo -e ""
     fi
     if [[ "$IS_COLD_INSTALL" = true ]]; then
-        echo "Starting installation of automatic Sandworm updates..."
+        echo -e "║ Starting installation of automatic Sandworm updates...                         ║"
         sleep $MESS_DELAY
     else
-        echo "Starting update of Sandworm macros..."
+        echo -e "Starting update of Sandworm macros..."
     fi
 }
 
@@ -142,7 +146,7 @@ fancy_restart_bar() {
         echo -ne "${G2}[$filled$empty]\r${C0}" >&3
         sleep 0.2
     done
-    echo ""
+    echo -e "║                                                                                ║"
 }
 
 ## --- Functions ---
@@ -154,10 +158,10 @@ create_post_merge_hook() {
 /home/biqu/Sandworm/install.sh
 EOF
         chmod +x "$HOOK_PATH"
-        echo "$OK Git post-merge hook created at: $HOOK_PATH"
+        echo -e "║ $OK Git post-merge hook created at: $HOOK_PATH                                 ║"
         sleep $MESS_sDELAY
     else
-        echo "$SKIPPED Git post-merge hook already exists."
+        echo -e "║ $SKIPPED Git post-merge hook already exists.                                   ║"
     fi
 }
 
@@ -169,72 +173,73 @@ path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
-    echo ""
-    echo "──────────────────────────────────────────────"
-    echo -e "$OK Added [update_manager Sandworm] config block to: moonraker.conf"
+    echo -e "║                                                                                ║"
+    echo -e "╟────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "║ $OK Added [update_manager Sandworm] config block to: moonraker.conf            ║"
     sleep $MESS_sDELAY
 }
 
 backup_files() {
-    echo ""
-    echo "──────────────────────────────────────────────"
-    echo "Creating backup of the printer config directory:"
+    echo -e "║                                                                                ║"
+    echo -e "╟────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "║ Creating backup of the printer config directory:                               ║"
     sleep $MESS_sDELAY
-    echo "  ● from: $CONFIG_DIR"
+    echo -e "║   ● from: $CONFIG_DIR                                                          ║"
     sleep $MESS_sDELAY
-    echo "  ●   to: $BACKUP_DIR"
+    echo -e "║   ●   to: $BACKUP_DIR                                                          ║"
     sleep $MESS_sDELAY
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
-    echo ""
-    echo "$OK Backup complete."
+    
+	echo -e "║                                                                                ║"
+    echo -e "║ $OK Backup complete.                                                           ║"
     sleep $MESS_DELAY
 }
 
 copy_files() {
-    echo ""
-    echo "──────────────────────────────────────────────"
-    echo "Copying new files:"
+    echo -e "║                                                                                ║"
+    echo -e "╟────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "║ Copying new files:                                                             ║"
     sleep $MESS_sDELAY
-    echo "  ● from: $SANDWORM_REPO"
+    echo -e "║   ● from: $SANDWORM_REPO                                                       ║"
     sleep $MESS_sDELAY
-    echo "  ●   to: $CONFIG_DIR"
+    echo -e "║   ●   to: $CONFIG_DIR                                                          ║"
     sleep $MESS_sDELAY
 
-    echo ""
+    echo -e "║                                                                                ║"
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
     sleep 0.5
-    echo ""
+    echo -e "║                                                                                ║"
     
-    echo "$OK Copying completed."
+    echo -e "║ $OK Copying completed.                                                         ║"
     sleep $MESS_DELAY
 }
 
 restart_klipper() {
-    echo ""
-    echo "Restarting Klipper to load new config..."
+    echo -e ""
+    echo -e "Restarting Klipper to load new config..."
     sleep 5
     curl --no-progress-meter -X POST 'http://localhost:7125/printer/restart' > /dev/null 2>&1
 }
 
 restart_moonraker() {
-    echo ""
-    read -rp "Do you want to restart Moonraker now to apply changes? [y/N]: " answer
+    echo -e "║                                                                                ║"
+    read -rp "║ Do you want to restart Moonraker now to apply changes? [y/N]:                  ║" answer
     if [[ "$answer" =~ ^[Yy]$ ]]; then
 
-        echo "Restarting Moonraker service in 5 seconds..."
+        echo -e "║ Restarting Moonraker service in 5 seconds...                                   ║"
         fancy_restart_bar
 
         curl --no-progress-meter -X POST http://localhost:7125/server/restart > /dev/null 2>&1
 
     else
-        echo ""
-        echo -e "$INFO Moonraker restart skipped. Changes have not been applied!"
-        echo -e "But you can restart Moonraker manually later via:"
-        echo -e "  1. The web interface: Power -→ Service Control -→ Moonraker"
-        echo -e "  2. Command line: curl -X POST http://localhost:7125/server/restart"
+        echo -e "║                                                                                ║"
+        echo -e "║ $INFO Moonraker restart skipped. Changes have not been applied!                ║"
+        echo -e "║ But you can restart Moonraker manually later via:                              ║"
+        echo -e "║   1. The web interface: Power -→ Service Control -→ Moonraker                  ║"
+        echo -e "║   2. Command line: curl -X POST http://localhost:7125/server/restart           ║"
     fi
 }
 
@@ -255,15 +260,16 @@ if [ "$IS_COLD_INSTALL" = true ]; then
 
     create_post_merge_hook  
 
-    echo -e "$OK The Sandworm installation was completed successfully!"
+    echo -e "║ $OK The Sandworm installation was completed successfully!                      ║"
     sleep $MESS_sDELAY
-    echo ""
-    echo -e "$INFO ⚠️ After restarting, please refresh the Klipper web interface (press F5)"
-    echo -e "to clear the memory and avoid UI cache issues (duplicate folders, etc)."
+    echo -e "║                                                                                ║"
+    echo -e "║ $INFO ⚠️ After restarting, please refresh the Klipper web interface (press F5) ║"
+    echo -e "║ to clear the memory and avoid UI cache issues (duplicate folders, etc).        ║"
 
     sleep 0.8
     restart_moonraker
-    echo ""
+    echo -e "║                                                                                ║"
+    echo -e "╚════════════════════════════════════════════════════════════════════════════════╝"
 else
     if [ ! -d "$SANDWORM_REPO" ]; then
         echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"
@@ -273,18 +279,18 @@ else
     backup_files
     copy_files
 
-    echo ""
-    echo "──────────────────────────────────────────────"
+    echo -e ""
+    echo -e "──────────────────────────────────────────────"
     echo -e "** NOTES: **"
     echo -e "✅ The Sandworm update was completed successfully!"
-    echo ""
+    echo -e ""
     echo -e "💾 Your config folder was backed up at: $BACKUP_DIR"
-    echo ""
+    echo -e ""
     echo -e "⚠️ After restarting, please refresh the Klipper web interface (press F5)"
     echo -e "to clear the memory and avoid UI cache issues (duplicate folders, etc)."
-    echo ""
-    echo "──────────────────────────────────────────────"
-    echo ""
+    echo -e ""
+    echo -e "──────────────────────────────────────────────"
+    echo -e ""
 
     # Replace previous update block with new one in log
     if [ -f "$LOGFILE" ]; then

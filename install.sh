@@ -276,9 +276,9 @@ else
 
     echo ""
     echo "──────────────────────────────────────────────"
-    echo -e "$OK ✅ The Sandworm update was completed successfully!"
+    echo -e "$OK The Sandworm update was completed successfully!"
     echo ""
-    echo -e "$INFO 💾 Your config folder was backed up at: $BACKUP_DIR"
+    echo -e "$INFO Your config folder was backed up at: $BACKUP_DIR"
     echo ""
     echo -e "$INFO ⚠️ After restarting, please refresh the Klipper web interface (press F5)"
     echo -e "to clear the memory and avoid UI cache issues (duplicate folders, etc)."

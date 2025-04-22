@@ -168,12 +168,15 @@ create_post_merge_hook() {
 /home/biqu/Sandworm/install.sh
 EOF
         chmod +x "$HOOK_PATH"
-        echo -e "║ $OK Git post-merge hook created at: $HOOK_PATH  ║"
+
+        echo -e "║ $OK Git post-merge hook created at path:                                        ║"
+        print_path_row "hook" "$HOOK_PATH"
         sleep $MESS_sDELAY
     else
         echo -e "║ $SKIPPED Git post-merge hook already exists.                                   ║"
     fi
 }
+
 
 add_update_manager_block() {
     echo -e "\n[update_manager Sandworm]
@@ -211,7 +214,7 @@ backup_files() {
     
     echo -e "║                                                                                 ║"
     echo -e "║ $OK Backup complete.                                                           ║"
-    sleep $MESS_DELAY
+    sleep $MESS_sDELAY
 }
 
 copy_files() {

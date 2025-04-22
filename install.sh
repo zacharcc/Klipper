@@ -31,6 +31,11 @@ ERROR="[ERROR]"
 MESS_DELAY=0.8
 MESS_sDELAY=0.2
 
+print_row() {
+    local msg="$1"
+    printf "║ %-79s ║\n" "$msg"
+}
+
 ## --- Git Version ---
 if [ -d "$HOME/Sandworm/.git" ]; then
     VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null || \
@@ -91,10 +96,6 @@ else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
 fi
 
-#   ●   to: /home/biqu/Sandworm/backup/backup_config_2025_04_22-16h38m
-#╠════════════════════════════════════════════╝
-
-
 ## --- Message Header ---
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
@@ -102,20 +103,22 @@ start_message() {
         echo -e "║             ** Cold Install **             ║"
         echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"
         sleep $MESS_sDELAY
-        echo -e "║ Started: $(date)                                       ║"
+        print_row "Started: $(date)"
         sleep $MESS_sDELAY
-        echo -e "║ Git version: $VERSION                                                          ║"
+        print_row "Git version: $VERSION"
         sleep $MESS_sDELAY
-        echo -e "║ Install version: $CUSTOM_VERSION                                         ║"
+        print_row "Install version: $CUSTOM_VERSION"
         sleep $MESS_sDELAY
-        echo -e "║                                                                                 ║"
+        print_row ""
+        print_row "Starting installation of automatic Sandworm updates..."
+        print_row ""
     else
         echo -e "╔════════════════════════════════════════════╗"
         echo -e "║                ** Update **                ║"
         echo -e "╚════════════════════════════════════════════╝"
         echo -e "Started: $(date)"
         echo -e "Git version: $VERSION"
-        echo -e "Update version: $CUSTOM_VERSION"
+        echo -e "Game version: $CUSTOM_VERSION"
         echo -e ""
     fi
     if [[ "$IS_COLD_INSTALL" = true ]]; then

@@ -202,20 +202,34 @@ copy_files() {
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Copying new files:                                                              ║"
     sleep $MESS_sDELAY
-    echo -e "║   ● from: $SANDWORM_REPO                                            ║"
+
+    from_path="  ● from: $SANDWORM_REPO"
+    to_path="    ●   to: $CONFIG_DIR"
+    
+    formatted_from=$(printf "%-78s" "$from_path")
+    formatted_to=$(printf "%-78s" "$to_path")
+
+    echo -e "║ $formatted_from║"
     sleep $MESS_sDELAY
-    echo -e "║   ●   to: $CONFIG_DIR                       ║"                   
+    echo -e "║ $formatted_to║"
     sleep $MESS_sDELAY
 
     echo -e "║                                                                                 ║"
+
     mkdir -p "$CONFIG_DIR"
-    rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
-    sleep 0.5
+    RSYNC_OUTPUT=$(rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/")
+
+    # výpis zarovnaného rsync výstupu
+    while IFS= read -r line; do
+        formatted_line=$(printf "%-78s" "$line")
+        echo -e "║ $formatted_line║"
+    done <<< "$RSYNC_OUTPUT"
+
     echo -e "║                                                                                 ║"
-    
     echo -e "║ $OK Copying completed.                                                         ║"
     sleep $MESS_DELAY
 }
+
 
 restart_klipper() {
     echo -e ""

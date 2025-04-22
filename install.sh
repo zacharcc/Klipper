@@ -121,6 +121,7 @@ start_message() {
         echo -e "Game version: $CUSTOM_VERSION"
         echo -e ""
         echo -e "Starting update of Sandworm macros..."
+    fi		
 }
 
 ## --- countdown progress bar ---

@@ -144,7 +144,7 @@ fancy_restart_bar() {
         echo -ne "${G2}[$filled$empty]\r${C0}" >&3
         sleep 0.2
     done
-    echo "║                                                                                 ║"
+    echo ""
 }
 
 ## --- Functions ---
@@ -287,7 +287,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     sleep $MESS_DELAY
     echo ""
     restart_moonraker
-    echo -e ""
+    echo ""
 else
     if [ ! -d "$SANDWORM_REPO" ]; then
         echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"

@@ -192,7 +192,7 @@ backup_files() {
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     
-	echo -e "║                                                                                 ║"
+    echo -e "║                                                                                 ║"
     echo -e "║ $OK Backup complete.                                                           ║"
     sleep $MESS_DELAY
 }
@@ -204,14 +204,14 @@ copy_files() {
     sleep $MESS_sDELAY
 
     from_path="  ● from: $SANDWORM_REPO"
-    to_path="    ●   to: $CONFIG_DIR"
+    to_path="  ●   to: $CONFIG_DIR"
     
-    formatted_from=$(printf "%-78s" "$from_path")
-    formatted_to=$(printf "%-78s" "$to_path")
+    formatted_from=$(printf "%-81s" "$from_path")
+    formatted_to=$(printf "%-83s" "$to_path")
 
-    echo -e "║ $formatted_from║"
+    echo -e "║ $formatted_from  ║"
     sleep $MESS_sDELAY
-    echo -e "║ $formatted_to║"
+    echo -e "║ $formatted_to  ║"
     sleep $MESS_sDELAY
 
     echo -e "║                                                                                 ║"

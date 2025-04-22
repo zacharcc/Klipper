@@ -172,7 +172,6 @@ path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
-    echo -e "║                                                                                 ║"
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ $OK Added [update_manager Sandworm] config block to: moonraker.conf            ║"
     sleep $MESS_sDELAY

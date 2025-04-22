@@ -36,13 +36,6 @@ print_row() {
     printf "║ %-79s ║\n" "$msg"
 }
 
-print_path_row() {
-    local label="$1"
-    local path="$2"
-    printf "║   ● %-7s %-65s ║\n" "$label" "$path"
-}
-
-
 ## --- Git Version ---
 if [ -d "$HOME/Sandworm/.git" ]; then
     VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null || \
@@ -169,14 +162,12 @@ create_post_merge_hook() {
 EOF
         chmod +x "$HOOK_PATH"
 
-        echo -e "║ $OK Git post-merge hook created at path:                                        ║"
-        print_path_row "hook" "$HOOK_PATH"
+        print_row "$OK Git post-merge hook created at: $HOOK_PATH"
         sleep $MESS_sDELAY
     else
-        echo -e "║ $SKIPPED Git post-merge hook already exists.                                   ║"
+        print_row "$SKIPPED Git post-merge hook already exists."
     fi
 }
-
 
 add_update_manager_block() {
     echo -e "\n[update_manager Sandworm]

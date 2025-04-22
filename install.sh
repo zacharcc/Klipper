@@ -36,6 +36,13 @@ print_row() {
     printf "║ %-79s ║\n" "$msg"
 }
 
+print_path_row() {
+    local label="$1"
+    local path="$2"
+    printf "║   ● %-7s %-65s ║\n" "$label" "$path"
+}
+
+
 ## --- Git Version ---
 if [ -d "$HOME/Sandworm/.git" ]; then
     VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null || \
@@ -183,22 +190,23 @@ install_script: install.sh" >> "$MOONRAKER_CONF"
 }
 
 backup_files() {
-    echo -e "║                                                                                 ║"
+    print_row ""
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
-    echo -e "║ Creating backup of the printer config directory:                                ║"
+    print_row "Creating backup of the printer config directory:"
     sleep $MESS_sDELAY
-    echo -e "║   ● from: $CONFIG_DIR                       ║"
+    print_path_row "from:" "$CONFIG_DIR"
     sleep $MESS_sDELAY
-    echo -e "║   ●   to: $BACKUP_DIR            ║"
+    print_path_row "  to:" "$BACKUP_DIR"
     sleep $MESS_sDELAY
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
-    
-    echo -e "║                                                                                 ║"
-    echo -e "║ $OK Backup complete.                                                           ║"
-    sleep $MESS_sDELAY
+
+    print_row ""
+    print_row "$OK Backup complete."
+    sleep $MESS_DELAY
 }
+
 
 copy_files() {
     echo -e "║                                                                                 ║"

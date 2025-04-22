@@ -205,7 +205,7 @@ copy_files() {
     echo ""
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
-    sleep $MESS_sDELAY
+    sleep 0.5
     echo ""
     
     echo "$OK Copying completed."

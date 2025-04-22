@@ -275,7 +275,7 @@ else
 
     echo ""
     echo "──────────────────────────────────────────────"
-    echo -e "$INFO:"
+    echo -e "**NOTES:"
     echo -e "✅ The Sandworm update was completed successfully!"
     echo ""
     echo -e "💾 Your config folder was backed up at: $BACKUP_DIR"

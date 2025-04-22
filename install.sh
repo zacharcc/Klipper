@@ -28,8 +28,8 @@ OK="[OK]"
 INFO="[INFO]"
 SKIPPED="[SKIPPED]"
 ERROR="[ERROR]"
-MESS_DELAY=0.6
-MESS_sDELAY=0.2
+MESS_DELAY=0.8
+MESS_sDELAY=0.25
 
 ## --- Git Version ---
 if [ -d "$HOME/Sandworm/.git" ]; then
@@ -120,7 +120,7 @@ start_message() {
     fi
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo -e "║ Starting installation of automatic Sandworm updates...                          ║"
-        sleep $MESS_DELAY
+        sleep $MESS_sDELAY
     else
         echo -e "Starting update of Sandworm macros..."
     fi
@@ -194,7 +194,7 @@ backup_files() {
     
     echo -e "║                                                                                 ║"
     echo -e "║ $OK Backup complete.                                                           ║"
-    sleep $MESS_DELAY
+    sleep $MESS_sDELAY
 }
 
 copy_files() {
@@ -227,7 +227,7 @@ copy_files() {
 
     echo -e "║                                                                                 ║"
     echo -e "║ $OK Copying completed.                                                         ║"
-    sleep $MESS_DELAY
+    sleep $MESS_sDELAY
 }
 
 
@@ -280,7 +280,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     echo -e "║ $INFO ⚠️ After restarting, please refresh the Klipper web interface (press F5) ║"
     echo -e "║ to clear the memory and avoid UI cache issues (duplicate folders, etc).         ║"
     echo -e "╚═════════════════════════════════════════════════════════════════════════════════╝"
-    sleep 0.8
+    sleep $MESS_DELAY
     echo -e ""
     restart_moonraker
     echo -e ""

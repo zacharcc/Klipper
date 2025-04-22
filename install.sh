@@ -261,7 +261,8 @@ if [ "$IS_COLD_INSTALL" = true ]; then
 
     sleep 0.8
     restart_moonraker
-
+    echo ""
+    echo ""
 else
     if [ ! -d "$SANDWORM_REPO" ]; then
         echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"

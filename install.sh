@@ -320,16 +320,10 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     backup_files
     copy_files 
 
-    if ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF" 2>/dev/null; then
-        add_update_manager_block
-    else
-        echo -e "║ $SKIPPED [update_manager Sandworm] already exists in moonraker.conf"           ║
-    fi
-	
     if ! grep -q "^\[power printer\]" "$MOONRAKER_CONF" 2>/dev/null; then
         add_power_printer_block
     else
-        echo -e "║ $SKIPPED [power printer] already exists in moonraker.conf"                     ║
+        echo -e "║ $SKIPPED [power printer] already exists in moonraker.conf                      ║"
     fi
 
     create_post_merge_hook  

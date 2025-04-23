@@ -319,6 +319,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
 
     backup_files
     copy_files 
+    add_update_manager_block
 
     if ! grep -q "^\[power printer\]" "$MOONRAKER_CONF" 2>/dev/null; then
         add_power_printer_block

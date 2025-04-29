@@ -1,0 +1,37 @@
+name: Validate Install Script
+
+on:
+  push:
+    paths:
+      - 'install.sh'
+  pull_request:
+    paths:
+      - 'install.sh'
+
+jobs:
+  validate-install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check if install.sh exists
+        run: |
+          if [ ! -f install.sh ]; then
+            echo "❌ install.sh not found!"
+            exit 1
+          fi
+          echo "✅ install.sh found."
+
+      - name: Check if install.sh is executable
+        run: |
+          if [ ! -x install.sh ]; then
+            echo "❌ install.sh is not executable! (missing chmod +x)"
+            exit 1
+          fi
+          echo "✅ install.sh is executable."
+
+      - name: Check install.sh for syntax errors
+        run: |
+          bash -n install.sh
+          echo "✅ Syntax check passed."

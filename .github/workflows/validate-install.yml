@@ -1,4 +1,4 @@
-name: Validate Install Script
+name: Validate install.sh
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
   pull_request:
     paths:
       - 'install.sh'
+  workflow_dispatch:   # For manual check run
 
 jobs:
   validate-install:

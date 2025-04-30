@@ -145,7 +145,7 @@ print_row "$OK Sandworm macros have been uninstalled successfully!"
 print_row ""
 print_row "$INFO To apply the changes, please restart Moonraker using the [Y] option."
 print_row "$INFO Uninstall log saved to:"
-echo -e "║   ● $LOGFILE       ║"
+echo -e "║    ● $LOGFILE       ║"
 echo "╚═════════════════════════════════════════════════════════════════════════════════╝"
 
 # --- Optional [y/N]: Restart Moonraker ---

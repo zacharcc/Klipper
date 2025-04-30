@@ -102,13 +102,9 @@ start_message() {
         echo -e "╔════════════════════════════════════════════╗"
         echo -e "║             ** Cold Install **             ║"
         echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"
-        sleep $MESS_sDELAY
         print_row "Started: $(date)"
-        sleep $MESS_sDELAY
         print_row "Git version: $VERSION"
-        sleep $MESS_sDELAY
         print_row "Install version: $CUSTOM_VERSION"
-        sleep $MESS_sDELAY
         print_row ""
         print_row "Starting installation of automatic Sandworm updates..."
         print_row ""
@@ -156,9 +152,7 @@ create_post_merge_hook() {
 /home/biqu/Sandworm/install.sh
 EOF
         chmod +x "$HOOK_PATH"
-
-        print_row "$OK Git post-merge hook created at: $HOOK_PATH"
-        sleep $MESS_sDELAY
+        print_row "$OK Git post-merge hook created at: $HOOK_PATH"      
     else
         print_row "$SKIPPED Git post-merge hook already exists."
     fi
@@ -174,8 +168,7 @@ managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
     echo "║                                                                                 ║"
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
-    echo -e "║ $OK Added [update_manager Sandworm] config block to: moonraker.conf            ║"
-    sleep $MESS_sDELAY
+    echo -e "║ $OK Added [update_manager Sandworm] config block to: moonraker.conf            ║"  
 }
 
 add_power_printer_block() {
@@ -188,26 +181,22 @@ locked_while_printing: True         # Prevent power-off during a print
 restart_klipper_when_powered: True
 restart_delay: 1
 bound_service: klipper              # Ensures Klipper service starts/restarts with power toggle" >> "$MOONRAKER_CONF"
-    echo -e "║ $OK Added [power printer] config block to: moonraker.conf                      ║"
-    sleep $MESS_sDELAY
+    echo -e "║ $OK Added [power printer] config block to: moonraker.conf                      ║"  
 }
 
 backup_files() {
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Creating backup of the printer config directory:                                ║"
-    sleep $MESS_sDELAY
-
+   
     from_path="  ● from: $CONFIG_DIR"
     to_path="  ●   to: $BACKUP_DIR"
     
     formatted_from=$(printf "%-82s" "$from_path")
     formatted_to=$(printf "%-82s" "$to_path")
     
-    echo -e "║ $formatted_from║"
-    sleep $MESS_sDELAY
+    echo -e "║ $formatted_from║"  
     echo -e "║ $formatted_to║"
-    sleep $MESS_sDELAY
-
+   
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     
@@ -219,25 +208,21 @@ backup_files() {
 backup_files_update() {
     echo ""
     echo "──────────────────────────────────────────────"
-    echo "Creating backup of the printer config directory:"
-    sleep $MESS_sDELAY
-    echo "  ● from: $CONFIG_DIR"
-    sleep $MESS_sDELAY
-    echo "  ●   to: $BACKUP_DIR"
-    sleep $MESS_sDELAY
+    echo "Creating backup of the printer config directory:"  
+    echo "  ● from: $CONFIG_DIR"  
+    echo "  ●   to: $BACKUP_DIR"  
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     echo ""
     echo "$OK Backup complete."
-    sleep $MESS_DELAY
+    sleep $MESS_sDELAY
 }
 
 copy_files() {
     echo "║                                                                                 ║"
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
-    echo -e "║ Copying new files:                                                              ║"
-    sleep $MESS_sDELAY
+    echo -e "║ Copying new files:                                                              ║" 
 
     from_path="  ● from: $SANDWORM_REPO"
     to_path="  ●   to: $CONFIG_DIR"
@@ -245,11 +230,8 @@ copy_files() {
     formatted_from=$(printf "%-82s" "$from_path")
     formatted_to=$(printf "%-82s" "$to_path")
 
-    echo -e "║ $formatted_from║"
-    sleep $MESS_sDELAY
-    echo -e "║ $formatted_to║"
-    sleep $MESS_sDELAY
-
+    echo -e "║ $formatted_from║"  
+    echo -e "║ $formatted_to║" 
     echo "║                                                                                 ║"
 
     mkdir -p "$CONFIG_DIR"
@@ -270,12 +252,9 @@ copy_files_update() {
     echo ""
     echo "──────────────────────────────────────────────"
     echo "Copying new files:"
-    sleep $MESS_sDELAY
     echo "  ● from: $SANDWORM_REPO"
-    sleep $MESS_sDELAY
     echo "  ●   to: $CONFIG_DIR"
-    sleep $MESS_sDELAY
-
+   
     echo ""
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
@@ -283,7 +262,7 @@ copy_files_update() {
     echo ""
     
     echo "$OK Copying completed."
-    sleep $MESS_DELAY
+    sleep $MESS_sDELAY
 }
 
 restart_klipper() {

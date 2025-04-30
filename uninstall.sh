@@ -100,9 +100,21 @@ if [ ! -f "$MOONRAKER_CONF" ]; then
     print_row ""
     print_row "   $ERROR moonraker.conf not found!"
 else
-    sed -i '/^\[update_manager Sandworm\]/,/^[[]/d' "$MOONRAKER_CONF"
-    sed -i '/^\[power printer\]/,/^[[]/d' "$MOONRAKER_CONF"
-	print_row ""
+    sed -i '/^\[update_manager Sandworm\]/,/^\[/{
+        /^\[update_manager Sandworm\]/d
+        /^\[power printer\]/!{/^\[/!d}
+    }' "$MOONRAKER_CONF"
+
+    sed -i '/^\[power printer\]/,/^\[/{
+        /^\[power printer\]/d
+        /^\[update_manager Sandworm\]/!{/^\[/!d}
+    }' "$MOONRAKER_CONF"
+
+    # --- Also handle EOF case ---
+    # Delete trailing block if it's the last in file (no new [section])
+    sed -i '/^\[update_manager Sandworm\]/,$d' "$MOONRAKER_CONF"
+    sed -i '/^\[power printer\]/,$d' "$MOONRAKER_CONF"
+    print_row ""
     print_row "   $OK Config blocks removed."
 fi
 
@@ -119,7 +131,7 @@ if [ -d "$SANDWORM_DIR" ]; then
 
     print_row "   Deleting directory: $SANDWORM_DIR"
     rm -rf "$SANDWORM_DIR"
-	print_row ""
+    print_row ""
     print_row "   $OK Sandworm directory removed."
 else
     print_row ""

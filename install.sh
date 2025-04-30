@@ -170,7 +170,7 @@ type: git_repo
 origin: https://github.com/zacharcc/Klipper.git
 path: ~/Sandworm
 primary_branch: test
-managed_services: moonraker
+managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
     echo "║                                                                                 ║"
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"

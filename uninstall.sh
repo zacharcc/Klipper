@@ -31,6 +31,7 @@ print_row() {
 # --- Logging setup ---
 exec > >(tee -a "$LOGFILE") 2>&1
 
+echo ""
 echo "╔═════════════════════════════════════════════════════════════════════════════════╗"
 echo "║                             Sandworm Uninstall Script                           ║"
 echo "╠═════════════════════════════════════════════════════════════════════════════════╣"
@@ -68,8 +69,8 @@ echo ""
 echo "╔═════════════════════════════════════════════════════════════════════════════════╗"
 print_row "1. Restoring backup:"
 
-from_path="  ● from: $LATEST_BACKUP"
-to_path="  ●   to: $CONFIG_DIR"
+from_path="   ● from: $LATEST_BACKUP"
+to_path="   ●   to: $CONFIG_DIR"
 
 formatted_from=$(printf "%-82s" "$from_path")
 formatted_to=$(printf "%-82s" "$to_path")
@@ -89,13 +90,19 @@ fi
 # --- Step 2: Remove Sandworm sections from moonraker.conf ---
 print_row ""
 echo "╟─────────────────────────────────────────────────────────────────────────────────╢"
-print_row "2. Removing Sandworm-related config blocks from: $MOONRAKER_CONF"
+print_row "2. Removing Sandworm-related config blocks:"
+
+from_path="   ● from: $MOONRAKER_CONF"
+formatted_from=$(printf "%-82s" "$from_path")
+echo -e "║ $formatted_from║"
 
 if [ ! -f "$MOONRAKER_CONF" ]; then
+    print_row ""
     print_row "   $ERROR moonraker.conf not found!"
 else
     sed -i '/^\[update_manager Sandworm\]/,/^[[]/d' "$MOONRAKER_CONF"
     sed -i '/^\[power printer\]/,/^[[]/d' "$MOONRAKER_CONF"
+	print_row ""
     print_row "   $OK Config blocks removed."
 fi
 
@@ -106,25 +113,28 @@ echo "╟───────────────────────�
 if [ -d "$SANDWORM_DIR" ]; then
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     if [[ "$SCRIPT_DIR" == "$SANDWORM_DIR"* ]]; then
-        print_row "$INFO Script is running from inside Sandworm folder. Moving to safe location..."
+        print_row "3. $INFO Moving the running script out of the ~Sandworm folder..."
         cd /tmp || exit 1
     fi
 
-    print_row "3. Deleting directory: $SANDWORM_DIR"
+    print_row "   Deleting directory: $SANDWORM_DIR"
     rm -rf "$SANDWORM_DIR"
-    print_row "$OK Sandworm directory removed."
+	print_row ""
+    print_row "   $OK Sandworm directory removed."
 else
-    print_row "$SKIPPED No Sandworm directory found to delete."
+    print_row ""
+    print_row "   $SKIPPED No Sandworm directory found to delete."
 fi
 
 # --- Done ---
 print_row ""
 echo "╟─────────────────────────────────────────────────────────────────────────────────╢"
 print_row "$OK Sandworm macros have been uninstalled successfully!"
+print_row ""
 print_row "To apply the changes, please restart Moonraker using the [Y] option."
-print_row "Uninstall log saved to: $LOGFILE"
+print_row "Uninstall log saved to:
+print_row "   ● $LOGFILE"
 echo "╚═════════════════════════════════════════════════════════════════════════════════╝"
-
 
 # --- Optional [y/N]: Restart Moonraker ---
 echo ""

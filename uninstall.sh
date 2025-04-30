@@ -146,7 +146,6 @@ print_row ""
 print_row "$INFO To apply the changes, please restart Moonraker using the [Y] option."
 print_row "$INFO Uninstall log saved to:"
 echo -e "║    ● $LOGFILE      ║"
-print_row ""
 echo "╚═════════════════════════════════════════════════════════════════════════════════╝"
 
 # --- Optional [y/N]: Restart Moonraker ---

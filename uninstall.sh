@@ -135,10 +135,16 @@ if [ -d "$SANDWORM_DIR" ]; then
 
     if [ -d "$SANDWORM_DIR/backup" ]; then
         print_row "   $INFO Preserving backup folder..."
+
+        # Delete old folder, if exist:
+        rm -rf "$PRESERVE_DIR/backup"
+
         mkdir -p "$PRESERVE_DIR"
         mv "$SANDWORM_DIR/backup" "$PRESERVE_DIR/"
-        print_row "   $OK Backup moved to: $PRESERVE_DIR"
+
+        print_row "   $OK Backup moved to: $PRESERVE_DIR/backup"
     fi
+
 
     print_row ""
     print_row "   Deleting directory: $SANDWORM_DIR"

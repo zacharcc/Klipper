@@ -140,9 +140,9 @@ if [ -d "$SANDWORM_DIR" ]; then
         print_row "   $OK Backup moved to: $PRESERVE_DIR"
     fi
 
+    print_row ""
     print_row "   Deleting directory: $SANDWORM_DIR"
     rm -rf "$SANDWORM_DIR"
-    print_row ""
     print_row "   $OK Sandworm directory removed."
 else
     print_row ""

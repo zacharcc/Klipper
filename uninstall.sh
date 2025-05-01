@@ -58,9 +58,11 @@ if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
 fi
 
 # --- Step 1: Find most recent backup ---
-LATEST_BACKUP=$(find "$BACKUP_ROOT" -maxdepth 1 -type d -name "backup_config_*" | sort -r | head -n 1)
+PREFERRED_BACKUP=$(find "$BACKUP_ROOT" -maxdepth 1 -type d -name "backup_config_*" | sort | head -n 1)
 
-if [ -z "$LATEST_BACKUP" ]; then
+if [ -n "$PREFERRED_BACKUP" ]; then
+    LATEST_BACKUP="$PREFERRED_BACKUP"
+else
     echo "$ERROR No backup directory found in $BACKUP_ROOT!"
     exit 1
 fi
@@ -127,6 +129,15 @@ if [ -d "$SANDWORM_DIR" ]; then
     if [[ "$SCRIPT_DIR" == "$SANDWORM_DIR"* ]]; then
         print_row "3. $INFO Moving the running script out of the ~Sandworm folder..."
         cd /tmp || exit 1
+    fi
+
+    PRESERVE_DIR="$HOME/Sandworm_backups"
+
+    if [ -d "$SANDWORM_DIR/backup" ]; then
+        print_row "   $INFO Preserving backup folder..."
+        mkdir -p "$PRESERVE_DIR"
+        mv "$SANDWORM_DIR/backup" "$PRESERVE_DIR/"
+        print_row "   $OK Backup moved to: $PRESERVE_DIR"
     fi
 
     print_row "   Deleting directory: $SANDWORM_DIR"

@@ -89,6 +89,10 @@ if [ "$IS_COLD_INSTALL" = true ]; then
        local lang_codes=(1 2 3)
        local selected=0
 
+       # Barvy
+       GREEN="\033[1;32m"
+       RESET="\033[0m"
+
        echo "" > /dev/tty
        echo "Select language using arrows (← →), confirm with [Enter]:" > /dev/tty
 
@@ -96,7 +100,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
           echo -ne "\r\033[K" > /dev/tty  # smazat řádek
            for i in "${!options[@]}"; do
                if [[ $i -eq $selected ]]; then
-                   echo -ne "${G2}[${options[$i]}]${G0} " > /dev/tty
+                   echo -ne "${GREEN}[${options[$i]}]${RESET} " > /dev/tty
                else
                    echo -ne " ${options[$i]}  " > /dev/tty
                fi

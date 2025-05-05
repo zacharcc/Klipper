@@ -1,5 +1,7 @@
 #!/bin/bash
 
+## INSTALL VERSION FOR TESTING:
+
 ## --- Trap ---
 set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
@@ -8,9 +10,11 @@ trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 echo -e ""
 
 # --- Paths ---
+# CONFIG_DIR="$HOME/printer_data/config"
+# MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 SANDWORM_REPO="$HOME/Sandworm/config"
-CONFIG_DIR="$HOME/printer_data/config"
-MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
+CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
+MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/backup/backup_config_$(date +%Y_%m_%d-%Hh%Mm)"
 HOOK_PATH="$HOME/Sandworm/.git/hooks/post-merge"
 LOGFILE="$HOME/printer_data/logs/sandworm_update.log"
@@ -74,21 +78,174 @@ elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
     IS_COLD_INSTALL=true
 fi
 
+#-------------------------------
+
+if [ "$IS_COLD_INSTALL" = true ]; then
+
+# Function: Interactive language selector (← → + Enter)
+select_lang() {
+    local options=("English" "Czech" "German")
+    local lang_codes=(1 2 3)
+    local selected=0
+
+    # Clear line + draw selector to tty
+    draw_selector() {
+        echo ""
+        echo -ne "\rSelect language using arrows (← →), confirm with [Enter]: " > /dev/tty
+        for i in "${!options[@]}"; do
+            if [[ $i -eq $selected ]]; then
+                echo -ne "[${options[$i]}] " > /dev/tty
+            else
+                echo -ne " ${options[$i]}  " > /dev/tty
+            fi
+        done
+    }
+
+    draw_selector
+    while IFS= read -rsn1 key; do
+        if [[ $key == $'\x1b' ]]; then
+            read -rsn2 -t 0.1 key
+            if [[ $key == "[C" ]]; then
+                ((selected=(selected+1)%${#options[@]}))
+            elif [[ $key == "[D" ]]; then
+                ((selected=(selected-1+${#options[@]})%${#options[@]}))
+            fi
+        elif [[ $key == "" ]]; then
+            break
+        fi
+        echo -ne "\r\033[K" > /dev/tty  # Clear line
+        draw_selector
+    done
+
+    echo "" > /dev/tty
+    export LANG_SELECTED=${lang_codes[$selected]}
+    echo "$OK Language selected: ${options[$selected]} (lang=$LANG_SELECTED)"
+}
+
+select_lang
+
+fi
+
+# Set value in variables.cfg
+set_variable_cfg() {
+    local key="$1"
+    local value="$2"
+    local file="$CONFIG_DIR/variables.cfg"
+
+    if [ ! -f "$file" ]; then
+        print_row "$SKIPPED variables.cfg not found at:"
+        to_path="  ● $file"
+        formatted_to=$(printf "%-82s" "$to_path")	
+        return
+    fi
+
+    if grep -q "^$key\s*=" "$file"; then
+        sed -i "s/^$key\s*=.*/$key = $value/" "$file"
+        print_row "$OK Updated $key to $value in variables.cfg"
+    else
+        print_row "$SKIPPED Variable '$key' not found in variables.cfg"
+    fi
+}
+
+# Usage:
+# select_lang
+# set_variable_cfg "lang" "$LANG_SELECTED"
+
+# translate_echo() {
+#     local lang=$1
+#     local key=$2
+#     shift 2
+# 
+#     case $key in
+#         "backup_message")
+#             case $lang in
+#                 1) echo -e "║ Creating backup of the printer config directory:                                ║" ;;
+#                 2) echo -e "║ Vytvářím zálohu adresáře s konfigurací tiskárny:                                 ║" ;;
+#                 3) echo -e "║ Erstelle eine Sicherung des Druckerkonfigurationsverzeichnisses:                ║" ;;
+#                 *) echo -e "║ Creating backup of the printer config directory:                                ║" ;;
+#             esac
+#         ;;
+#     esac
+# }
+
+# function to translate message
+translate_string() {
+    local lang=$1
+    local key=$2
+    case $key in
+        "title_cold_install") 
+            case $lang in
+                1) echo "║             ** Cold Install **             ║" ;;
+                2) echo "║             ** Čistá instalace **          ║" ;;
+                3) echo "║             ** Kaltinstallation **         ║" ;;
+                *) echo "║             ** Cold Install **             ║" ;;
+            esac ;;	
+        "start_date")
+            case $lang in
+                1) echo "Started: $(date)" ;;
+                2) echo "Zahájeno: $(date)" ;;
+                3) echo "Gestartet: $(date)" ;;
+                *) echo "Started: $(date)" ;;
+            esac ;;
+        "git_version")
+            case $lang in
+                1) echo "Git version: $VERSION" ;;
+                2) echo "Git verze: $VERSION" ;;
+                3) echo "Git-Version: $VERSION" ;;
+                *) echo "Git version: $VERSION" ;;
+            esac ;;
+        "install_version")
+            case $lang in
+                1) echo "Install version: $CUSTOM_VERSION" ;;
+                2) echo "Verze instalace: $CUSTOM_VERSION" ;;
+                3) echo "Installationsversion: $CUSTOM_VERSION" ;;
+                *) echo "Install version: $CUSTOM_VERSION" ;;
+            esac ;;
+        "from") case $lang in 1) echo "from:" ;; 2) echo " z:" ;; 3) echo " von:" ;; esac ;;
+        "to")   case $lang in 1) echo "  to:" ;;   2) echo "do:" ;; 3) echo "nach:" ;; esac ;;
+        "backup_done")
+            case $lang in
+                1) echo "$OK Backup complete." ;;
+                2) echo "$OK Záloha byla úspěšně dokončena." ;;
+                3) echo "$OK Sicherung erfolgreich abgeschlossen." ;;
+                *) echo "$OK Backup complete." ;;
+            esac ;;
+        "copying_done")
+            case $lang in
+                1) echo "$OK Copying completed." ;;
+                2) echo "$OK Kopírování dokončeno." ;;
+                3) echo "$OK Kopiervorgang abgeschlossen." ;;
+                *) echo "$OK Copying completed." ;;
+            esac ;;
+        # ... další klíče sem
+        *)
+            print_row "$key"  # fallback
+        ;;
+    esac
+}
+
+
+# Použití:
+# print_row "$(translate_string "$LANG_SELECTED" "backup_done")"
+
+#-------------------------------
+
+
 ## ---  Logging setup ---
 mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
     set_game_variables
 
-    # ASCII intro to log
+    # ASCII intro do logu
     exec 4>"$LOGFILE"
     print_game_intro_ascii >&4
     exec 4>&-
 
-    # stdout/stderr to log and tee (append instead of rewrite)
+    # stdout/stderr do logu a tee (append místo přepisu)
     exec > >(tee -a "$LOGFILE") 2>&1
     exec 3>/dev/tty
 
-    # colors intro to console output
+    # barevné intro do konzole
     draw_game_intro >&3
 else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
@@ -98,14 +255,13 @@ fi
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo -e "╔════════════════════════════════════════════╗"
-        echo -e "║             ** Cold Install **             ║"
-        echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"     
-        print_row "Started: $(date)"    
-        print_row "Git version: $VERSION"     
-        print_row "Install version: $CUSTOM_VERSION"     
+        print_row "$(translate_string "$LANG_SELECTED" "title_cold_install")"
+        echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"
+        print_row "$(translate_string "$LANG_SELECTED" "start_date")"		
+        print_row "$(translate_string "$LANG_SELECTED" "git_version")"
+        print_row "$(translate_string "$LANG_SELECTED" "install_version")"	
         print_row ""
         print_row "Starting installation of automatic Sandworm updates..."
-		sleep $MESS_sDELAY
         print_row ""
     else
         echo -e "╔════════════════════════════════════════════╗"
@@ -116,7 +272,7 @@ start_message() {
         echo -e "Game version: $CUSTOM_VERSION"
         echo -e ""
         echo -e "Starting update of Sandworm macros..."
-    fi		
+    fi
 }
 
 ## --- countdown progress bar ---
@@ -143,19 +299,85 @@ fancy_restart_bar() {
 }
 
 ## --- Functions ---
+backup_files() {
+    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "║ Creating backup of the printer config directory:                                ║"
+   
+    from_path="  ● $(translate_string "$LANG_SELECTED" "from") $CONFIG_DIR"
+    to_path="  ●   $(translate_string "$LANG_SELECTED" "to") $BACKUP_DIR"
 
-create_post_merge_hook() {
-    if [ ! -f "$HOOK_PATH" ]; then
-        cat << 'EOF' > "$HOOK_PATH"
-#!/bin/bash
-/home/biqu/Sandworm/install.sh
-EOF
-        chmod +x "$HOOK_PATH"
+    formatted_from=$(printf "%-82s" "$from_path")
+    formatted_to=$(printf "%-82s" "$to_path")
+    
+    echo -e "║ $formatted_from║"  
+    echo -e "║ $formatted_to║"
+   
+    mkdir -p "$BACKUP_DIR"
+    cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
+    
+    echo "║                                                                                 ║"
+    print_row "$(translate_string "$LANG_SELECTED" "backup_done")"
+    sleep $MESS_sDELAY
+}
 
-        print_row "$OK Git post-merge hook created at: $HOOK_PATH"       
-    else
-        print_row "$SKIPPED Git post-merge hook already exists."
-    fi
+backup_files_update() {
+    echo ""
+    echo "──────────────────────────────────────────────"
+    echo "Creating backup of the printer config directory:"  
+    echo "  ● from: $CONFIG_DIR"  
+    echo "  ●   to: $BACKUP_DIR"  
+
+    mkdir -p "$BACKUP_DIR"
+    cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
+    echo ""
+    echo "$OK Backup complete."
+    sleep $MESS_sDELAY
+}
+
+copy_files() {
+    echo "║                                                                                 ║"
+    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "║ Copying new files:                                                              ║" 
+
+    from_path="  ● $(translate_string "$LANG_SELECTED" "from") $SANDWORM_REPO"
+    to_path="  ●   $(translate_string "$LANG_SELECTED" "to") $CONFIG_DIR"
+
+    formatted_from=$(printf "%-82s" "$from_path")
+    formatted_to=$(printf "%-82s" "$to_path")
+
+    echo -e "║ $formatted_from║"  
+    echo -e "║ $formatted_to║" 
+    echo "║                                                                                 ║"
+
+    mkdir -p "$CONFIG_DIR"
+    RSYNC_OUTPUT=$(rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/")
+
+    # výpis zarovnaného rsync výstupu
+    while IFS= read -r line; do
+        formatted_line=$(printf "%-78s" "$line")
+        echo -e "║ $formatted_line  ║"
+    done <<< "$RSYNC_OUTPUT"
+
+    echo "║                                                                                 ║"
+    echo -e "║ $OK Copying completed.                                                         ║"
+    sleep $MESS_sDELAY
+}
+
+copy_files_update() {
+    echo ""
+    echo "──────────────────────────────────────────────"
+    echo "Copying new files:"
+    echo "  ● from: $SANDWORM_REPO"
+    echo "  ●   to: $CONFIG_DIR"
+   
+    echo ""
+    mkdir -p "$CONFIG_DIR"
+    rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
+    sleep 0.5
+    echo ""
+    
+    echo "$OK Copying completed."
+    sleep $MESS_sDELAY
 }
 
 add_update_manager_block() {
@@ -181,89 +403,20 @@ locked_while_printing: True         # Prevent power-off during a print
 restart_klipper_when_powered: True
 restart_delay: 1
 bound_service: klipper              # Ensures Klipper service starts/restarts with power toggle" >> "$MOONRAKER_CONF"
-    echo -e "║ $OK Added [power printer] config block to: moonraker.conf                      ║"   
+    echo -e "║ $OK Added [power printer] config block to: moonraker.conf                      ║"  
 }
 
-backup_files() {
-    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
-    echo -e "║ Creating backup of the printer config directory:                                ║"   
-
-    from_path="  ● from: $CONFIG_DIR"
-    to_path="  ●   to: $BACKUP_DIR"
-    
-    formatted_from=$(printf "%-82s" "$from_path")
-    formatted_to=$(printf "%-82s" "$to_path")
-    
-    echo -e "║ $formatted_from║"  
-    echo -e "║ $formatted_to║"  
-
-    mkdir -p "$BACKUP_DIR"
-    cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
-    
-    echo "║                                                                                 ║"
-    echo -e "║ $OK Backup complete.                                                           ║"
-    sleep $MESS_sDELAY
-}
-
-backup_files_update() {
-    echo ""
-    echo "──────────────────────────────────────────────"
-    echo "Creating backup of the printer config directory:"  
-    echo "  ● from: $CONFIG_DIR" 
-    echo "  ●   to: $BACKUP_DIR"  
-
-    mkdir -p "$BACKUP_DIR"
-    cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
-    echo ""
-    echo "$OK Backup complete."
-    sleep $MESS_DELAY
-}
-
-copy_files() {
-    echo "║                                                                                 ║"
-    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
-    echo -e "║ Copying new files:                                                              ║"  
-
-    from_path="  ● from: $SANDWORM_REPO"
-    to_path="  ●   to: $CONFIG_DIR"
-    
-    formatted_from=$(printf "%-82s" "$from_path")
-    formatted_to=$(printf "%-82s" "$to_path")
-
-    echo -e "║ $formatted_from║"   
-    echo -e "║ $formatted_to║"  
-
-    echo "║                                                                                 ║"
-
-    mkdir -p "$CONFIG_DIR"
-    RSYNC_OUTPUT=$(rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/")
-
-    # výpis zarovnaného rsync výstupu
-    while IFS= read -r line; do
-        formatted_line=$(printf "%-78s" "$line")
-        echo -e "║ $formatted_line  ║"
-    done <<< "$RSYNC_OUTPUT"
-
-    echo "║                                                                                 ║"
-    echo -e "║ $OK Copying completed.                                                         ║"
-    sleep $MESS_sDELAY
-}
-
-copy_files_update() {
-    echo ""
-    echo "──────────────────────────────────────────────"
-    echo "Copying new files:"  
-    echo "  ● from: $SANDWORM_REPO"
-    echo "  ●   to: $CONFIG_DIR"
-
-    echo ""
-    mkdir -p "$CONFIG_DIR"
-    rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
-    sleep 0.5
-    echo ""
-    
-    echo "$OK Copying completed."
-    sleep $MESS_DELAY
+create_post_merge_hook() {
+    if [ ! -f "$HOOK_PATH" ]; then
+        cat << 'EOF' > "$HOOK_PATH"
+#!/bin/bash
+/home/biqu/Sandworm/install.sh
+EOF
+        chmod +x "$HOOK_PATH"
+        print_row "$OK Git post-merge hook created at: $HOOK_PATH"      
+    else
+        print_row "$SKIPPED Git post-merge hook already exists."
+    fi
 }
 
 restart_klipper() {
@@ -307,9 +460,14 @@ if [ "$IS_COLD_INSTALL" = true ]; then
         echo -e "║ $SKIPPED [power printer] already exists in moonraker.conf                      ║"
     fi
 
+    # Set message on startup and language:
+    set_variable_cfg "update_msg" 1
+    set_variable_cfg "lang" "$LANG_SELECTED"
+
     create_post_merge_hook  
 
-    echo -e "║ $OK The Sandworm installation was completed successfully!                      ║"   
+    echo -e "║ $OK The Sandworm installation was completed successfully!                      ║"
+    sleep $MESS_sDELAY
     echo "║                                                                                 ║"
     echo -e "║ $INFO ⚠️ After restarting, please refresh the web interface (press F5)         ║"
     echo -e "║ to clear the memory and avoid UI cache issues (duplicate folders, etc).         ║"
@@ -326,6 +484,9 @@ else
 
     backup_files_update
     copy_files_update
+
+    # Set message on startup:
+    set_variable_cfg "update_msg" 2
 
     echo -e ""
     echo -e "┌─────────────────────────────────────────────────────────────────────────"

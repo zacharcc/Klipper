@@ -269,7 +269,7 @@ start_message() {
         echo -e "╔════════════════════════════════════════════╗"
         translate_echo "$LANG_SELECTED" "title_cold_install"
         echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"
-         print_row "$(translate_string "$LANG_SELECTED" "start_date)"	
+        print_row "$(translate_string "$LANG_SELECTED" "start_date")"	
         print_row "$(translate_string "$LANG_SELECTED" "git_version")"
         print_row "$(translate_string "$LANG_SELECTED" "install_version")"	
         print_row ""

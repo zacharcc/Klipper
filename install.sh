@@ -483,6 +483,8 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     sleep $MESS_DELAY
     echo ""
     restart_moonraker
+	
+	sleep $MESS_sDELAY
     echo ""
 else
     if [ ! -d "$SANDWORM_REPO" ]; then

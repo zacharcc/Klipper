@@ -205,7 +205,7 @@ translate_string() {
          "description")
             case $lang in
                 1) echo "Sandworm installation with automatic updates has started..." ;;
-                2) echo "Zahájena instalace Sandworm s automatickými aktualizacemi..." ;;
+                2) echo "Zahájena instalace Sandworm s automatickými aktualizacemi...   " ;;
                 3) echo "Die Sandworm-Installation mit automatischen Updates wurde gestartet..." ;;
                 *) echo "Sandworm installation with automatic updates has started..." ;;
             esac ;;

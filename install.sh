@@ -92,7 +92,7 @@ select_lang() {
     RESET="\033[0m"
 
     echo "" > /dev/tty
-    echo "Select language using arrows ${GREEN}(← →)${RESET}, confirm with [Enter]:" > /dev/tty
+    echo -e "Select language using arrows ${GREEN}(← →)${RESET}, confirm with [Enter]:" > /dev/tty
 
     # Vykreslení volby
     draw_selector() {

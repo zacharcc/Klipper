@@ -304,8 +304,8 @@ backup_files() {
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Creating backup of the printer config directory:                                ║"
    
-    from_path="  ●$(translate_string "$LANG_SELECTED" "from") $CONFIG_DIR"
-    to_path="  ●$(translate_string "$LANG_SELECTED" "to") $BACKUP_DIR"
+    from_path="  ● $(translate_string "$LANG_SELECTED" "from") $CONFIG_DIR"
+    to_path="  ● $(translate_string "$LANG_SELECTED" "to") $BACKUP_DIR"
 
     formatted_from=$(printf "%-82s" "$from_path")
     formatted_to=$(printf "%-82s" "$to_path")
@@ -340,8 +340,8 @@ copy_files() {
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Copying new files:                                                              ║" 
 
-    from_path="  ●$(translate_string "$LANG_SELECTED" "from") $SANDWORM_REPO"
-    to_path="  ●$(translate_string "$LANG_SELECTED" "to") $CONFIG_DIR"
+    from_path="  ● $(translate_string "$LANG_SELECTED" "from") $SANDWORM_REPO"
+    to_path="  ● $(translate_string "$LANG_SELECTED" "to") $CONFIG_DIR"
 
     formatted_from=$(printf "%-82s" "$from_path")
     formatted_to=$(printf "%-82s" "$to_path")

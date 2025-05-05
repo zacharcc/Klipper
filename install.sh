@@ -8,11 +8,9 @@ trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 echo -e ""
 
 # --- Paths ---
-# CONFIG_DIR="$HOME/printer_data/config"
-# MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 SANDWORM_REPO="$HOME/Sandworm/config"
-CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
-MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
+CONFIG_DIR="$HOME/printer_data/config"
+MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/backup/backup_config_$(date +%Y_%m_%d-%Hh%Mm)"
 HOOK_PATH="$HOME/Sandworm/.git/hooks/post-merge"
 LOGFILE="$HOME/printer_data/logs/sandworm_update.log"
@@ -81,16 +79,16 @@ mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
     set_game_variables
 
-    # ASCII intro do logu
+    # ASCII intro to log
     exec 4>"$LOGFILE"
     print_game_intro_ascii >&4
     exec 4>&-
 
-    # stdout/stderr do logu a tee (append místo přepisu)
+    # stdout/stderr to log and tee (append instead of rewrite)
     exec > >(tee -a "$LOGFILE") 2>&1
     exec 3>/dev/tty
 
-    # barevné intro do konzole
+    # colors intro to console output
     draw_game_intro >&3
 else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
@@ -100,13 +98,14 @@ fi
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo -e "╔════════════════════════════════════════════╗"
-        echo -e "║             ** Čistá instalace **          ║"
-        echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"
-        print_row "Started: $(date)"
-        print_row "Git version: $VERSION"
-        print_row "Install version: $CUSTOM_VERSION"
+        echo -e "║             ** Cold Install **             ║"
+        echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"     
+        print_row "Started: $(date)"    
+        print_row "Git version: $VERSION"     
+        print_row "Install version: $CUSTOM_VERSION"     
         print_row ""
         print_row "Starting installation of automatic Sandworm updates..."
+		sleep $MESS_sDELAY
         print_row ""
     else
         echo -e "╔════════════════════════════════════════════╗"
@@ -152,7 +151,8 @@ create_post_merge_hook() {
 /home/biqu/Sandworm/install.sh
 EOF
         chmod +x "$HOOK_PATH"
-        print_row "$OK Git post-merge hook created at: $HOOK_PATH"      
+
+        print_row "$OK Git post-merge hook created at: $HOOK_PATH"       
     else
         print_row "$SKIPPED Git post-merge hook already exists."
     fi
@@ -181,13 +181,13 @@ locked_while_printing: True         # Prevent power-off during a print
 restart_klipper_when_powered: True
 restart_delay: 1
 bound_service: klipper              # Ensures Klipper service starts/restarts with power toggle" >> "$MOONRAKER_CONF"
-    echo -e "║ $OK Added [power printer] config block to: moonraker.conf                      ║"  
+    echo -e "║ $OK Added [power printer] config block to: moonraker.conf                      ║"   
 }
 
 backup_files() {
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
-    echo -e "║ Creating backup of the printer config directory:                                ║"
-   
+    echo -e "║ Creating backup of the printer config directory:                                ║"   
+
     from_path="  ● from: $CONFIG_DIR"
     to_path="  ●   to: $BACKUP_DIR"
     
@@ -195,8 +195,8 @@ backup_files() {
     formatted_to=$(printf "%-82s" "$to_path")
     
     echo -e "║ $formatted_from║"  
-    echo -e "║ $formatted_to║"
-   
+    echo -e "║ $formatted_to║"  
+
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     
@@ -209,20 +209,20 @@ backup_files_update() {
     echo ""
     echo "──────────────────────────────────────────────"
     echo "Creating backup of the printer config directory:"  
-    echo "  ● from: $CONFIG_DIR"  
+    echo "  ● from: $CONFIG_DIR" 
     echo "  ●   to: $BACKUP_DIR"  
 
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     echo ""
     echo "$OK Backup complete."
-    sleep $MESS_sDELAY
+    sleep $MESS_DELAY
 }
 
 copy_files() {
     echo "║                                                                                 ║"
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
-    echo -e "║ Copying new files:                                                              ║" 
+    echo -e "║ Copying new files:                                                              ║"  
 
     from_path="  ● from: $SANDWORM_REPO"
     to_path="  ●   to: $CONFIG_DIR"
@@ -230,8 +230,9 @@ copy_files() {
     formatted_from=$(printf "%-82s" "$from_path")
     formatted_to=$(printf "%-82s" "$to_path")
 
-    echo -e "║ $formatted_from║"  
-    echo -e "║ $formatted_to║" 
+    echo -e "║ $formatted_from║"   
+    echo -e "║ $formatted_to║"  
+
     echo "║                                                                                 ║"
 
     mkdir -p "$CONFIG_DIR"
@@ -251,10 +252,10 @@ copy_files() {
 copy_files_update() {
     echo ""
     echo "──────────────────────────────────────────────"
-    echo "Copying new files:"
+    echo "Copying new files:"  
     echo "  ● from: $SANDWORM_REPO"
     echo "  ●   to: $CONFIG_DIR"
-   
+
     echo ""
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
@@ -262,7 +263,7 @@ copy_files_update() {
     echo ""
     
     echo "$OK Copying completed."
-    sleep $MESS_sDELAY
+    sleep $MESS_DELAY
 }
 
 restart_klipper() {
@@ -308,8 +309,7 @@ if [ "$IS_COLD_INSTALL" = true ]; then
 
     create_post_merge_hook  
 
-    echo -e "║ $OK The Sandworm installation was completed successfully!                      ║"
-    sleep $MESS_sDELAY
+    echo -e "║ $OK The Sandworm installation was completed successfully!                      ║"   
     echo "║                                                                                 ║"
     echo -e "║ $INFO ⚠️ After restarting, please refresh the web interface (press F5)         ║"
     echo -e "║ to clear the memory and avoid UI cache issues (duplicate folders, etc).         ║"

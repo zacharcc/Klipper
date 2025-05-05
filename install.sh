@@ -81,7 +81,7 @@ elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
     IS_COLD_INSTALL=true
 fi
 
-# Function: Interactive language selector (← →) + Enter:
+# Function: Interactive language selector (← →) + (Enter):
 select_lang() {
     local options=("English" "Czech" "German")
     local lang_codes=(1 2 3)
@@ -92,10 +92,11 @@ select_lang() {
     RESET="\033[0m"
 
     echo "" > /dev/tty
-    echo "Select language using arrows (← →), confirm with [Enter]:" > /dev/tty
+    echo "Select language using arrows ${GREEN}(← →)${RESET}, confirm with [Enter]:" > /dev/tty
 
+    # Vykreslení volby
     draw_selector() {
-       echo -ne "\r\033[K" > /dev/tty  # smazat řádek
+        echo -ne "\r\033[K" > /dev/tty
         for i in "${!options[@]}"; do
             if [[ $i -eq $selected ]]; then
                 echo -ne "${GREEN}[${options[$i]}]${RESET} " > /dev/tty
@@ -106,13 +107,14 @@ select_lang() {
     }
 
     draw_selector
-    while IFS= read -rsn1 key; do
+    while true; do
+        IFS= read -rsn1 key
         if [[ $key == $'\x1b' ]]; then
             read -rsn2 -t 0.1 key
             if [[ $key == "[C" ]]; then
-                ((selected=(selected+1)%${#options[@]}))
+                selected=$(( (selected + 1) % ${#options[@]} ))
             elif [[ $key == "[D" ]]; then
-                ((selected=(selected-1+${#options[@]})%${#options[@]}))
+                selected=$(( (selected - 1 + ${#options[@]}) % ${#options[@]} ))
             fi
         elif [[ $key == "" ]]; then
             break

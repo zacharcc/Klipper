@@ -35,7 +35,11 @@ MESS_sDELAY=0.2
 
 print_row() {
     local msg="$1"
-    printf "║ %-79s ║\n" "$msg"
+    local visible_length=$(echo -n "$msg" | wc -m)
+    local total_width=79
+    local padding=$((total_width - visible_length))
+    [ $padding -lt 0 ] && padding=0
+    printf "║ %s%*s ║\n" "$msg" "$padding" ""
 }
 
 ## --- Git Version ---
@@ -205,7 +209,7 @@ translate_string() {
          "description")
             case $lang in
                 1) echo "Sandworm installation with automatic updates has started..." ;;
-                2) echo "Zahájena instalace Sandworm s automatickými aktualizacemi...   " ;;
+                2) echo "Zahájena instalace Sandworm s automatickými aktualizacemi..." ;;
                 3) echo "Die Sandworm-Installation mit automatischen Updates wurde gestartet..." ;;
                 *) echo "Sandworm installation with automatic updates has started..." ;;
             esac ;;
@@ -214,7 +218,7 @@ translate_string() {
         "backup_done")
             case $lang in
                 1) echo "$OK Backup complete." ;;
-                2) echo "$OK Záloha byla úspěšně dokončena.   " ;;
+                2) echo "$OK Záloha byla úspěšně dokončena." ;;
                 3) echo "$OK Sicherung erfolgreich abgeschlossen." ;;
                 *) echo "$OK Backup complete." ;;
             esac ;;

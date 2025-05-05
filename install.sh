@@ -175,14 +175,14 @@ translate_string() {
     case $key in
         "title_cold_install") 
             case $lang in
-                1) echo "║             ** Cold Install **             ║" ;;
-                2) echo "║             ** Čistá instalace **          ║" ;;
-                3) echo "║             ** Kaltinstallation **         ║" ;;
-                *) echo "║             ** Cold Install **             ║" ;;
+                1) echo "             ** Cold Install **" ;;
+                2) echo "             ** Čistá instalace **" ;;
+                3) echo "             ** Kaltinstallation **" ;;
+                *) echo "             ** Cold Install **" ;;
             esac ;;	
         "start_date")
             case $lang in
-                1) echo "Started: $(date)" ;;
+                1) echo "Started: $(date) " ;;
                 2) echo "Zahájeno: $(date)" ;;
                 3) echo "Gestartet: $(date)" ;;
                 *) echo "Started: $(date)" ;;

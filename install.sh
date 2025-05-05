@@ -82,11 +82,9 @@ elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
     IS_COLD_INSTALL=true
 fi
 
-#-------------------------------
-
 if [ "$IS_COLD_INSTALL" = true ]; then
 
-# Function: Interactive language selector (← → + Enter)
+# Function: Interactive language selector (← →) + Enter:
 select_lang() {
     local options=("English" "Czech" "German")
     local lang_codes=(1 2 3)
@@ -134,7 +132,8 @@ fi
 set_variable_cfg() {
     local key="$1"
     local value="$2"
-    local file="$CONFIG_DIR/variables.cfg"
+    #local file="$CONFIG_DIR/variables.cfg"
+	local file="$HOME/printer_data/config/variables.cfg"
 
     if [ ! -f "$file" ]; then
         print_row "$SKIPPED variables.cfg not found at:"
@@ -227,12 +226,6 @@ translate_string() {
         ;;
     esac
 }
-
-
-# Použití:
-# print_row "$(translate_string "$LANG_SELECTED" "backup_done")"
-
-#-------------------------------
 
 
 ## ---  Logging setup ---

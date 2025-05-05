@@ -187,10 +187,10 @@ translate_string() {
     case $key in
         "start_date")
             case $lang in
-                1) echo -e "Started: $(date) " ;;
-                2) echo -e "Zahájeno: $(date)  " ;;
-                3) echo -e "Gestartet: $(date) " ;;
-                *) echo -e "Started: $(date) " ;;
+                1) echo -e "Started: $(date)" ;;
+                2) echo -e "Zahájeno: $(date)" ;;
+                3) echo -e "Gestartet: $(date)" ;;
+                *) echo -e "Started: $(date)" ;;
             esac ;;
         "git_version")
             case $lang in
@@ -269,7 +269,7 @@ start_message() {
         echo -e "╔════════════════════════════════════════════╗"
         translate_echo "$LANG_SELECTED" "title_cold_install"
         echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"
-        translate_echo "$LANG_SELECTED" "start_date"	
+         print_row "$(translate_string "$LANG_SELECTED" "start_date)"	
         print_row "$(translate_string "$LANG_SELECTED" "git_version")"
         print_row "$(translate_string "$LANG_SELECTED" "install_version")"	
         print_row ""
@@ -381,7 +381,7 @@ copy_files_update() {
     echo "Copying new files:"
     echo "  ● from: $SANDWORM_REPO"
     echo "  ●   to: $CONFIG_DIR"
-   
+
     echo ""
     mkdir -p "$CONFIG_DIR"
     rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
@@ -487,9 +487,9 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     sleep $MESS_DELAY
     echo ""
     restart_moonraker
-	
-	sleep $MESS_sDELAY
+
     echo ""
+    sleep $MESS_sDELAY
 else
     if [ ! -d "$SANDWORM_REPO" ]; then
         echo -e "$ERROR Source repo directory $SANDWORM_REPO not found!"

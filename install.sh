@@ -82,50 +82,48 @@ elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
     IS_COLD_INSTALL=true
 fi
 
-if [ "$IS_COLD_INSTALL" = true ]; then
-
 # Function: Interactive language selector (← →) + Enter:
-select_lang() {
-    local options=("English" "Czech" "German")
-    local lang_codes=(1 2 3)
-    local selected=0
+if [ "$IS_COLD_INSTALL" = true ]; then
+   select_lang() {
+       local options=("English" "Czech" "German")
+       local lang_codes=(1 2 3)
+       local selected=0
 
-    # Clear line + draw selector to tty
-    draw_selector() {
-        echo ""
-        echo -ne "\rSelect language using arrows (← →), confirm with [Enter]: " > /dev/tty
-        for i in "${!options[@]}"; do
-            if [[ $i -eq $selected ]]; then
-                echo -ne "[${options[$i]}] " > /dev/tty
-            else
-                echo -ne " ${options[$i]}  " > /dev/tty
-            fi
-        done
-    }
+       echo "" > /dev/tty
+       echo "Select language using arrows (← →), confirm with [Enter]:" > /dev/tty
 
-    draw_selector
-    while IFS= read -rsn1 key; do
-        if [[ $key == $'\x1b' ]]; then
-            read -rsn2 -t 0.1 key
-            if [[ $key == "[C" ]]; then
-                ((selected=(selected+1)%${#options[@]}))
-            elif [[ $key == "[D" ]]; then
-                ((selected=(selected-1+${#options[@]})%${#options[@]}))
-            fi
-        elif [[ $key == "" ]]; then
-            break
-        fi
-        echo -ne "\r\033[K" > /dev/tty  # Clear line
-        draw_selector
-    done
+       draw_selector() {
+          echo -ne "\r\033[K" > /dev/tty  # smazat řádek
+           for i in "${!options[@]}"; do
+               if [[ $i -eq $selected ]]; then
+                   echo -ne "${G2}[${options[$i]}]${G0} " > /dev/tty
+               else
+                   echo -ne " ${options[$i]}  " > /dev/tty
+               fi
+           done
+       }
 
-    echo "" > /dev/tty
-    export LANG_SELECTED=${lang_codes[$selected]}
-    echo "$OK Language selected: ${options[$selected]} (lang=$LANG_SELECTED)"
-}
+       draw_selector
+       while IFS= read -rsn1 key; do
+           if [[ $key == $'\x1b' ]]; then
+               read -rsn2 -t 0.1 key
+               if [[ $key == "[C" ]]; then
+                   ((selected=(selected+1)%${#options[@]}))
+               elif [[ $key == "[D" ]]; then
+                   ((selected=(selected-1+${#options[@]})%${#options[@]}))
+               fi
+           elif [[ $key == "" ]]; then
+               break
+           fi
+           echo -ne "\r\033[K" > /dev/tty
+           draw_selector
+       done
 
-select_lang
-
+       echo "" > /dev/tty
+       export LANG_SELECTED=${lang_codes[$selected]}
+       echo "$OK Language selected: ${options[$selected]} (lang=$LANG_SELECTED)"
+   }
+   select_lang
 fi
 
 # Set value in variables.cfg
@@ -133,7 +131,7 @@ set_variable_cfg() {
     local key="$1"
     local value="$2"
     #local file="$CONFIG_DIR/variables.cfg"
-	local file="$HOME/printer_data/config/variables.cfg"
+    local file="$HOME/printer_data/config/variables.cfg"
 
     if [ ! -f "$file" ]; then
         print_row "$SKIPPED variables.cfg not found at:"

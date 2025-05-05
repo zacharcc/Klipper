@@ -179,10 +179,10 @@ translate_string() {
     case $key in
         "start_date")
             case $lang in
-                1) echo "Started: $(date) " ;;
-                2) echo "Zahájeno: $(date)  " ;;
-                3) echo "Gestartet: $(date) " ;;
-                *) echo "Started: $(date) " ;;
+                1) echo -e "Started: $(date) " ;;
+                2) echo -e "Zahájeno: $(date)  " ;;
+                3) echo -e "Gestartet: $(date) " ;;
+                *) echo -e "Started: $(date) " ;;
             esac ;;
         "git_version")
             case $lang in

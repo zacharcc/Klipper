@@ -167,10 +167,10 @@ translate_echo() {
         ;;
         "start_date")
             case $lang in
-                1) echo -e "Started: $(date)   ║" ;;
-                2) echo -e "Zahájeno: $(date)  ║" ;;
-                3) echo -e "Gestartet: $(date) ║" ;;
-                *) echo -e "Started: $(date)   ║" ;;
+                1) echo -e "║ Started: $(date)                                       ║" ;;
+                2) echo -e "║ Zahájeno: $(date)                                      ║" ;;
+                3) echo -e "║ Gestartet: $(date)                                     ║" ;;
+                *) echo -e "║ Started: $(date)                                       ║" ;;
             esac
         ;;
     esac

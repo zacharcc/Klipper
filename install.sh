@@ -151,35 +151,32 @@ set_variable_cfg() {
 # select_lang
 # set_variable_cfg "lang" "$LANG_SELECTED"
 
-# translate_echo() {
-#     local lang=$1
-#     local key=$2
-#     shift 2
-# 
-#     case $key in
-#         "backup_message")
-#             case $lang in
-#                 1) echo -e "║ Creating backup of the printer config directory:                                ║" ;;
-#                 2) echo -e "║ Vytvářím zálohu adresáře s konfigurací tiskárny:                                 ║" ;;
-#                 3) echo -e "║ Erstelle eine Sicherung des Druckerkonfigurationsverzeichnisses:                ║" ;;
-#                 *) echo -e "║ Creating backup of the printer config directory:                                ║" ;;
-#             esac
-#         ;;
-#     esac
-# }
+ translate_echo() {
+     local lang=$1
+     local key=$2
+     shift 2
+ 
+     case $key in
+         "title_cold_install")
+             case $lang in
+                 1) echo -e "║             ** Cold Install **             ║" ;;
+                 2) echo -e "║           ** Čistá instalace **            ║" ;;
+                 3) echo -e "║           ** Kaltinstallation **           ║" ;;
+                 *) echo -e "║             ** Cold Install **             ║" ;;
+             esac
+         ;;
+     esac
+
+# použití:
+# translate_echo "$LANG_SELECTED" "title_cold_install"
+
+}
 
 # function to translate message
 translate_string() {
     local lang=$1
     local key=$2
     case $key in
-        "title_cold_install") 
-            case $lang in
-                1) echo "             ** Cold Install **" ;;
-                2) echo "             ** Čistá instalace **" ;;
-                3) echo "             ** Kaltinstallation **" ;;
-                *) echo "             ** Cold Install **" ;;
-            esac ;;	
         "start_date")
             case $lang in
                 1) echo "Started: $(date) " ;;
@@ -255,7 +252,7 @@ fi
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo -e "╔════════════════════════════════════════════╗"
-        print_row "$(translate_string "$LANG_SELECTED" "title_cold_install")"
+        translate_echo "$LANG_SELECTED" "title_cold_install"
         echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"
         print_row "$(translate_string "$LANG_SELECTED" "start_date")"		
         print_row "$(translate_string "$LANG_SELECTED" "git_version")"
@@ -303,8 +300,8 @@ backup_files() {
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Creating backup of the printer config directory:                                ║"
    
-    from_path="  ● $(translate_string "$LANG_SELECTED" "from") $CONFIG_DIR"
-    to_path="  ●   $(translate_string "$LANG_SELECTED" "to") $BACKUP_DIR"
+    from_path="  ●$(translate_string "$LANG_SELECTED" "from") $CONFIG_DIR"
+    to_path="  ●$(translate_string "$LANG_SELECTED" "to") $BACKUP_DIR"
 
     formatted_from=$(printf "%-82s" "$from_path")
     formatted_to=$(printf "%-82s" "$to_path")
@@ -339,8 +336,8 @@ copy_files() {
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Copying new files:                                                              ║" 
 
-    from_path="  ● $(translate_string "$LANG_SELECTED" "from") $SANDWORM_REPO"
-    to_path="  ●   $(translate_string "$LANG_SELECTED" "to") $CONFIG_DIR"
+    from_path="  ●$(translate_string "$LANG_SELECTED" "from") $SANDWORM_REPO"
+    to_path="  ●$(translate_string "$LANG_SELECTED" "to") $CONFIG_DIR"
 
     formatted_from=$(printf "%-82s" "$from_path")
     formatted_to=$(printf "%-82s" "$to_path")

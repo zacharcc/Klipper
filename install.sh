@@ -214,7 +214,7 @@ translate_string() {
         "backup_done")
             case $lang in
                 1) echo "$OK Backup complete." ;;
-                2) echo "$OK Záloha byla úspěšně dokončena." ;;
+                2) echo "$OK Záloha byla úspěšně dokončena.   " ;;
                 3) echo "$OK Sicherung erfolgreich abgeschlossen." ;;
                 *) echo "$OK Backup complete." ;;
             esac ;;

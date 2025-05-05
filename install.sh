@@ -87,34 +87,32 @@ select_lang() {
     local lang_codes=(1 2 3)
     local selected=0
 
-    local COLOR_SELECTED="\033[32m"  # zelená
-    local COLOR_RESET="\033[0m"
+    # Barvy
+    GREEN="\033[1;32m"
+    RESET="\033[0m"
 
-    # Vykreslení volby jazyků
+    echo "" > /dev/tty
+    echo "Select language using arrows (← →), confirm with [Enter]:" > /dev/tty
+
     draw_selector() {
-        echo ""
-        echo -ne "Select language using arrows ${COLOR_SELECTED}(← →)${COLOR_RESET}, confirm with [Enter]:\n" > /dev/tty
+       echo -ne "\r\033[K" > /dev/tty  # smazat řádek
         for i in "${!options[@]}"; do
             if [[ $i -eq $selected ]]; then
-                echo -ne "${COLOR_SELECTED}[${options[$i]}]${COLOR_RESET} " > /dev/tty
+                echo -ne "${GREEN}[${options[$i]}]${RESET} " > /dev/tty
             else
                 echo -ne " ${options[$i]}  " > /dev/tty
             fi
         done
-        echo "" > /dev/tty
     }
 
     draw_selector
-
     while IFS= read -rsn1 key; do
         if [[ $key == $'\x1b' ]]; then
             read -rsn2 -t 0.1 key
             if [[ $key == "[C" ]]; then
-                ((selected++))
-                [[ $selected -ge ${#options[@]} ]] && selected=0
+                ((selected=(selected+1)%${#options[@]}))
             elif [[ $key == "[D" ]]; then
-                ((selected--))
-                [[ $selected -lt 0 ]] && selected=$((${#options[@]} - 1))
+                ((selected=(selected-1+${#options[@]})%${#options[@]}))
             fi
         elif [[ $key == "" ]]; then
             break
@@ -125,7 +123,7 @@ select_lang() {
 
     echo "" > /dev/tty
     export LANG_SELECTED=${lang_codes[$selected]}
-    echo -e "$OK Language selected: ${options[$selected]} (lang=$LANG_SELECTED)"
+    echo "$OK Language selected: ${options[$selected]} (lang=$LANG_SELECTED)"
 }
 
 if [ "$IS_COLD_INSTALL" = true ]; then

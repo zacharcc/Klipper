@@ -76,131 +76,6 @@ elif ! grep -q "^\[update_manager Sandworm\]" "$MOONRAKER_CONF"; then
     IS_COLD_INSTALL=true
 fi
 
-#-------------------------------
-
-if [ "$IS_COLD_INSTALL" = true ]; then
-
-# Function: Interactive language selector (← → + Enter)
-select_lang() {
-    local options=("English" "Czech" "German")
-    local lang_codes=(1 2 3)
-    local selected=0
-
-    # Clear line + draw selector to tty
-    draw_selector() {
-        echo ""
-        echo -ne "\rSelect language using arrows (← →), confirm with [Enter]: " > /dev/tty
-        for i in "${!options[@]}"; do
-            if [[ $i -eq $selected ]]; then
-                echo -ne "[${options[$i]}] " > /dev/tty
-            else
-                echo -ne " ${options[$i]}  " > /dev/tty
-            fi
-        done
-    }
-
-    draw_selector
-    while IFS= read -rsn1 key; do
-        if [[ $key == $'\x1b' ]]; then
-            read -rsn2 -t 0.1 key
-            if [[ $key == "[C" ]]; then
-                ((selected=(selected+1)%${#options[@]}))
-            elif [[ $key == "[D" ]]; then
-                ((selected=(selected-1+${#options[@]})%${#options[@]}))
-            fi
-        elif [[ $key == "" ]]; then
-            break
-        fi
-        echo -ne "\r\033[K" > /dev/tty  # Clear line
-        draw_selector
-    done
-
-    echo "" > /dev/tty
-    export LANG_SELECTED=${lang_codes[$selected]}
-    echo "$OK Language selected: ${options[$selected]} (lang=$LANG_SELECTED)"
-}
-
-select_lang
-
-fi
-
-# Set value in variables.cfg
-set_variable_cfg() {
-    local key="$1"
-    local value="$2"
-    local file="$CONFIG_DIR/variables.cfg"
-
-    if [ ! -f "$file" ]; then
-        print_row "$SKIPPED variables.cfg not found at:"
-        to_path="  ● $file"
-        formatted_to=$(printf "%-82s" "$to_path")	
-        return
-    fi
-
-    if grep -q "^$key\s*=" "$file"; then
-        sed -i "s/^$key\s*=.*/$key = $value/" "$file"
-        print_row "$OK Updated $key to $value in variables.cfg"
-    else
-        print_row "$SKIPPED Variable '$key' not found in variables.cfg"
-    fi
-}
-
-# Usage:
-# select_lang
-# set_variable_cfg "lang" "$LANG_SELECTED"
-
-# translate_echo() {
-#     local lang=$1
-#     local key=$2
-#     shift 2
-# 
-#     case $key in
-#         "backup_message")
-#             case $lang in
-#                 1) echo -e "║ Creating backup of the printer config directory:                                ║" ;;
-#                 2) echo -e "║ Vytvářím zálohu adresáře s konfigurací tiskárny:                                 ║" ;;
-#                 3) echo -e "║ Erstelle eine Sicherung des Druckerkonfigurationsverzeichnisses:                ║" ;;
-#                 *) echo -e "║ Creating backup of the printer config directory:                                ║" ;;
-#             esac
-#         ;;
-#     esac
-# }
-
-# function to translate message
-translate_string() {
-    local lang=$1
-    local key=$2
-    case $key in
-        "from") case $lang in 1) echo "from:" ;; 2) echo " z:" ;; 3) echo " von:" ;; esac ;;
-        "to")   case $lang in 1) echo "  to:" ;;   2) echo "do:" ;; 3) echo "nach:" ;; esac ;;
-        "backup_done")
-            case $lang in
-                1) echo "$OK Backup complete." ;;
-                2) echo "$OK Záloha byla úspěšně dokončena." ;;
-                3) echo "$OK Sicherung erfolgreich abgeschlossen." ;;
-                *) echo "$OK Backup complete." ;;
-            esac ;;
-        "copying_done")
-            case $lang in
-                1) echo "$OK Copying completed." ;;
-                2) echo "$OK Kopírování dokončeno." ;;
-                3) echo "$OK Kopiervorgang abgeschlossen." ;;
-                *) echo "$OK Copying completed." ;;
-            esac ;;
-        # ... další klíče sem
-        *)
-            print_row "$key"  # fallback
-        ;;
-    esac
-}
-
-
-# Použití:
-# print_row "$(translate_string "$LANG_SELECTED" "backup_done")"
-
-#-------------------------------
-
-
 ## ---  Logging setup ---
 mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
@@ -225,7 +100,7 @@ fi
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo -e "╔════════════════════════════════════════════╗"
-        print_row "$(translate_string "$LANG_SELECTED" "title_cold_install")"
+        echo -e "║             ** Čistá instalace **          ║"
         echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"
         print_row "Started: $(date)"
         print_row "Git version: $VERSION"
@@ -242,7 +117,7 @@ start_message() {
         echo -e "Game version: $CUSTOM_VERSION"
         echo -e ""
         echo -e "Starting update of Sandworm macros..."
-    fi
+    fi		
 }
 
 ## --- countdown progress bar ---
@@ -269,13 +144,53 @@ fancy_restart_bar() {
 }
 
 ## --- Functions ---
+
+create_post_merge_hook() {
+    if [ ! -f "$HOOK_PATH" ]; then
+        cat << 'EOF' > "$HOOK_PATH"
+#!/bin/bash
+/home/biqu/Sandworm/install.sh
+EOF
+        chmod +x "$HOOK_PATH"
+        print_row "$OK Git post-merge hook created at: $HOOK_PATH"      
+    else
+        print_row "$SKIPPED Git post-merge hook already exists."
+    fi
+}
+
+add_update_manager_block() {
+    echo -e "\n[update_manager Sandworm]
+type: git_repo
+origin: https://github.com/zacharcc/Klipper.git
+path: ~/Sandworm
+primary_branch: test
+managed_services: klipper
+install_script: install.sh" >> "$MOONRAKER_CONF"
+    echo "║                                                                                 ║"
+    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "║ $OK Added [update_manager Sandworm] config block to: moonraker.conf            ║"  
+}
+
+add_power_printer_block() {
+    echo -e "\n[power printer]
+type: gpio
+pin: gpiochip0/gpio72               # Can be reversed with "!", (Bigtreetech PI V1.2 GPIO pin PC8)
+initial_state: off
+off_when_shutdown: True             # Turn off power on shutdown/error
+locked_while_printing: True         # Prevent power-off during a print
+restart_klipper_when_powered: True
+restart_delay: 1
+bound_service: klipper              # Ensures Klipper service starts/restarts with power toggle" >> "$MOONRAKER_CONF"
+    echo -e "║ $OK Added [power printer] config block to: moonraker.conf                      ║"  
+}
+
 backup_files() {
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Creating backup of the printer config directory:                                ║"
    
-    from_path="  ● $(translate_string "$LANG_SELECTED" "from") $CONFIG_DIR"
-    to_path="  ●   $(translate_string "$LANG_SELECTED" "to") $BACKUP_DIR"
-
+    from_path="  ● from: $CONFIG_DIR"
+    to_path="  ●   to: $BACKUP_DIR"
+    
     formatted_from=$(printf "%-82s" "$from_path")
     formatted_to=$(printf "%-82s" "$to_path")
     
@@ -286,7 +201,7 @@ backup_files() {
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     
     echo "║                                                                                 ║"
-    print_row "$(translate_string "$LANG_SELECTED" "backup_done")"
+    echo -e "║ $OK Backup complete.                                                           ║"
     sleep $MESS_sDELAY
 }
 
@@ -309,9 +224,9 @@ copy_files() {
     echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
     echo -e "║ Copying new files:                                                              ║" 
 
-    from_path="  ● $(translate_string "$LANG_SELECTED" "from") $SANDWORM_REPO"
-    to_path="  ●   $(translate_string "$LANG_SELECTED" "to") $CONFIG_DIR"
-
+    from_path="  ● from: $SANDWORM_REPO"
+    to_path="  ●   to: $CONFIG_DIR"
+    
     formatted_from=$(printf "%-82s" "$from_path")
     formatted_to=$(printf "%-82s" "$to_path")
 
@@ -348,45 +263,6 @@ copy_files_update() {
     
     echo "$OK Copying completed."
     sleep $MESS_sDELAY
-}
-
-add_update_manager_block() {
-    echo -e "\n[update_manager Sandworm]
-type: git_repo
-origin: https://github.com/zacharcc/Klipper.git
-path: ~/Sandworm
-primary_branch: test
-managed_services: klipper
-install_script: install.sh" >> "$MOONRAKER_CONF"
-    echo "║                                                                                 ║"
-    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
-    echo -e "║ $OK Added [update_manager Sandworm] config block to: moonraker.conf            ║"  
-}
-
-add_power_printer_block() {
-    echo -e "\n[power printer]
-type: gpio
-pin: gpiochip0/gpio72               # Can be reversed with "!", (Bigtreetech PI V1.2 GPIO pin PC8)
-initial_state: off
-off_when_shutdown: True             # Turn off power on shutdown/error
-locked_while_printing: True         # Prevent power-off during a print
-restart_klipper_when_powered: True
-restart_delay: 1
-bound_service: klipper              # Ensures Klipper service starts/restarts with power toggle" >> "$MOONRAKER_CONF"
-    echo -e "║ $OK Added [power printer] config block to: moonraker.conf                      ║"  
-}
-
-create_post_merge_hook() {
-    if [ ! -f "$HOOK_PATH" ]; then
-        cat << 'EOF' > "$HOOK_PATH"
-#!/bin/bash
-/home/biqu/Sandworm/install.sh
-EOF
-        chmod +x "$HOOK_PATH"
-        print_row "$OK Git post-merge hook created at: $HOOK_PATH"      
-    else
-        print_row "$SKIPPED Git post-merge hook already exists."
-    fi
 }
 
 restart_klipper() {
@@ -430,10 +306,6 @@ if [ "$IS_COLD_INSTALL" = true ]; then
         echo -e "║ $SKIPPED [power printer] already exists in moonraker.conf                      ║"
     fi
 
-    # Set message on startup and language:
-    set_variable_cfg "update_msg" 1
-    set_variable_cfg "lang" "$LANG_SELECTED"
-
     create_post_merge_hook  
 
     echo -e "║ $OK The Sandworm installation was completed successfully!                      ║"
@@ -454,9 +326,6 @@ else
 
     backup_files_update
     copy_files_update
-	
-	# Set message on startup:
-	set_variable_cfg "update_msg" 2
 
     echo -e ""
     echo -e "┌─────────────────────────────────────────────────────────────────────────"

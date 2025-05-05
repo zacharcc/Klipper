@@ -302,7 +302,7 @@ start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
         echo -e "╔════════════════════════════════════════════╗"
         translate_echo "$LANG_SELECTED" "title_cold_install"
-        echo -e "╠════════════════════════════════════════════╩════════════════════════════════════╗"
+        echo -e "╠════════════════════════════════════════════╩═══════════════════════════════════════╗"
         print_row "$(translate_string "$LANG_SELECTED" "start_date")"
         print_row "$(translate_string "$LANG_SELECTED" "git_version")"
         print_row "$(translate_string "$LANG_SELECTED" "install_version")"
@@ -346,7 +346,7 @@ fancy_restart_bar() {
 
 ## --- Functions ---
 backup_files() {
-    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "╟────────────────────────────────────────────────────────────────────────────────────╢"
     print_row "$(translate_string "$LANG_SELECTED" "backup")"
    
     from_path="  ● $(translate_string "$LANG_SELECTED" "from") $CONFIG_DIR"
@@ -361,7 +361,7 @@ backup_files() {
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     
-    echo -e "║                                                                                 ║"
+    echo -e "║                                                                                    ║"
     print_row "$(translate_string "$LANG_SELECTED" "backup_done")"
     sleep $MESS_sDELAY
 }
@@ -381,8 +381,8 @@ backup_files_update() {
 }
 
 copy_files() {
-    echo -e "║                                                                                 ║"
-    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "║                                                                                    ║"
+    echo -e "╟────────────────────────────────────────────────────────────────────────────────────╢"
     print_row "$(translate_string "$LANG_SELECTED" "copy")"
 
     from_path="  ● $(translate_string "$LANG_SELECTED" "from") $SANDWORM_REPO"
@@ -393,18 +393,18 @@ copy_files() {
 
     echo -e "║ $formatted_from║"  
     echo -e "║ $formatted_to║" 
-    echo -e "║                                                                                 ║"
+    echo -e "║                                                                                    ║"
 
     mkdir -p "$CONFIG_DIR"
     RSYNC_OUTPUT=$(rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/")
 
     # rsync output in rows:
     while IFS= read -r line; do
-        formatted_line=$(printf "%-78s" "$line")
+        formatted_line=$(printf "%-81s" "$line")
         echo -e "║ $formatted_line  ║"
     done <<< "$RSYNC_OUTPUT"
 
-    echo -e "║                                                                                 ║"
+    echo -e "║                                                                                    ║"
     print_row "$(translate_string "$LANG_SELECTED" "copying_done")"
     sleep $MESS_sDELAY
 }
@@ -434,8 +434,8 @@ path: ~/Sandworm
 primary_branch: test
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
-    echo -e "║                                                                                 ║"
-    echo -e "╟─────────────────────────────────────────────────────────────────────────────────╢"
+    echo -e "║                                                                                    ║"
+    echo -e "╟────────────────────────────────────────────────────────────────────────────────────╢"
     print_row "$(translate_string "$LANG_SELECTED" "add_update_manager")"
 }
 
@@ -512,12 +512,12 @@ if [ "$IS_COLD_INSTALL" = true ]; then
 
     create_post_merge_hook  
 
-    echo -e "║ $OK The Sandworm installation was completed successfully!                      ║"
+    echo -e "║ $OK The Sandworm installation was completed successfully!                         ║"
     sleep $MESS_sDELAY
-    echo -e "║                                                                                 ║"
-    echo -e "║ $INFO ⚠️ After restarting, please refresh the web interface (press F5)         ║"
-    echo -e "║ to clear the memory and avoid UI cache issues (duplicate folders, etc).         ║"
-    echo -e "╚═════════════════════════════════════════════════════════════════════════════════╝"
+    echo -e "║                                                                                    ║"
+    echo -e "║ $INFO ⚠️ After restarting, please refresh the web interface (press F5)            ║"
+    echo -e "║ to clear the memory and avoid UI cache issues (duplicate folders, etc).            ║"
+    echo -e "╚════════════════════════════════════════════════════════════════════════════════════╝"
     sleep $MESS_DELAY
     echo ""
     restart_moonraker

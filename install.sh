@@ -151,6 +151,7 @@ set_variable_cfg() {
 # select_lang
 # set_variable_cfg "lang" "$LANG_SELECTED"
 
+# Echo's Legendary Great Dictionary:
 translate_echo() {
     local lang=$1
     local key=$2
@@ -159,10 +160,10 @@ translate_echo() {
     case $key in
         "title_cold_install")
             case $lang in
-                1) echo -e "║             ** Cold Install **             ║" ;;
-                2) echo -e "║           ** Čistá instalace **            ║" ;;
-                3) echo -e "║           ** Kaltinstallation **           ║" ;;
-                *) echo -e "║             ** Cold Install **             ║" ;;
+                1) echo -e "║        ** Sandworm installation **         ║" ;;
+                2) echo -e "║          ** Sandworm instalace **          ║" ;;
+                3) echo -e "║        ** Sandworm-Installation **         ║" ;;
+                *) echo -e "║        ** Sandworm installation **         ║" ;;
             esac
         ;;
         "start_date")
@@ -176,7 +177,6 @@ translate_echo() {
     esac
 }
 
-# function to translate message
 translate_string() {
     local lang=$1
     local key=$2
@@ -201,6 +201,13 @@ translate_string() {
                 2) echo "Verze instalace: $CUSTOM_VERSION" ;;
                 3) echo "Installationsversion: $CUSTOM_VERSION" ;;
                 *) echo "Install version: $CUSTOM_VERSION" ;;
+            esac ;;
+         "description")
+            case $lang in
+                1) echo "Sandworm installation with automatic updates has started..." ;;
+                2) echo "Zahájena instalace Sandworm s automatickými aktualizacemi..." ;;
+                3) echo "Die Sandworm-Installation mit automatischen Updates wurde gestartet..." ;;
+                *) echo "Sandworm installation with automatic updates has started..." ;;
             esac ;;
         "from") case $lang in 1) echo "from:" ;; 2) echo " z:" ;; 3) echo " von:" ;; esac ;;
         "to")   case $lang in 1) echo "  to:" ;;   2) echo "do:" ;; 3) echo "nach:" ;; esac ;;
@@ -262,11 +269,11 @@ start_message() {
         print_row "$(translate_string "$LANG_SELECTED" "git_version")"
         print_row "$(translate_string "$LANG_SELECTED" "install_version")"	
         print_row ""
-        print_row "Starting installation of automatic Sandworm updates..."
+        print_row "$(translate_string "$LANG_SELECTED" "description")"	
         print_row ""
     else
         echo -e "╔════════════════════════════════════════════╗"
-        echo -e "║                ** Update **                ║"
+        echo -e "║           ** Sandworm Update **            ║"
         echo -e "╚════════════════════════════════════════════╝"
         echo -e "Started: $(date)"
         echo -e "Git version: $VERSION"

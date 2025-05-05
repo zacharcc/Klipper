@@ -151,10 +151,11 @@ set_variable_cfg() {
 # select_lang
 # set_variable_cfg "lang" "$LANG_SELECTED"
 
- translate_echo() {
+translate_echo() {
     local lang=$1
     local key=$2
     shift 2
+
     case $key in
         "title_cold_install")
             case $lang in
@@ -163,19 +164,16 @@ set_variable_cfg() {
                 3) echo -e "║           ** Kaltinstallation **           ║" ;;
                 *) echo -e "║             ** Cold Install **             ║" ;;
             esac
+        ;;
         "start_date")
-           case $lang in
+            case $lang in
                 1) echo -e "Started: $(date)   ║" ;;
-                2) echo -e "Zahájeno: $(date)   ║" ;;
-                3) echo -e "Gestartet: $(date)   ║" ;;
-               *) echo -e "Started: $(date)   ║" ;;
-           esac ;;
+                2) echo -e "Zahájeno: $(date)  ║" ;;
+                3) echo -e "Gestartet: $(date) ║" ;;
+                *) echo -e "Started: $(date)   ║" ;;
+            esac
         ;;
     esac
-
-# použití:
-# translate_echo "$LANG_SELECTED" "start_date"
-
 }
 
 # function to translate message

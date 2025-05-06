@@ -148,7 +148,7 @@ set_variable_cfg() {
     if grep -q "^$key\s*=" "$file"; then
         sed -i "s/^$key\s*=.*/$key = $value/" "$file"
         if [ "$IS_COLD_INSTALL" = true ]; then
-            # Dynamický klíč do překladače, např. "set_update_msg"
+            # Dynamic key to the translator, e.g. "set_update_msg"
             print_row "$(translate_string "$LANG_SELECTED" "set_${key}")"
         else
             print_row "$OK Updated $key to $value in variables.cfg"
@@ -580,8 +580,6 @@ else
     echo -e "│ ✅ The Sandworm update was completed successfully!"
     echo -e "│ 💾 Your config folder was backed up at: $BACKUP_DIR"
     echo -e "│ 📜 For full update details, see the log: $LOGFILE"
-    echo -e "│ ⚠️ After restarting, please refresh the Klipper web interface (press F5)"
-    echo -e "│ to clear the memory and avoid UI cache issues (duplicate folders, etc)."
     echo -e "└─────────────────────────────────────────────────────────────────────────"
     echo -e ""
 

@@ -305,7 +305,49 @@ translate_string() {
                 3) echo "$OK Die Sandworm-Installation wurde erfolgreich abgeschlossen!" ;;
                 *) echo "$OK The Sandworm installation was completed successfully!" ;;
             esac ;;
-        # ... další klíče sem
+        "restart_prompt")
+            case $lang in
+                1) echo "Do you want to restart Moonraker now to apply changes? [y/N]: " ;;
+                2) echo "Chcete nyní restartovat Moonraker pro použití změn? [y/N]: " ;;
+                3) echo "Möchten Sie Moonraker jetzt neu starten, um die Änderungen anzuwenden? [y/N]: " ;;
+                *) echo "Do you want to restart Moonraker now to apply changes? [y/N]: " ;;
+            esac ;;
+        "restart_now")
+            case $lang in
+                1) echo "Restarting Moonraker service in 5 seconds..." ;;
+                2) echo "Restart Moonrakeru začne za 5 sekund..." ;;
+                3) echo "Moonraker wird in 5 Sekunden neu gestartet..." ;;
+                *) echo "Restarting Moonraker service in 5 seconds..." ;;
+            esac ;;
+        "restart_skipped")
+            case $lang in
+                1) echo "$INFO Moonraker restart skipped. Changes have not been applied!" ;;
+                2) echo "$INFO Restart Moonrakeru byl přeskočen. Změny nebyly použity!" ;;
+                3) echo "$INFO Moonraker-Neustart übersprungen. Änderungen wurden nicht übernommen!" ;;
+                *) echo "$INFO Moonraker restart skipped. Changes have not been applied!" ;;
+            esac ;;
+        "restart_manual")
+            case $lang in
+                1) echo "You can restart Moonraker manually later via:" ;;
+                2) echo "Moonraker můžete později restartovat ručně pomocí:" ;;
+                3) echo "Sie können Moonraker später manuell neu starten über:" ;;
+                *) echo "You can restart Moonraker manually later via:" ;;
+            esac ;;
+        "restart_manual_1")
+            case $lang in
+                1) echo "  1. The web interface: Power -→ Service Control -→ Moonraker" ;;
+                2) echo "  1. Webového rozhraní: Power -→ Service Control -→ Moonraker" ;;
+                3) echo "  1. Webinterface: Power -→ Service Control -→ Moonraker" ;;
+                *) echo "  1. The web interface: Power -→ Service Control -→ Moonraker" ;;
+            esac ;;
+        "restart_manual_2")
+            case $lang in
+                1) echo "  2. Command line: curl -X POST http://localhost:7125/server/restart" ;;
+                2) echo "  2. Příkazového řádku: curl -X POST http://localhost:7125/server/restart" ;;
+                3) echo "  2. Befehlszeile: curl -X POST http://localhost:7125/server/restart" ;;
+                *) echo "  2. Command line: curl -X POST http://localhost:7125/server/restart" ;;
+            esac ;;
+         # ... další klíče sem
         *)
             print_row "$key"  # fallback
         ;;
@@ -513,20 +555,17 @@ restart_klipper() {
 }
 
 restart_moonraker() {
-    read -rp "Do you want to restart Moonraker now to apply changes? [y/N]: " answer
+    read -rp "$(translate_string "$LANG_SELECTED" "restart_prompt")" answer
     if [[ "$answer" =~ ^[Yy]$ ]]; then
-
-        echo -e "Restarting Moonraker service in 5 seconds..."
+        print_row "$(translate_string "$LANG_SELECTED" "restart_now")"
         fancy_restart_bar
-
         curl --no-progress-meter -X POST http://localhost:7125/server/restart > /dev/null 2>&1
-
     else
         echo ""
-        echo -e "$INFO Moonraker restart skipped. Changes have not been applied!"
-        echo -e "But you can restart Moonraker manually later via:"
-        echo -e "  1. The web interface: Power -→ Service Control -→ Moonraker"
-        echo -e "  2. Command line: curl -X POST http://localhost:7125/server/restart"
+        print_row "$(translate_string "$LANG_SELECTED" "restart_skipped")"
+        print_row "$(translate_string "$LANG_SELECTED" "restart_manual")"
+        print_row "$(translate_string "$LANG_SELECTED" "restart_manual_1")"
+		print_row "$(translate_string "$LANG_SELECTED" "restart_manual_2")"
     fi
 }
 

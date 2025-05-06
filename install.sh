@@ -151,7 +151,7 @@ set_variable_cfg() {
             # Dynamic key to the translator, e.g. "set_update_msg"
             print_row "$(translate_string "$LANG_SELECTED" "set_${key}")"
         else
-            print_row "$OK Updated $key to $value in variables.cfg"
+            echo -e "$OK Updated $key to $value in variables.cfg"
         fi
     else
         print_row "$SKIPPED Variable '$key' not found in variables.cfg"
@@ -361,7 +361,6 @@ translate_string() {
     esac
 
 # usage: print_row "$(translate_string "$LANG_SELECTED" "install_success")"
-
 }
 
 

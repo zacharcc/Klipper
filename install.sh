@@ -348,7 +348,7 @@ translate_string() {
         "restart_prompt")
             case $lang in
                 1) echo "Do you want to restart Moonraker now to apply changes? [y/N]: " ;;
-                2) echo "Chcete nyní restartovat Moonraker pro použití změn? [y/N]: " ;;
+                2) echo "Chcete nyní restartovat Moonraker pro aplikování změn? [y/N]: " ;;
                 3) echo "Möchten Sie Moonraker jetzt neu starten, um die Änderungen anzuwenden? [y/N]: " ;;
                 *) echo "Do you want to restart Moonraker now to apply changes? [y/N]: " ;;
             esac ;;

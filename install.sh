@@ -1,7 +1,5 @@
 #!/bin/bash
 
-## INSTALL VERSION FOR TESTING:
-
 ## --- Trap ---
 set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
@@ -249,7 +247,7 @@ backup_files() {
 
 backup_files_update() {
     echo ""
-    echo "──────────────────────────────────────────────"
+    echo "─────────────────────────────────────────────────────────────────────────────────────"
     echo "Creating backup of the printer config directory:"  
     echo "  ● from: $CONFIG_DIR"  
     echo "  ●   to: $BACKUP_DIR"  
@@ -292,7 +290,7 @@ copy_files() {
 
 copy_files_update() {
     echo ""
-    echo "──────────────────────────────────────────────"
+    echo "─────────────────────────────────────────────────────────────────────────────────────"
     echo "Copying new files:"
     echo "  ● from: $SANDWORM_REPO"
     echo "  ●   to: $CONFIG_DIR"

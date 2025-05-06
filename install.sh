@@ -9,8 +9,6 @@ trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 ## --- Brake line after git clone messages ---
 
 # --- Paths ---
-
-# TAKÉ PŘENASTAVIT variables.cfg sekci a PATH!!!!!
 # CONFIG_DIR="$HOME/printer_data/config"
 # MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 SANDWORM_REPO="$HOME/Sandworm/config"
@@ -140,9 +138,10 @@ set_variable_cfg() {
     local file="$HOME/printer_data/config/variables.cfg"
 
     if [ ! -f "$file" ]; then
-        print_row "$SKIPPED variables.cfg not found at:"
-        to_path="  ● $file"
-        formatted_to=$(printf "%-85s" "$to_path")
+        print_row "$(translate_string "$LANG_SELECTED" "skipped_variables")"
+        from_path="  ● $file"
+        formatted_at=$(printf "%-86s" "$from_path")
+        echo -e "║$formatted_at║"
         return
     fi
 
@@ -287,10 +286,17 @@ translate_string() {
             esac ;;
         "set_lang")
             case $lang in
-                1) echo "$OK English language has been set in [variables.cfg]." ;;
-                2) echo "$OK Čeština byla nastavena v souboru [variables.cfg]." ;;
-                3) echo "$OK Deutsch wurde in der Datei [variables.cfg] festgelegt." ;;
-                *) echo "$OK Language setting has been saved in [variables.cfg]." ;;
+                1) echo "$OK English language set in [variables.cfg]." ;;
+                2) echo "$OK Čeština nastavena v souboru [variables.cfg]." ;;
+                3) echo "$OK Deutsch in [variables.cfg] eingestellt." ;;
+                *) echo "$OK Language setting saved in [variables.cfg]." ;;
+            esac ;;
+        "skipped_variables")
+            case $lang in
+                1) echo "$SKIPPED The file [variables.cfg] was not found in:" ;;
+                2) echo "$SKIPPED Soubor [variables.cfg] nebyl nalezen v:" ;;
+                3) echo "$SKIPPED Die Datei [variables.cfg] wurde nicht gefunden in:" ;;
+                *) echo "$SKIPPED The file [variables.cfg] was not found in:" ;;
             esac ;;
         "install_success")
             case $lang in
@@ -305,7 +311,8 @@ translate_string() {
         ;;
     esac
 
-# print_row "$(translate_string "$LANG_SELECTED" "set_update_msg")"
+# usage: print_row "$(translate_string "$LANG_SELECTED" "skipped_variables")"
+# usage: print_row "$(translate_string "$LANG_SELECTED" "install_success")"
 
 }
 

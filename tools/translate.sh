@@ -53,6 +53,9 @@ translate_echo() {
                 *) echo -e "  2. Command line: curl -X POST http://localhost:7125/server/restart" ;;
             esac
         ;;
+        *)
+            echo "[ $ERROR ⚠️ missing translation: $key ]"
+        ;;
     esac
 }
 
@@ -190,7 +193,7 @@ translate_string() {
             esac ;;
          # ... další klíče sem
         *)
-            echo "$key"
+            echo "[ $ERROR ⚠️ missing translation: $key ]"
         ;;
     esac
 

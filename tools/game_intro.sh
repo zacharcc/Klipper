@@ -52,7 +52,7 @@ shai_hulud() {
 ## --- Progress Bar 0% [########] 100% ---
 simulate_loading_bar_with_ascii() {
     local steps=24
-    local delay=0.15
+    local delay=0.1
     local bar_width=24
 
     for i in $(seq 0 $steps); do

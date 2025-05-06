@@ -272,7 +272,7 @@ copy_files() {
 
     echo -e "║ $formatted_from║"  
     echo -e "║ $formatted_to║" 
-    echo -e "║                                                                                    ║"
+    print_row ""
 
     mkdir -p "$CONFIG_DIR"
     RSYNC_OUTPUT=$(rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/")
@@ -283,7 +283,7 @@ copy_files() {
         echo -e "║ $formatted_line  ║"
     done <<< "$RSYNC_OUTPUT"
 
-    echo -e "║                                                                                    ║"
+    print_row ""
     print_row "$(translate_string "$LANG_SELECTED" "copying_done")"
     sleep $MESS_sDELAY
 }

@@ -9,6 +9,8 @@ trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 ## --- Brake line after git clone messages ---
 
 # --- Paths ---
+
+# TAKÉ PŘENASTAVIT variables.cfg sekci a PATH!!!!!
 # CONFIG_DIR="$HOME/printer_data/config"
 # MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 SANDWORM_REPO="$HOME/Sandworm/config"
@@ -94,7 +96,6 @@ select_lang() {
     echo "" > /dev/tty
     echo -e "Select language using arrows ${GREEN}(← →)${RESET}, confirm with [Enter]:" > /dev/tty
 
-    # Vykreslení volby
     draw_selector() {
         echo -ne "\r\033[K" > /dev/tty
         for i in "${!options[@]}"; do
@@ -136,23 +137,28 @@ fi
 set_variable_cfg() {
     local key="$1"
     local value="$2"
-    #local file="$CONFIG_DIR/variables.cfg"
     local file="$HOME/printer_data/config/variables.cfg"
 
     if [ ! -f "$file" ]; then
         print_row "$SKIPPED variables.cfg not found at:"
         to_path="  ● $file"
-        formatted_to=$(printf "%-82s" "$to_path")	
+        formatted_to=$(printf "%-85s" "$to_path")
         return
     fi
 
     if grep -q "^$key\s*=" "$file"; then
         sed -i "s/^$key\s*=.*/$key = $value/" "$file"
-        print_row "$OK Updated $key to $value in variables.cfg"
+        if [ "$IS_COLD_INSTALL" = true ]; then
+            # Dynamický klíč do překladače, např. "set_update_msg"
+            print_row "$(translate_string "$LANG_SELECTED" "set_${key}")"
+        else
+            print_row "$OK Updated $key to $value in variables.cfg"
+        fi
     else
         print_row "$SKIPPED Variable '$key' not found in variables.cfg"
     fi
 }
+
 
 # Usage:
 # select_lang
@@ -273,14 +279,34 @@ translate_string() {
                 3) echo "$SKIPPED Git post-merge hook ist bereits vorhanden." ;;
                 *) echo "$SKIPPED Git post-merge hook already exists." ;;
             esac ;;
+        "set_update_msg")
+            case $lang in
+                1) echo "$OK The opening message was set in the [variables.cfg] files." ;;
+                2) echo "$OK Úvodní zpráva byla nastavena v soubory [variables.cfg]." ;;
+                3) echo "$OK Die Eröffnungsnachricht wurde in den [variables.cfg]-Dateien festgelegt." ;;
+                *) echo "$OK The opening message was set in the [variables.cfg] files." ;;
+            esac ;;
+        "set_lang")
+            case $lang in
+                1) echo "$OK English language has been set in [variables.cfg]." ;;
+                2) echo "$OK Čeština byla nastavena v souboru [variables.cfg]." ;;
+                3) echo "$OK Deutsch wurde in der Datei [variables.cfg] festgelegt." ;;
+                *) echo "$OK Language setting has been saved in [variables.cfg]." ;;
+            esac ;;
+        "install_success")
+            case $lang in
+                1) echo "$OK The Sandworm installation was completed successfully!" ;;
+                2) echo "$OK Instalace Sandworm byla úspěšně dokončena!" ;;
+                3) echo "$OK Die Sandworm-Installation wurde erfolgreich abgeschlossen!" ;;
+                *) echo "$OK The Sandworm installation was completed successfully!" ;;
+            esac ;;
         # ... další klíče sem
         *)
             print_row "$key"  # fallback
         ;;
     esac
-	
-# $SKIPPED Git post-merge hook already exists.
-# print_row "$(translate_string "$LANG_SELECTED" "skipped_post-merge_hook")"
+
+# print_row "$(translate_string "$LANG_SELECTED" "set_update_msg")"
 
 }
 
@@ -520,11 +546,9 @@ if [ "$IS_COLD_INSTALL" = true ]; then
 
     create_post_merge_hook  
 
-    echo -e "║ $OK The Sandworm installation was completed successfully!                         ║"
-    sleep $MESS_sDELAY
     echo -e "║                                                                                    ║"
-    echo -e "║ $INFO ⚠️ After restarting, please refresh the web interface (press F5)            ║"
-    echo -e "║ to clear the memory and avoid UI cache issues (duplicate folders, etc).            ║"
+    print_row "$(translate_string "$LANG_SELECTED" "install_success")"
+    echo -e "║                                                                                    ║"
     echo -e "╚════════════════════════════════════════════════════════════════════════════════════╝"
     sleep $MESS_DELAY
     echo ""

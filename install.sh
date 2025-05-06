@@ -240,7 +240,7 @@ backup_files() {
     mkdir -p "$BACKUP_DIR"
     cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
     
-    echo -e "║                                                                                    ║"
+    print_row ""
     print_row "$(translate_string "$LANG_SELECTED" "backup_done")"
     sleep $MESS_sDELAY
 }

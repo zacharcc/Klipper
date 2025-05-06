@@ -156,11 +156,13 @@ set_variable_cfg() {
     else
         print_row "$SKIPPED Variable '$key' not found in variables.cfg"
     fi
-}
 
 # Usage:
 # select_lang
 # set_variable_cfg "lang" "$LANG_SELECTED"
+}
+
+
 
 # Echo's Legendary Great Dictionary:
 translate_echo() {

@@ -412,12 +412,12 @@ else
     set_variable_cfg "update_msg" 2
 
     echo -e ""
-    echo -e "┌─────────────────────────────────────────────────────────────────────────"
+    echo -e "┌─────────────────────────────────────────────────────────────────────────────────────"
     echo -e "│ ** NOTES: **"
     echo -e "│ ✅ The Sandworm update was completed successfully!"
     echo -e "│ 💾 Your config folder was backed up at: $BACKUP_DIR"
     echo -e "│ 📜 For full update details, see the log: $LOGFILE"
-    echo -e "└─────────────────────────────────────────────────────────────────────────"
+    echo -e "└─────────────────────────────────────────────────────────────────────────────────────"
     echo -e ""
 
     # Replace previous update block with new one in log

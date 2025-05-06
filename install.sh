@@ -159,7 +159,6 @@ set_variable_cfg() {
     fi
 }
 
-
 # Usage:
 # select_lang
 # set_variable_cfg "lang" "$LANG_SELECTED"
@@ -254,7 +253,7 @@ translate_string() {
         "add_power_printer")
             case $lang in
                 1) echo "$OK Added [power printer] config block to: moonraker.conf" ;;
-                2) echo "$OK Přidán [power printer] konfig blok do: moonraker.conf" ;;
+                2) echo "$OK Přidán [power printer] konfigurační blok do: moonraker.conf" ;;
                 3) echo "$OK Konfigblock [power printer] hinzugefügt zu: moonraker.conf" ;;
                 *) echo "$OK Added [power printer] config block to: moonraker.conf" ;;
             esac ;;
@@ -281,9 +280,9 @@ translate_string() {
             esac ;;
         "set_update_msg")
             case $lang in
-                1) echo "$OK The opening message was set in the [variables.cfg] files." ;;
-                2) echo "$OK Úvodní zpráva byla nastavena v soubory [variables.cfg]." ;;
-                3) echo "$OK Die Eröffnungsnachricht wurde in den [variables.cfg]-Dateien festgelegt." ;;
+                1) echo "$OK Introductory message enabled in [variables.cfg]" ;;
+                2) echo "$OK Zobrazení úvodní zprávy nastaveno v [variables.cfg]" ;;
+                3) echo "$OK Startnachricht in [variables.cfg] aktiviert." ;;
                 *) echo "$OK The opening message was set in the [variables.cfg] files." ;;
             esac ;;
         "set_lang")

@@ -262,17 +262,25 @@ translate_string() {
         "post-merge_hook")
             case $lang in
                 1) echo "$OK Git post-merge hook created at: $HOOK_PATH" ;;
-                2) echo "$OK " ;;
-                3) echo "$OK " ;;
+                2) echo "$OK Git post-merge hook vytvořen v: $HOOK_PATH" ;;
+                3) echo "$OK Git post-merge hook erstellt unter: $HOOK_PATH" ;;
                 *) echo "$OK Git post-merge hook created at: $HOOK_PATH" ;;
+            esac ;;
+        "skipped_post-merge_hook")
+            case $lang in
+                1) echo "$SKIPPED Git post-merge hook already exists." ;;
+                2) echo "$SKIPPED Git post-merge hook již existuje." ;;
+                3) echo "$SKIPPED Git post-merge hook ist bereits vorhanden." ;;
+                *) echo "$SKIPPED Git post-merge hook already exists." ;;
             esac ;;
         # ... další klíče sem
         *)
             print_row "$key"  # fallback
         ;;
     esac
-
-# print_row "$(translate_string "$LANG_SELECTED" "skipped_power_printer")"
+	
+# $SKIPPED Git post-merge hook already exists.
+# print_row "$(translate_string "$LANG_SELECTED" "skipped_post-merge_hook")"
 
 }
 
@@ -352,8 +360,8 @@ backup_files() {
     from_path="  ● $(translate_string "$LANG_SELECTED" "from") $CONFIG_DIR"
     to_path="  ● $(translate_string "$LANG_SELECTED" "to") $BACKUP_DIR"
 
-    formatted_from=$(printf "%-82s" "$from_path")
-    formatted_to=$(printf "%-82s" "$to_path")
+    formatted_from=$(printf "%-85s" "$from_path")
+    formatted_to=$(printf "%-85s" "$to_path")
     
     echo -e "║ $formatted_from║"  
     echo -e "║ $formatted_to║"
@@ -388,8 +396,8 @@ copy_files() {
     from_path="  ● $(translate_string "$LANG_SELECTED" "from") $SANDWORM_REPO"
     to_path="  ● $(translate_string "$LANG_SELECTED" "to") $CONFIG_DIR"
 
-    formatted_from=$(printf "%-82s" "$from_path")
-    formatted_to=$(printf "%-82s" "$to_path")
+    formatted_from=$(printf "%-85s" "$from_path")
+    formatted_to=$(printf "%-85s" "$to_path")
 
     echo -e "║ $formatted_from║"  
     echo -e "║ $formatted_to║" 
@@ -459,9 +467,9 @@ create_post_merge_hook() {
 /home/biqu/Sandworm/install.sh
 EOF
         chmod +x "$HOOK_PATH"
-        print_row "$OK Git post-merge hook created at: $HOOK_PATH"
+        print_row "$(translate_string "$LANG_SELECTED" "post-merge_hook")"
     else
-        print_row "$SKIPPED Git post-merge hook already exists."
+        print_row "$(translate_string "$LANG_SELECTED" "skipped_post-merge_hook")"
     fi
 }
 

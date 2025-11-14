@@ -139,9 +139,72 @@ translate_string() {
             case $lang in
                 1) echo "$SKIPPED [power printer] already exists in moonraker.conf" ;;
                 2) echo "$SKIPPED [power printer] již existuje v moonraker.conf" ;;
-                3) echo "$SKIPPED [Power Printer] existiert bereits in moonraker.conf" ;;
+                3) echo "$SKIPPED [power printer] existiert bereits in moonraker.conf" ;;
                 *) echo "$SKIPPED [power printer] already exists in moonraker.conf" ;;
             esac ;;
+        "gpio_header")
+            case $lang in
+                1) echo "GPIO Group and Permission Setup" ;;
+                2) echo "Nastavení skupiny GPIO a oprávnění" ;;
+                3) echo "Einrichtung der GPIO-Gruppe und Berechtigungen" ;;
+                *) echo "GPIO Group and Permission Setup" ;;
+            esac ;;
+        "gpio_rpi_skip")
+            case $lang in
+                1) echo "$SKIPPED Raspberry Pi detected – GPIO permissions already configured, skipping." ;;
+                2) echo "$SKIPPED Zjištěn Raspberry Pi – GPIO je již nastaveno, krok se přeskočí." ;;
+                3) echo "$SKIPPED Raspberry Pi erkannt – GPIO ist bereits konfiguriert, überspringe." ;;
+                *) echo "$SKIPPED Raspberry Pi detected – skipping GPIO setup." ;;
+            esac ;;			
+        "gpio_info")
+            case $lang in
+                1) echo "Adding user to GPIO group (required for proper extensions)" ;;
+                2) echo "Přidání uživatele do skupiny GPIO (nutné pro správnou funkci rozšíření)" ;;
+                3) echo "Hinzufügen des Benutzers zur GPIO-Gruppe (erforderlich für Erweiterungen)" ;;
+                *) echo "Adding user to GPIO group" ;;
+            esac ;;
+        "gpio_create")
+            case $lang in
+                1) echo "Creating GPIO group ..." ;;
+                2) echo "Vytvářím skupinu GPIO ..." ;;
+                3) echo "Erstelle GPIO-Gruppe ..." ;;
+                *) echo "Creating GPIO group ..." ;;
+            esac ;;
+        "gpio_exists")
+            case $lang in
+                1) echo "$SKIPPED GPIO group already exists" ;;
+                2) echo "$SKIPPED Skupina GPIO již existuje" ;;
+                3) echo "$SKIPPED GPIO-Gruppe existiert bereits" ;;
+                *) echo "$SKIPPED GPIO group already exists" ;;
+            esac ;;
+        "gpio_add_user")
+            case $lang in
+                1) echo "Adding user 'biqu' to GPIO group ..." ;;
+                2) echo "Přidávám uživatele 'biqu' do skupiny GPIO ..." ;;
+                3) echo "Füge Benutzer 'biqu' zur GPIO-Gruppe hinzu ..." ;;
+                *) echo "Adding user 'biqu' to GPIO group ..." ;;
+            esac ;;
+        "gpio_user_exists")
+            case $lang in
+                1) echo "$SKIPPED User 'biqu' is already in GPIO group" ;;
+                2) echo "$SKIPPED Uživatel 'biqu' je již ve skupině GPIO" ;;
+                3) echo "$SKIPPED Benutzer 'biqu' ist bereits in der GPIO-Gruppe" ;;
+                *) echo "$SKIPPED User 'biqu' already in group" ;;
+            esac ;;
+        "gpio_udev_reload")
+            case $lang in
+                1) echo "Reloading udev rules ..." ;;
+                2) echo "Načítám udev pravidla ..." ;;
+                3) echo "Lade udev-Regeln neu ..." ;;
+                *) echo "Reloading udev rules ..." ;;
+            esac ;;
+        "gpio_done")
+            case $lang in
+                1) echo "$OK GPIO setup completed" ;;
+                2) echo "$OK Nastavení GPIO dokončeno" ;;
+                3) echo "$OK GPIO-Einrichtung abgeschlossen" ;;
+                *) echo "$OK GPIO setup completed" ;;
+            esac ;;	
         "post-merge_hook")
             case $lang in
                 1) echo "$OK Git post-merge hook created at: $HOOK_PATH" ;;

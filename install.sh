@@ -7,11 +7,9 @@ trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 ## --- Brake line after git clone messages ---
 
 # --- Paths ---
-# CONFIG_DIR="$HOME/printer_data/config"
-# MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
+CONFIG_DIR="$HOME/printer_data/config"
+MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 SANDWORM_REPO="$HOME/Sandworm/config"
-CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
-MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
 BACKUP_DIR="$HOME/Sandworm/backup/backup_config_$(date +%Y_%m_%d-%Hh%Mm)"
 HOOK_PATH="$HOME/Sandworm/.git/hooks/post-merge"
 LOGFILE="$HOME/printer_data/logs/sandworm_update.log"
@@ -176,6 +174,53 @@ else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
 fi
 
+## ---  Conditional GPIO Premission ---
+setup_gpio_permissions() {
+    echo -e "║                                                                                    ║"
+    echo -e "╟────────────────────────────────────────────────────────────────────────────────────╢"
+    print_row "$(translate_string "$LANG_SELECTED" "gpio_header")"
+
+    # Determine user dynamically
+    LOCAL_USER=$(logname 2>/dev/null || echo "$USER")
+
+    from_path="  ● $(translate_string "$LANG_SELECTED" "gpio_info") (user: $LOCAL_USER)"
+    formatted_from=$(printf "%-85s" "$from_path")
+    echo -e "║ $formatted_from║"
+
+    # Detect platform
+    MODEL=$(tr -d '\0' < /proc/device-tree/model 2>/dev/null || echo "unknown")
+
+    # Raspberry Pi platforms → Skip GPIO creation (group already exists)
+    if echo "$MODEL" | grep -qi "Raspberry Pi"; then
+        print_row "$(translate_string "$LANG_SELECTED" "gpio_rpi_skip")"
+        return
+    fi
+
+    # On CB1/CB2/other ARM boards → ensure GPIO group exists
+    if ! getent group gpio >/dev/null; then
+        print_row "$(translate_string "$LANG_SELECTED" "gpio_create")"
+        sudo groupadd gpio
+    else
+        print_row "$(translate_string "$LANG_SELECTED" "gpio_exists")"
+    fi
+
+    # Add user to group
+    if ! groups "$LOCAL_USER" | grep -qw gpio; then
+        print_row "$(translate_string "$LANG_SELECTED" "gpio_add_user")"
+        sudo usermod -aG gpio "$LOCAL_USER"
+    else
+        print_row "$(translate_string "$LANG_SELECTED" "gpio_user_exists")"
+    fi
+
+    # Apply udev rules
+    print_row "$(translate_string "$LANG_SELECTED" "gpio_udev_reload")"
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger
+
+    print_row "$(translate_string "$LANG_SELECTED" "gpio_done")"
+    sleep $MESS_sDELAY
+}
+
 ## --- Message Header ---
 start_message() {
     if [[ "$IS_COLD_INSTALL" = true ]]; then
@@ -297,7 +342,7 @@ copy_files_update() {
 
     echo ""
     mkdir -p "$CONFIG_DIR"
-    rsync -av "$SANDWORM_REPO/" "$CONFIG_DIR/"
+    rsync -av --exclude 'printer.cfg' "$SANDWORM_REPO/" "$CONFIG_DIR/"
     sleep 0.5
     echo ""
     
@@ -308,9 +353,9 @@ copy_files_update() {
 add_update_manager_block() {
     echo -e "\n[update_manager Sandworm]
 type: git_repo
-origin: https://github.com/zacharcc/Klipper.git
+origin: https://github.com/Urobotos/Sandworm.git
 path: ~/Sandworm
-primary_branch: test
+primary_branch: main
 managed_services: klipper
 install_script: install.sh" >> "$MOONRAKER_CONF"
     echo -e "║                                                                                    ║"
@@ -383,6 +428,8 @@ if [ "$IS_COLD_INSTALL" = true ]; then
         print_row "$(translate_string "$LANG_SELECTED" "skipped_power_printer")"
     fi
 
+    setup_gpio_permissions
+
     # Set message on startup and language:
     set_variable_cfg "update_msg" 1
     set_variable_cfg "lang" "$LANG_SELECTED"
@@ -412,12 +459,12 @@ else
     set_variable_cfg "update_msg" 2
 
     echo -e ""
-    echo -e "┌─────────────────────────────────────────────────────────────────────────────────────"
+    echo -e "┌────────────────────────────────────────────────────────────────────────────────────"
     echo -e "│ ** NOTES: **"
     echo -e "│ ✅ The Sandworm update was completed successfully!"
     echo -e "│ 💾 Your config folder was backed up at: $BACKUP_DIR"
     echo -e "│ 📜 For full update details, see the log: $LOGFILE"
-    echo -e "└─────────────────────────────────────────────────────────────────────────────────────"
+    echo -e "└────────────────────────────────────────────────────────────────────────────────────"
     echo -e ""
 
     # Replace previous update block with new one in log

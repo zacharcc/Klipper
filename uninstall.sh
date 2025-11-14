@@ -8,11 +8,9 @@ set -Ee
 trap 'echo -e "$ERROR Script failed at line $LINENO"' ERR
 
 # --- Paths ---
-# CONFIG_DIR="$HOME/printer_data/config"
-# MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
-CONFIG_DIR="$HOME/printer_data/config/TEST/update_test"
+CONFIG_DIR="$HOME/printer_data/config"
+MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 BACKUP_ROOT="$HOME/Sandworm/backup"
-MOONRAKER_CONF="$HOME/printer_data/config/moonraker.conf"
 LOGFILE="$HOME/printer_data/logs/sandworm_uninstall_$(date +%Y_%m_%d-%Hh%Mm).log"
 SANDWORM_DIR="$HOME/Sandworm"
 

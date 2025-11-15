@@ -144,10 +144,10 @@ translate_string() {
             esac ;;
         "gpio_header")
             case $lang in
-                1) echo "GPIO Group and Permission Setup" ;;
-                2) echo "Nastavení skupiny GPIO a oprávnění" ;;
-                3) echo "Einrichtung der GPIO-Gruppe und Berechtigungen" ;;
-                *) echo "GPIO Group and Permission Setup" ;;
+                1) echo "GPIO Group and Permission Setup:" ;;
+                2) echo "Nastavení skupiny GPIO a oprávnění:" ;;
+                3) echo "Einrichtung der GPIO-Gruppe und Berechtigungen:" ;;
+                *) echo "GPIO Group and Permission Setup:" ;;
             esac ;;
         "gpio_rpi_skip")
             case $lang in
@@ -156,13 +156,13 @@ translate_string() {
                 3) echo "$SKIPPED Raspberry Pi erkannt – GPIO ist bereits konfiguriert, überspringe." ;;
                 *) echo "$SKIPPED Raspberry Pi detected – skipping GPIO setup." ;;
             esac ;;			
-        "gpio_info")
-            case $lang in
-                1) echo "Adding user to GPIO group (required for proper extensions)" ;;
-                2) echo "Přidání uživatele do skupiny GPIO (nutné pro správnou funkci rozšíření)" ;;
-                3) echo "Hinzufügen des Benutzers zur GPIO-Gruppe (erforderlich für Erweiterungen)" ;;
-                *) echo "Adding user to GPIO group" ;;
-            esac ;;
+		"gpio_info")
+			case $lang in
+				1) echo "Adding user $LOCAL_USER to GPIO group" ;;
+				2) echo "Přidání uživatele $LOCAL_USER do skupiny GPIO" ;;
+				3) echo "Hinzufügen des Benutzers $LOCAL_USER zur GPIO-Gruppe" ;;
+				*) echo "Adding user $LOCAL_USER to GPIO group" ;;
+			esac ;;
         "gpio_create")
             case $lang in
                 1) echo "Creating GPIO group ..." ;;

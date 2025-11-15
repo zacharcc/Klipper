@@ -167,7 +167,7 @@ mkdir -p "$TMP_LOG_DIR"
 if [ "$IS_COLD_INSTALL" = true ]; then
     set_game_variables
 
-    # ASCII intro do logu
+    # ASCII intro to log
     exec 4>"$LOGFILE"
     print_game_intro_ascii >&4
     exec 4>&-
@@ -176,12 +176,13 @@ if [ "$IS_COLD_INSTALL" = true ]; then
     exec > >(tee -a "$LOGFILE") 2>&1
     exec 3>/dev/tty
 
-    # barevné intro do konzole
+    # color intro to console
     draw_game_intro >&3
 else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
 fi
 
+## ---  Conditional GPIO settings ---
 setup_gpio_permissions() {
     echo -e "║                                                                                    ║"
     echo -e "╟────────────────────────────────────────────────────────────────────────────────────╢"
@@ -194,7 +195,7 @@ setup_gpio_permissions() {
     print_row "$(translate_string "$LANG_SELECTED" "gpio_info")"
     print_row ""
 
-    # Raspberry Pi = vše bez sudo → žádné přerušení tabulky
+    # Raspberry Pi = everything without sudo → no table breaks
     if echo "$MODEL" | grep -qi "Raspberry Pi"; then
         print_row "$(translate_string "$LANG_SELECTED" "gpio_rpi_skip")"
         return
@@ -203,27 +204,27 @@ setup_gpio_permissions() {
     GROUP_CREATE_NEEDED=0
     USER_ADD_NEEDED=0
 
-    # Test zda je potřeba groupadd
+    # check whether groupadd is needed
     if ! getent group gpio >/dev/null; then
         GROUP_CREATE_NEEDED=1
     fi
 
-    # Test zda je potřeba usermod
+    # check if usermod is needed
     if ! groups "$LOCAL_USER" | grep -qw gpio; then
         USER_ADD_NEEDED=1
     fi
 
-    # Pokud není potřeba sudo → vše uvnitř tabulky
+    # If sudo is not needed → everything inside the table
     if [ $GROUP_CREATE_NEEDED -eq 0 ] && [ $USER_ADD_NEEDED -eq 0 ]; then
         print_row "$(translate_string "$LANG_SELECTED" "gpio_exists")"
         print_row "$(translate_string "$LANG_SELECTED" "gpio_user_exists")"
         return
     fi
 
-    # --- PŘERUŠENÍ TABULKY KVŮLI SUDO ---
+    # Table break due to sudo
     close_box
 
-    # --- SUDO SEKCE ---
+    # Sudo section
     if [ $GROUP_CREATE_NEEDED -eq 1 ]; then
         sudo groupadd gpio
     fi
@@ -235,17 +236,16 @@ setup_gpio_permissions() {
     sudo udevadm control --reload-rules
     sudo udevadm trigger
 
-    # --- ZNOVU OTEVŘÍT TABULKU (JEDNOU!) ---
     open_box
 
-    # Všechny sudo-řádky v JEDNÉ TABULCE:
+    # all sudo-rows in one table:
     [ $GROUP_CREATE_NEEDED -eq 1 ] && \
         print_row "$(translate_string "$LANG_SELECTED" "gpio_create")"
 
     [ $USER_ADD_NEEDED -eq 1 ] && \
         print_row "$(translate_string "$LANG_SELECTED" "gpio_add_user")"
 
-    print_row ""   # prázdný řádek
+    print_row ""
     print_row "$(translate_string "$LANG_SELECTED" "gpio_done")"
 }
 
@@ -379,30 +379,35 @@ copy_files_update() {
 }
 
 add_update_manager_block() {
-    echo -e "\n[update_manager Sandworm]
-type: git_repo
-origin: https://github.com/Urobotos/Sandworm.git
-path: ~/Sandworm
-primary_branch: main
-managed_services: klipper
-install_script: install.sh" >> "$MOONRAKER_CONF"
+    # Přidání bloku pomocí printf (bez rizika zdvojených / chybějících newline)
+    printf "\n[update_manager Sandworm]\n\
+type: git_repo\n\
+origin: https://github.com/Urobotos/Sandworm.git\n\
+path: ~/Sandworm\n\
+primary_branch: main\n\
+managed_services: klipper\n\
+install_script: install.sh\n" >> "$MOONRAKER_CONF"
+
     echo -e "║                                                                                    ║"
     echo -e "╟────────────────────────────────────────────────────────────────────────────────────╢"
     print_row "$(translate_string "$LANG_SELECTED" "add_update_manager")"
 }
 
 add_power_printer_block() {
-    echo -e "\n[power printer]
-type: gpio
-pin: gpiochip0/gpio72               # Can be reversed with "!", (Bigtreetech PI V1.2 GPIO pin PC8)
-initial_state: off
-off_when_shutdown: True             # Turn off power on shutdown/error
-locked_while_printing: True         # Prevent power-off during a print
-restart_klipper_when_powered: True
-restart_delay: 1
-bound_service: klipper              # Ensures Klipper service starts/restarts with power toggle" >> "$MOONRAKER_CONF"
+    # Bezpečné vložení bloku přes printf
+    printf "\n[power printer]\n\
+type: gpio\n\
+pin: gpiochip0/gpio72               # Can be reversed with \"!\", (Bigtreetech PI V1.2 GPIO pin PC8)\n\
+initial_state: off\n\
+off_when_shutdown: True             # Turn off power on shutdown/error\n\
+locked_while_printing: True         # Prevent power-off during a print\n\
+restart_klipper_when_powered: True\n\
+restart_delay: 1\n\
+bound_service: klipper              # Ensures Klipper service starts/restarts with power toggle\n" >> "$MOONRAKER_CONF"
+
     print_row "$(translate_string "$LANG_SELECTED" "add_power_printer")"
 }
+
 
 create_post_merge_hook() {
     if [ ! -f "$HOOK_PATH" ]; then

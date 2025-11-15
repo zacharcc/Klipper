@@ -179,10 +179,10 @@ translate_string() {
             esac ;;
         "gpio_add_user")
             case $lang in
-                1) echo "Adding user 'biqu' to GPIO group ..." ;;
-                2) echo "Přidávám uživatele 'biqu' do skupiny GPIO ..." ;;
-                3) echo "Füge Benutzer 'biqu' zur GPIO-Gruppe hinzu ..." ;;
-                *) echo "Adding user 'biqu' to GPIO group ..." ;;
+                1) echo "$INFO Adding user 'biqu' to GPIO group ..." ;;
+                2) echo "$INFO Přidávám uživatele 'biqu' do skupiny GPIO ..." ;;
+                3) echo "$INFO Füge Benutzer 'biqu' zur GPIO-Gruppe hinzu ..." ;;
+                *) echo "$INFO Adding user 'biqu' to GPIO group ..." ;;
             esac ;;
         "gpio_user_exists")
             case $lang in

@@ -165,10 +165,10 @@ translate_string() {
 			esac ;;
         "gpio_create")
             case $lang in
-                1) echo "Creating GPIO group ..." ;;
-                2) echo "Vytvářím skupinu GPIO ..." ;;
-                3) echo "Erstelle GPIO-Gruppe ..." ;;
-                *) echo "Creating GPIO group ..." ;;
+                1) echo "$INFO Creating GPIO group..." ;;
+                2) echo "$INFO Vytvářím skupinu GPIO..." ;;
+                3) echo "$INFO Erstelle GPIO-Gruppe..." ;;
+                *) echo "$INFO Creating GPIO group..." ;;
             esac ;;
         "gpio_exists")
             case $lang in
@@ -179,10 +179,10 @@ translate_string() {
             esac ;;
         "gpio_add_user")
             case $lang in
-                1) echo "$INFO Adding user 'biqu' to GPIO group ..." ;;
-                2) echo "$INFO Přidávám uživatele 'biqu' do skupiny GPIO ..." ;;
-                3) echo "$INFO Füge Benutzer 'biqu' zur GPIO-Gruppe hinzu ..." ;;
-                *) echo "$INFO Adding user 'biqu' to GPIO group ..." ;;
+                1) echo "$INFO Adding user 'biqu' to GPIO group..." ;;
+                2) echo "$INFO Přidávám uživatele 'biqu' do skupiny GPIO..." ;;
+                3) echo "$INFO Füge Benutzer 'biqu' zur GPIO-Gruppe hinzu..." ;;
+                *) echo "$INFO Adding user 'biqu' to GPIO group..." ;;
             esac ;;
         "gpio_user_exists")
             case $lang in
@@ -193,10 +193,10 @@ translate_string() {
             esac ;;
         "gpio_udev_reload")
             case $lang in
-                1) echo "Reloading udev rules ..." ;;
-                2) echo "Načítám udev pravidla ..." ;;
-                3) echo "Lade udev-Regeln neu ..." ;;
-                *) echo "Reloading udev rules ..." ;;
+                1) echo "Reloading udev rules..." ;;
+                2) echo "Načítám udev pravidla..." ;;
+                3) echo "Lade udev-Regeln neu..." ;;
+                *) echo "Reloading udev rules..." ;;
             esac ;;
         "gpio_done")
             case $lang in

@@ -378,8 +378,17 @@ copy_files_update() {
     sleep $MESS_sDELAY
 }
 
+ensure_trailing_newline() {
+    # Pokud poslední byte není newline → přidáme jeden
+    if [ -f "$MOONRAKER_CONF" ] && [ -s "$MOONRAKER_CONF" ]; then
+        if [ "$(tail -c1 "$MOONRAKER_CONF" | wc -l)" -eq 0 ]; then
+            echo "" >> "$MOONRAKER_CONF"
+        fi
+    fi
+}
+
 add_update_manager_block() {
-    # Přidání bloku pomocí printf (bez rizika zdvojených / chybějících newline)
+    ensure_trailing_newline
     printf "\n[update_manager Sandworm]\n\
 type: git_repo\n\
 origin: https://github.com/Urobotos/Sandworm.git\n\
@@ -394,7 +403,7 @@ install_script: install.sh\n" >> "$MOONRAKER_CONF"
 }
 
 add_power_printer_block() {
-    # Bezpečné vložení bloku přes printf
+    ensure_trailing_newline
     printf "\n[power printer]\n\
 type: gpio\n\
 pin: gpiochip0/gpio72               # Can be reversed with \"!\", (Bigtreetech PI V1.2 GPIO pin PC8)\n\

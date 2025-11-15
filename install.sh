@@ -182,7 +182,6 @@ else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
 fi
 
-## ---  Conditional GPIO Permission ---
 setup_gpio_permissions() {
     echo -e "║                                                                                    ║"
     echo -e "╟────────────────────────────────────────────────────────────────────────────────────╢"
@@ -195,77 +194,61 @@ setup_gpio_permissions() {
     print_row "$(translate_string "$LANG_SELECTED" "gpio_info")"
     print_row ""
 
-    # Raspberry Pi – skupina GPIO již existuje, nic sudo → nepřerušovat tabulku
+    # Raspberry Pi = vše bez sudo → žádné přerušení tabulky
     if echo "$MODEL" | grep -qi "Raspberry Pi"; then
         print_row "$(translate_string "$LANG_SELECTED" "gpio_rpi_skip")"
         return
     fi
 
-    BOX_OPEN=1        # tabulka je teď otevřená
-    FIRST_SUDO=1       # při prvním sudo zavřeme tabulku
+    GROUP_CREATE_NEEDED=0
+    USER_ADD_NEEDED=0
 
-    # --- Kontrola existence skupiny GPIO ---
+    # Test zda je potřeba groupadd
     if ! getent group gpio >/dev/null; then
-
-        # zavřít tabulku před prvním sudo
-        if [ "$FIRST_SUDO" -eq 1 ]; then
-            close_box
-            FIRST_SUDO=0
-            BOX_OPEN=0
-        fi
-
-        sudo groupadd gpio
-
-        # znovu otevřít tabulku
-        open_box
-        BOX_OPEN=1
-
-        print_row "$(translate_string "$LANG_SELECTED" "gpio_create")"
-        print_row ""
-
-    else
-        print_row "$(translate_string "$LANG_SELECTED" "gpio_exists")"
-        print_row ""
+        GROUP_CREATE_NEEDED=1
     fi
 
-    # --- Přidání uživatele do skupiny ---
+    # Test zda je potřeba usermod
     if ! groups "$LOCAL_USER" | grep -qw gpio; then
+        USER_ADD_NEEDED=1
+    fi
 
-        if [ "$FIRST_SUDO" -eq 1 ]; then
-            close_box
-            FIRST_SUDO=0
-            BOX_OPEN=0
-        fi
-
-        sudo usermod -aG gpio "$LOCAL_USER"
-
-        open_box
-        BOX_OPEN=1
-
-        print_row "$(translate_string "$LANG_SELECTED" "gpio_add_user")"
-        print_row ""
-
-    else
+    # Pokud není potřeba sudo → vše uvnitř tabulky
+    if [ $GROUP_CREATE_NEEDED -eq 0 ] && [ $USER_ADD_NEEDED -eq 0 ]; then
+        print_row "$(translate_string "$LANG_SELECTED" "gpio_exists")"
         print_row "$(translate_string "$LANG_SELECTED" "gpio_user_exists")"
         print_row ""
+        return
     fi
 
-    # --- Udev reload ---
-    if [ "$FIRST_SUDO" -eq 1 ]; then
-        # znamená: ještě nebylo žádné sudo
-        close_box
-        FIRST_SUDO=0
-        BOX_OPEN=0
+    # --- PŘERUŠENÍ TABULKY KVŮLI SUDO ---
+    close_box
+
+    # --- SUDO SEKCE ---
+    if [ $GROUP_CREATE_NEEDED -eq 1 ]; then
+        sudo groupadd gpio
+    fi
+
+    if [ $USER_ADD_NEEDED -eq 1 ]; then
+        sudo usermod -aG gpio "$LOCAL_USER"
     fi
 
     sudo udevadm control --reload-rules
     sudo udevadm trigger
 
+    # --- ZNOVU OTEVŘÍT TABULKU (JEDNOU!) ---
     open_box
-    BOX_OPEN=1
-    print_row ""
+
+    # Všechny sudo-řádky v JEDNÉ TABULCE:
+    [ $GROUP_CREATE_NEEDED -eq 1 ] && \
+        print_row "$(translate_string "$LANG_SELECTED" "gpio_create")"
+
+    [ $USER_ADD_NEEDED -eq 1 ] && \
+        print_row "$(translate_string "$LANG_SELECTED" "gpio_add_user")"
+
+    print_row ""   # prázdný řádek
     print_row "$(translate_string "$LANG_SELECTED" "gpio_done")"
-    sleep $MESS_sDELAY
+    print_row ""
 }
 
 ## --- Message Header ---

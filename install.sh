@@ -460,6 +460,10 @@ if [ "$IS_COLD_INSTALL" = true ]; then
 
     setup_gpio_permissions
 
+    echo -e "║                                                                                    ║"
+    echo -e "╟────────────────────────────────────────────────────────────────────────────────────╢"
+	echo -e "║                                                                                    ║"
+
     # Set message on startup and language:
     set_variable_cfg "update_msg" 1
     set_variable_cfg "lang" "$LANG_SELECTED"

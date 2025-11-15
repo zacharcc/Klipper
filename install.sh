@@ -192,69 +192,74 @@ setup_gpio_permissions() {
     LOCAL_USER=$(logname 2>/dev/null || echo "$USER")
     MODEL=$(tr -d '\0' < /proc/device-tree/model 2>/dev/null || echo "unknown")
 
-    # Informace o procesu – stále uvnitř tabulky
     print_row "$(translate_string "$LANG_SELECTED" "gpio_info")"
     print_row ""
 
-    # Raspberry Pi - žádné sudo → žádné přerušení tabulky
+    # Raspberry Pi – skupina GPIO již existuje, nic sudo → nepřerušovat tabulku
     if echo "$MODEL" | grep -qi "Raspberry Pi"; then
         print_row "$(translate_string "$LANG_SELECTED" "gpio_rpi_skip")"
         return
     fi
 
-    ### --- Nyní nás čekají potenciální sudo (groupadd / usermod / udevadm)
-    ### Proto budeme sledovat, zda jsme box již zavřeli
-
-    BOX_OPEN=1
-    SUDO_CALLED=0
+    BOX_OPEN=1        # tabulka je teď otevřená
+    FIRST_SUDO=1       # při prvním sudo zavřeme tabulku
 
     # --- Kontrola existence skupiny GPIO ---
     if ! getent group gpio >/dev/null; then
-        # Zavřít tabulku před sudo
-        if [ "$BOX_OPEN" -eq 1 ]; then
+
+        # zavřít tabulku před prvním sudo
+        if [ "$FIRST_SUDO" -eq 1 ]; then
             close_box
+            FIRST_SUDO=0
             BOX_OPEN=0
         fi
 
         sudo groupadd gpio
-        SUDO_CALLED=1
 
-        # Po sudo znovu otevřít tabulku
+        # znovu otevřít tabulku
         open_box
         BOX_OPEN=1
+
         print_row "$(translate_string "$LANG_SELECTED" "gpio_create")"
+        print_row ""
+
     else
         print_row "$(translate_string "$LANG_SELECTED" "gpio_exists")"
+        print_row ""
     fi
 
     # --- Přidání uživatele do skupiny ---
     if ! groups "$LOCAL_USER" | grep -qw gpio; then
-        if [ "$BOX_OPEN" -eq 1 ]; then
+
+        if [ "$FIRST_SUDO" -eq 1 ]; then
             close_box
+            FIRST_SUDO=0
             BOX_OPEN=0
         fi
 
         sudo usermod -aG gpio "$LOCAL_USER"
-        SUDO_CALLED=1
 
         open_box
         BOX_OPEN=1
+
         print_row "$(translate_string "$LANG_SELECTED" "gpio_add_user")"
-		print_row ""
+        print_row ""
+
     else
         print_row "$(translate_string "$LANG_SELECTED" "gpio_user_exists")"
-		print_row ""
+        print_row ""
     fi
 
-    # --- Udev reload (vždy sudo mimo RPi) ---
-    if [ "$BOX_OPEN" -eq 1 ]; then
+    # --- Udev reload ---
+    if [ "$FIRST_SUDO" -eq 1 ]; then
+        # znamená: ještě nebylo žádné sudo
         close_box
+        FIRST_SUDO=0
         BOX_OPEN=0
     fi
 
     sudo udevadm control --reload-rules
     sudo udevadm trigger
-    SUDO_CALLED=1
 
     open_box
     BOX_OPEN=1

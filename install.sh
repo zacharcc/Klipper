@@ -217,7 +217,6 @@ setup_gpio_permissions() {
     if [ $GROUP_CREATE_NEEDED -eq 0 ] && [ $USER_ADD_NEEDED -eq 0 ]; then
         print_row "$(translate_string "$LANG_SELECTED" "gpio_exists")"
         print_row "$(translate_string "$LANG_SELECTED" "gpio_user_exists")"
-        print_row ""
         return
     fi
 

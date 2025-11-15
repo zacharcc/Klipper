@@ -311,7 +311,7 @@ backup_files() {
     echo -e "║ $formatted_to║"
    
     mkdir -p "$BACKUP_DIR"
-    cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
+    cp -r "$CONFIG_DIR"/. "$BACKUP_DIR"/ || echo -e "$ERROR Backup failed!"
     
     print_row ""
     print_row "$(translate_string "$LANG_SELECTED" "backup_done")"
@@ -326,7 +326,7 @@ backup_files_update() {
     echo "  ●   to: $BACKUP_DIR"  
 
     mkdir -p "$BACKUP_DIR"
-    cp -r "$CONFIG_DIR/"* "$BACKUP_DIR/" || echo -e "$ERROR Backup failed!"
+    cp -r "$CONFIG_DIR"/. "$BACKUP_DIR"/ || echo -e "$ERROR Backup failed!"
     echo ""
     echo "$OK Backup complete."
     sleep $MESS_sDELAY

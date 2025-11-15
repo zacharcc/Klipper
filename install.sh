@@ -38,6 +38,14 @@ print_row() {
     printf "║ %s%*s ║\n" "$msg" "$padding" ""
 }
 
+open_box() {
+    echo -e "╔════════════════════════════════════════════════════════════════════════════════════╗"
+}
+
+close_box() {
+    echo -e "╚════════════════════════════════════════════════════════════════════════════════════╝"
+}
+
 ## --- Git Version ---
 if [ -d "$HOME/Sandworm/.git" ]; then
     VERSION=$(git -C "$HOME/Sandworm" describe --tags --exact-match 2>/dev/null || \
@@ -174,49 +182,80 @@ else
     exec > >(tee "$TMP_UPDATE_LOG") 2>&1
 fi
 
-## ---  Conditional GPIO Premission ---
+## ---  Conditional GPIO Permission ---
 setup_gpio_permissions() {
     echo -e "║                                                                                    ║"
     echo -e "╟────────────────────────────────────────────────────────────────────────────────────╢"
     print_row "$(translate_string "$LANG_SELECTED" "gpio_header")"
+    echo -e "║                                                                                    ║"
 
-    # Determine user dynamically
     LOCAL_USER=$(logname 2>/dev/null || echo "$USER")
-
-    from_path="  ● $(translate_string "$LANG_SELECTED" "gpio_info") (user: $LOCAL_USER)"
-    formatted_from=$(printf "%-85s" "$from_path")
-    echo -e "║ $formatted_from║"
-
-    # Detect platform
     MODEL=$(tr -d '\0' < /proc/device-tree/model 2>/dev/null || echo "unknown")
 
-    # Raspberry Pi platforms → Skip GPIO creation (group already exists)
+    # Informace o procesu – stále uvnitř tabulky
+    print_row "$(translate_string "$LANG_SELECTED" "gpio_info")"
+    print_row ""
+
+    # Raspberry Pi - žádné sudo → žádné přerušení tabulky
     if echo "$MODEL" | grep -qi "Raspberry Pi"; then
         print_row "$(translate_string "$LANG_SELECTED" "gpio_rpi_skip")"
         return
     fi
 
-    # On CB1/CB2/other ARM boards → ensure GPIO group exists
+    ### --- Nyní nás čekají potenciální sudo (groupadd / usermod / udevadm)
+    ### Proto budeme sledovat, zda jsme box již zavřeli
+
+    BOX_OPEN=1
+    SUDO_CALLED=0
+
+    # --- Kontrola existence skupiny GPIO ---
     if ! getent group gpio >/dev/null; then
-        print_row "$(translate_string "$LANG_SELECTED" "gpio_create")"
+        # Zavřít tabulku před sudo
+        if [ "$BOX_OPEN" -eq 1 ]; then
+            close_box
+            BOX_OPEN=0
+        fi
+
         sudo groupadd gpio
+        SUDO_CALLED=1
+
+        # Po sudo znovu otevřít tabulku
+        open_box
+        BOX_OPEN=1
+        print_row "$(translate_string "$LANG_SELECTED" "gpio_create")"
     else
         print_row "$(translate_string "$LANG_SELECTED" "gpio_exists")"
     fi
 
-    # Add user to group
+    # --- Přidání uživatele do skupiny ---
     if ! groups "$LOCAL_USER" | grep -qw gpio; then
-        print_row "$(translate_string "$LANG_SELECTED" "gpio_add_user")"
+        if [ "$BOX_OPEN" -eq 1 ]; then
+            close_box
+            BOX_OPEN=0
+        fi
+
         sudo usermod -aG gpio "$LOCAL_USER"
+        SUDO_CALLED=1
+
+        open_box
+        BOX_OPEN=1
+        print_row "$(translate_string "$LANG_SELECTED" "gpio_add_user")"
     else
         print_row "$(translate_string "$LANG_SELECTED" "gpio_user_exists")"
     fi
 
-    # Apply udev rules
-    print_row "$(translate_string "$LANG_SELECTED" "gpio_udev_reload")"
+    # --- Udev reload (vždy sudo mimo RPi) ---
+    if [ "$BOX_OPEN" -eq 1 ]; then
+        close_box
+        BOX_OPEN=0
+    fi
+
     sudo udevadm control --reload-rules
     sudo udevadm trigger
+    SUDO_CALLED=1
 
+    open_box
+    BOX_OPEN=1
     print_row "$(translate_string "$LANG_SELECTED" "gpio_done")"
     sleep $MESS_sDELAY
 }

@@ -158,10 +158,10 @@ translate_string() {
             esac ;;			
 		"gpio_info")
 			case $lang in
-				1) echo "Adding user $LOCAL_USER to GPIO group" ;;
-				2) echo "Přidání uživatele $LOCAL_USER do skupiny GPIO" ;;
-				3) echo "Hinzufügen des Benutzers $LOCAL_USER zur GPIO-Gruppe" ;;
-				*) echo "Adding user $LOCAL_USER to GPIO group" ;;
+				1) echo "Adding user $LOCAL_USER to GPIO group..." ;;
+				2) echo "Přidání uživatele $LOCAL_USER do skupiny GPIO..." ;;
+				3) echo "Hinzufügen des Benutzers $LOCAL_USER zur GPIO-Gruppe..." ;;
+				*) echo "Adding user $LOCAL_USER to GPIO group..." ;;
 			esac ;;
         "gpio_create")
             case $lang in

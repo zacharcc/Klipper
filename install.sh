@@ -240,8 +240,10 @@ setup_gpio_permissions() {
         open_box
         BOX_OPEN=1
         print_row "$(translate_string "$LANG_SELECTED" "gpio_add_user")"
+		print_row ""
     else
         print_row "$(translate_string "$LANG_SELECTED" "gpio_user_exists")"
+		print_row ""
     fi
 
     # --- Udev reload (vždy sudo mimo RPi) ---

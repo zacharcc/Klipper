@@ -408,7 +408,6 @@ bound_service: klipper              # Ensures Klipper service starts/restarts wi
     print_row "$(translate_string "$LANG_SELECTED" "add_power_printer")"
 }
 
-
 create_post_merge_hook() {
     if [ ! -f "$HOOK_PATH" ]; then
         cat << 'EOF' > "$HOOK_PATH"

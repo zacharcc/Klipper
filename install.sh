@@ -248,7 +248,6 @@ setup_gpio_permissions() {
 
     print_row ""   # prázdný řádek
     print_row "$(translate_string "$LANG_SELECTED" "gpio_done")"
-    print_row ""
 }
 
 ## --- Message Header ---

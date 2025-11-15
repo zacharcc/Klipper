@@ -258,6 +258,7 @@ setup_gpio_permissions() {
 
     open_box
     BOX_OPEN=1
+    print_row ""
     print_row "$(translate_string "$LANG_SELECTED" "gpio_done")"
     sleep $MESS_sDELAY
 }
